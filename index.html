@@ -35,7 +35,7 @@
   .signout-btn { background: none; border: none; color: var(--text-dim); font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: color 0.15s; }
   .signout-btn:hover { color: var(--text-mid); }
 
-  /* CALENDAR GRID */
+  /* CALENDAR */
   .day-headers { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 6px; }
   .day-header-cell { text-align: center; font-size: 9px; color: var(--text-dim); letter-spacing: 0.15em; padding: 4px 0; }
   .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
@@ -50,40 +50,41 @@
   .pnl-label.pos { color: var(--green); }
   .pnl-label.neg { color: var(--red); }
 
-  /* SUMMARY TOGGLE BUTTON */
-  .summary-toggle-btn {
-    background: none; border: 1px solid var(--border2); color: var(--text-dim);
-    font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
-    padding: 8px 20px; border-radius: 10px; cursor: pointer;
-    transition: border-color 0.15s, color 0.15s; margin-top: 20px; width: 100%;
-  }
+  /* SUMMARY TOGGLE BTN */
+  .summary-toggle-btn { background: none; border: 1px solid var(--border2); color: var(--text-dim); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; padding: 8px 20px; border-radius: 10px; cursor: pointer; transition: border-color 0.15s, color 0.15s; margin-top: 20px; width: 100%; }
   .summary-toggle-btn:hover { border-color: var(--text-mid); color: var(--text-mid); }
 
-  /* MONTH SUMMARY */
-  .month-summary { margin-top: 12px; border-radius: 14px; border: 1px solid var(--border2); background: var(--surface); overflow: hidden; }
+  /* MONTH SUMMARY CARD */
   @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+  .month-summary { margin-top: 12px; border-radius: 14px; border: 1px solid var(--border2); background: var(--surface); overflow: hidden; }
 
-  /* PNL ROW */
-  .summary-inner { display: grid; grid-template-columns: 1fr 1px 1fr 1px 1fr; border-bottom: 1px solid var(--border2); }
-  .summary-divider { background: var(--border2); }
-  .summary-col { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 11px 8px; }
-  .summary-label { font-size: 8px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; }
-  .summary-value { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; line-height: 1; }
-  .summary-value.pos { color: var(--green); }
-  .summary-value.neg { color: var(--red); }
-  .summary-value.neutral { color: var(--text-mid); }
+  .sum-row { display: grid; border-bottom: 1px solid var(--border2); }
+  .sum-row.cols3 { grid-template-columns: 1fr 1px 1fr 1px 1fr; }
+  .sum-row.cols2 { grid-template-columns: 1fr 1px 1fr; }
+  .sum-row.cols4 { grid-template-columns: 1fr 1px 1fr 1px 1fr 1px 1fr; }
+  .sum-row.no-border { border-bottom: none; }
+  .sum-divider { background: var(--border2); }
+  .sum-col { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 6px; }
+  .sum-label { font-size: 8px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; text-align: center; }
+  .sum-value { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.02em; line-height: 1; color: var(--text-mid); }
+  .sum-value.pos { color: var(--green); }
+  .sum-value.neg { color: var(--red); }
+  .sum-value.lg { font-size: 14px; }
   .summary-bar-wrap { height: 3px; background: var(--border); overflow: hidden; }
   .summary-bar { height: 100%; transition: width 0.5s cubic-bezier(.22,1,.36,1), background 0.3s; }
 
-  /* STATS ROW */
-  .stats-inner { display: grid; grid-template-columns: 1fr 1px 1fr 1px 1fr 1px 1fr; }
-  .stats-col { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 10px 4px; }
-  .stats-label { font-size: 7px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; }
-  .stats-value { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: var(--text-mid); line-height: 1; }
-  .stats-value.pos { color: var(--green); }
-  .stats-value.neg { color: var(--red); }
+  /* PAIR LIST */
+  .pair-list-wrap { border-top: 1px solid var(--border2); padding: 10px 12px; max-height: 140px; overflow-y: auto; }
+  .pair-list-title { font-size: 8px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
+  .pair-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .pair-row:last-child { border-bottom: none; }
+  .pair-name { font-size: 12px; color: var(--text); }
+  .pair-stats { display: flex; gap: 10px; align-items: center; }
+  .pair-count { font-size: 11px; color: var(--text-mid); }
+  .pair-tp { font-size: 10px; color: var(--green); }
+  .pair-sl { font-size: 10px; color: var(--red); }
 
-  /* OVERLAY */
+  /* OVERLAY & MODAL */
   .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 100; align-items: flex-end; justify-content: center; padding: 16px; }
   .overlay.open { display: flex; }
   .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 18px; width: 100%; max-width: 460px; padding: 20px; display: flex; flex-direction: column; gap: 16px; max-height: 88vh; overflow-y: auto; animation: slideUp 0.22s cubic-bezier(.22,1,.36,1); }
@@ -109,56 +110,51 @@
   .add-photo-label:hover { border-color: var(--text-mid); color: var(--text-mid); }
   .add-photo-label input { display: none; }
 
-  textarea { background: #111; border: 1px solid var(--border); border-radius: 12px; color: #ddd; font-size: 12px; font-family: 'Trebuchet MS', sans-serif; line-height: 1.8; padding: 16px; resize: none; outline: none; width: 100%; min-height: 100px; letter-spacing: 0.01em; transition: border-color 0.15s; }
+  textarea { background: #111; border: 1px solid var(--border); border-radius: 12px; color: #ddd; font-size: 12px; font-family: 'Trebuchet MS', sans-serif; line-height: 1.8; padding: 16px; resize: none; outline: none; width: 100%; min-height: 100px; transition: border-color 0.15s; }
   textarea:focus { border-color: #3a3a3a; }
   textarea::placeholder { color: #333; font-style: italic; }
 
-  .section-title { font-size: 10px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px; }
+  .section-title { font-size: 10px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
 
   /* TRADE FORM */
-  .trade-form { background: #111; border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-  .trade-form-row { display: flex; gap: 8px; }
-  .trade-input {
-    background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px;
-    color: var(--text); font-size: 12px; font-family: 'DM Mono', monospace;
-    padding: 8px 10px; outline: none; width: 100%; transition: border-color 0.15s;
-  }
+  .trade-form { background: #111; border: 1px solid var(--border); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .trade-form-row { display: flex; gap: 6px; }
+  .trade-input { background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-size: 12px; font-family: 'DM Mono', monospace; padding: 8px 10px; outline: none; width: 100%; transition: border-color 0.15s; }
   .trade-input:focus { border-color: var(--text-mid); }
   .trade-input::placeholder { color: var(--text-dim); }
-  .trade-type-btn {
-    flex: 1; background: none; border: 1px solid var(--border2); color: var(--text-dim);
-    border-radius: 8px; padding: 8px; font-size: 12px; font-family: 'DM Mono', monospace;
-    cursor: pointer; transition: all 0.15s; letter-spacing: 0.05em;
-  }
-  .trade-type-btn.long.active { border-color: #2a4a35; color: var(--green); background: rgba(76,175,125,0.08); }
-  .trade-type-btn.short.active { border-color: #4a2a2a; color: var(--red); background: rgba(224,92,92,0.08); }
-  .add-trade-btn {
-    background: none; border: 1px dashed var(--border2); color: var(--text-dim);
-    border-radius: 8px; padding: 8px; font-size: 11px; font-family: 'DM Mono', monospace;
-    cursor: pointer; letter-spacing: 0.08em; transition: border-color 0.15s, color 0.15s; width: 100%;
-  }
+
+  /* toggle buttons: long/short & tp/sl */
+  .toggle-btn { flex: 1; background: none; border: 1px solid var(--border2); color: var(--text-dim); border-radius: 8px; padding: 8px; font-size: 12px; font-family: 'DM Mono', monospace; cursor: pointer; transition: all 0.15s; letter-spacing: 0.05em; }
+  .toggle-btn.long.active  { border-color: #2a4a35; color: var(--green); background: rgba(76,175,125,0.08); }
+  .toggle-btn.short.active { border-color: #4a2a2a; color: var(--red);   background: rgba(224,92,92,0.08); }
+  .toggle-btn.tp.active    { border-color: #2a4a35; color: var(--green); background: rgba(76,175,125,0.08); }
+  .toggle-btn.sl.active    { border-color: #4a2a2a; color: var(--red);   background: rgba(224,92,92,0.08); }
+
+  .add-trade-btn { background: none; border: 1px dashed var(--border2); color: var(--text-dim); border-radius: 8px; padding: 8px; font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: border-color 0.15s, color 0.15s; width: 100%; }
   .add-trade-btn:hover { border-color: var(--text-mid); color: var(--text-mid); }
 
   /* TRADE LIST */
   .trade-list { display: flex; flex-direction: column; gap: 6px; }
   .trade-card { background: #111; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .trade-card-left { display: flex; flex-direction: column; gap: 3px; }
+  .trade-card-left { display: flex; flex-direction: column; gap: 3px; flex: 1; }
   .trade-card-pair { font-size: 12px; color: var(--text); font-weight: 500; }
-  .trade-card-meta { font-size: 10px; color: var(--text-dim); letter-spacing: 0.05em; }
-  .trade-card-right { display: flex; align-items: center; gap: 8px; }
+  .trade-card-meta { font-size: 10px; color: var(--text-dim); }
+  .trade-card-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
   .trade-card-rr { font-size: 12px; font-weight: 500; }
   .trade-card-rr.pos { color: var(--green); }
   .trade-card-rr.neg { color: var(--red); }
-  .trade-card-type { font-size: 9px; letter-spacing: 0.1em; padding: 2px 7px; border-radius: 5px; }
-  .trade-card-type.long { color: var(--green); background: rgba(76,175,125,0.12); }
-  .trade-card-type.short { color: var(--red); background: rgba(224,92,92,0.12); }
-  .trade-remove-btn { background: none; border: none; color: var(--text-dim); font-size: 16px; cursor: pointer; line-height: 1; padding: 0 2px; }
+  .trade-card-dollar { font-size: 11px; font-weight: 500; }
+  .trade-card-dollar.pos { color: var(--green); }
+  .trade-card-dollar.neg { color: var(--red); }
+  .trade-card-badge { font-size: 9px; letter-spacing: 0.1em; padding: 2px 7px; border-radius: 5px; }
+  .trade-card-badge.long  { color: var(--green); background: rgba(76,175,125,0.12); }
+  .trade-card-badge.short { color: var(--red);   background: rgba(224,92,92,0.12); }
+  .trade-card-badge.tp    { color: var(--green); background: rgba(76,175,125,0.12); }
+  .trade-card-badge.sl    { color: var(--red);   background: rgba(224,92,92,0.12); }
+  .trade-remove-btn { background: none; border: none; color: var(--text-dim); font-size: 16px; cursor: pointer; line-height: 1; }
   .trade-remove-btn:hover { color: var(--red); }
 
   .status { font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-align: right; min-height: 16px; }
-
-  /* PNL INPUT */
-  .pnl-input-styled { background: #111; border: 1px solid #222; border-radius: 10px; color: #ddd; font-size: 15px; font-family: 'DM Mono', monospace; padding: 10px 14px; outline: none; width: 100%; transition: border-color 0.15s; }
 
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
@@ -203,70 +199,65 @@
 
     <button class="summary-toggle-btn" id="summaryToggleBtn">ay özeti göster</button>
     <div class="month-summary" id="monthSummary" style="display:none">
-      <!-- PNL row -->
-      <div class="summary-inner">
-        <div class="summary-col">
-          <span class="summary-label">Kâr</span>
-          <span class="summary-value pos" id="sumProfit">—</span>
+
+      <!-- Row 1: Kâr / Net / Zarar -->
+      <div class="sum-row cols3">
+        <div class="sum-col"><span class="sum-label">Kâr</span><span class="sum-value pos lg" id="sumProfit">—</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-col"><span class="sum-label">Net</span><span class="sum-value lg" id="sumNet">—</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-col"><span class="sum-label">Zarar</span><span class="sum-value neg lg" id="sumLoss">—</span></div>
+      </div>
+      <div class="summary-bar-wrap"><div class="summary-bar" id="summaryBar" style="width:0%"></div></div>
+
+      <!-- Row 2: İşlem / Win% / Ort RR -->
+      <div class="sum-row cols3">
+        <div class="sum-col"><span class="sum-label">İşlem</span><span class="sum-value" id="statTotal">—</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-col"><span class="sum-label">Win%</span><span class="sum-value" id="statWinRate">—</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-col"><span class="sum-label">Ort RR</span><span class="sum-value" id="statAvgRR">—</span></div>
+      </div>
+
+      <!-- Row 3: Long (TP/SL) / Short (TP/SL) -->
+      <div class="sum-row cols2">
+        <div class="sum-col">
+          <span class="sum-label">Long</span>
+          <span class="sum-value pos" id="statLong">—</span>
+          <span class="sum-label" id="statLongDetail" style="color:var(--text-dim); font-size:9px;"></span>
         </div>
-        <div class="summary-divider"></div>
-        <div class="summary-col">
-          <span class="summary-label">Net</span>
-          <span class="summary-value neutral" id="sumNet">—</span>
-        </div>
-        <div class="summary-divider"></div>
-        <div class="summary-col">
-          <span class="summary-label">Zarar</span>
-          <span class="summary-value neg" id="sumLoss">—</span>
+        <div class="sum-divider"></div>
+        <div class="sum-col">
+          <span class="sum-label">Short</span>
+          <span class="sum-value neg" id="statShort">—</span>
+          <span class="sum-label" id="statShortDetail" style="color:var(--text-dim); font-size:9px;"></span>
         </div>
       </div>
-      <div class="summary-bar-wrap">
-        <div class="summary-bar" id="summaryBar" style="width:0%"></div>
-      </div>
-      <!-- Stats row -->
-      <div class="stats-inner">
-        <div class="stats-col">
-          <span class="stats-label">İşlem</span>
-          <span class="stats-value" id="statTotal">—</span>
+
+      <!-- Row 4: Trade $ ort -->
+      <div class="sum-row cols2 no-border">
+        <div class="sum-col">
+          <span class="sum-label">Kârlı Trade Ort.</span>
+          <span class="sum-value pos" id="statAvgWin">—</span>
         </div>
-        <div class="summary-divider"></div>
-        <div class="stats-col">
-          <span class="stats-label">Win%</span>
-          <span class="stats-value" id="statWinRate">—</span>
-        </div>
-        <div class="summary-divider"></div>
-        <div class="stats-col">
-          <span class="stats-label">Long</span>
-          <span class="stats-value pos" id="statLong">—</span>
-        </div>
-        <div class="summary-divider"></div>
-        <div class="stats-col">
-          <span class="stats-label">Short</span>
-          <span class="stats-value neg" id="statShort">—</span>
+        <div class="sum-divider"></div>
+        <div class="sum-col">
+          <span class="sum-label">Zararlı Trade Ort.</span>
+          <span class="sum-value neg" id="statAvgLoss">—</span>
         </div>
       </div>
-      <!-- Second stats row -->
-      <div style="border-top:1px solid var(--border2); display:grid; grid-template-columns:1fr 1px 1fr 1px 1fr;">
-        <div class="stats-col">
-          <span class="stats-label">Ort RR</span>
-          <span class="stats-value" id="statAvgRR">—</span>
-        </div>
-        <div class="summary-divider"></div>
-        <div class="stats-col">
-          <span class="stats-label">En İyi</span>
-          <span class="stats-value pos" id="statBestRR">—</span>
-        </div>
-        <div class="summary-divider"></div>
-        <div class="stats-col">
-          <span class="stats-label">En Kötü</span>
-          <span class="stats-value neg" id="statWorstRR">—</span>
-        </div>
+
+      <!-- Pair list -->
+      <div class="pair-list-wrap" id="pairListWrap" style="display:none">
+        <div class="pair-list-title">Pair Dağılımı</div>
+        <div id="pairList"></div>
       </div>
+
     </div>
   </div>
 </div>
 
-<!-- Fullscreen viewer -->
+<!-- Viewer -->
 <div class="viewer-overlay" id="viewerOverlay">
   <button class="viewer-close" id="viewerClose">×</button>
   <a class="viewer-download" id="viewerDownload" download="foto.jpg">⬇</a>
@@ -281,42 +272,45 @@
       <button class="close-btn" id="closeBtn">×</button>
     </div>
 
-    <!-- Photos -->
     <div class="photo-grid" id="photoGrid"></div>
-    <label class="add-photo-label">
-      + Fotoğraf ekle
-      <input type="file" id="fileInput" accept="image/*" multiple>
-    </label>
+    <label class="add-photo-label">+ Fotoğraf ekle<input type="file" id="fileInput" accept="image/*" multiple></label>
 
-    <!-- Note -->
     <textarea id="noteArea" placeholder="Bugün ne oldu? Notunu buraya yaz..."></textarea>
 
-    <!-- PNL -->
+    <!-- Günlük PNL -->
     <div style="display:flex; flex-direction:column; gap:8px;">
-      <input type="text" inputmode="decimal" id="pnlInput" class="pnl-input-styled" placeholder="Tutar gir (örn: 250)">
+      <input type="text" inputmode="decimal" id="pnlInput" placeholder="Günlük tutar (örn: 250)"
+        style="background:#111; border:1px solid #222; border-radius:10px; color:#ddd; font-size:15px; font-family:'DM Mono',monospace; padding:10px 14px; outline:none; width:100%;">
       <div style="display:flex; gap:8px;">
-        <button id="karBtn" style="flex:1; background:none; border:1px solid #2a4a35; color:#4caf7d; border-radius:10px; padding:10px; font-size:13px; font-family:'DM Mono',monospace; cursor:pointer; letter-spacing:0.05em;">Kâr</button>
-        <button id="zararBtn" style="flex:1; background:none; border:1px solid #4a2a2a; color:#e05c5c; border-radius:10px; padding:10px; font-size:13px; font-family:'DM Mono',monospace; cursor:pointer; letter-spacing:0.05em;">Zarar</button>
+        <button id="karBtn" style="flex:1; background:none; border:1px solid #2a4a35; color:#4caf7d; border-radius:10px; padding:10px; font-size:13px; font-family:'DM Mono',monospace; cursor:pointer;">Kâr</button>
+        <button id="zararBtn" style="flex:1; background:none; border:1px solid #4a2a2a; color:#e05c5c; border-radius:10px; padding:10px; font-size:13px; font-family:'DM Mono',monospace; cursor:pointer;">Zarar</button>
       </div>
     </div>
 
-    <!-- Trades -->
+    <!-- Tradeler -->
     <div>
       <div class="section-title">Tradeler</div>
       <div class="trade-list" id="tradeList"></div>
-      <div class="trade-form" id="tradeForm" style="margin-top:10px;">
+      <div class="trade-form">
+        <!-- Pair + TF -->
         <div class="trade-form-row">
           <input class="trade-input" id="tPair" placeholder="Pair (ör: EURUSD)" style="flex:2">
           <input class="trade-input" id="tTF" placeholder="TF (ör: 15m)" style="flex:1">
         </div>
+        <!-- Long / Short -->
         <div class="trade-form-row">
-          <button class="trade-type-btn long" id="tLongBtn">Long</button>
-          <button class="trade-type-btn short" id="tShortBtn">Short</button>
+          <button class="toggle-btn long active" id="tLongBtn">Long</button>
+          <button class="toggle-btn short" id="tShortBtn">Short</button>
         </div>
+        <!-- TP / SL sonuç -->
         <div class="trade-form-row">
-          <input class="trade-input" id="tTP" placeholder="TP">
-          <input class="trade-input" id="tSL" placeholder="SL">
+          <button class="toggle-btn tp" id="tTPBtn">TP ✓</button>
+          <button class="toggle-btn sl" id="tSLBtn">SL ✗</button>
+        </div>
+        <!-- RR + $ tutar -->
+        <div class="trade-form-row">
           <input class="trade-input" id="tRR" placeholder="RR (ör: 2.5)">
+          <input class="trade-input" id="tDollar" placeholder="$ Tutar (ör: 100)" inputmode="decimal">
         </div>
         <button class="add-trade-btn" id="addTradeBtn">+ Trade ekle</button>
       </div>
@@ -354,7 +348,8 @@ let selectedDay = null;
 let currentUser = null;
 let saveTimer = null;
 let dotCache = {};
-let tradeType = "long"; // default
+let tradeDir = "long";   // long | short
+let tradeResult = null;  // null | "tp" | "sl"
 
 function showScreen(name) {
   document.getElementById("loginScreen").style.display = name === "login" ? "block" : "none";
@@ -368,8 +363,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 document.getElementById("googleSignInBtn").addEventListener("click", async () => {
-  const errEl = document.getElementById("loginError");
-  errEl.style.display = "none";
+  const errEl = document.getElementById("loginError"); errEl.style.display = "none";
   try { await signInWithPopup(auth, new GoogleAuthProvider()); }
   catch(e) { errEl.textContent = "Giriş başarısız: " + e.message; errEl.style.display = "block"; }
 });
@@ -409,8 +403,11 @@ async function updateMonthlySummary(y, m) {
   const entries = await Promise.all(Array.from({length: days}, (_, i) => loadEntry(y, m, i+1)));
 
   let totalProfit = 0, totalLoss = 0;
-  let allTrades = [], winCount = 0, longCount = 0, shortCount = 0;
-  let rrValues = [];
+  let allTrades = [];
+  let longTotal = 0, longTP = 0, longSL = 0;
+  let shortTotal = 0, shortTP = 0, shortSL = 0;
+  let rrValues = [], winCount = 0;
+  let dollarWins = [], dollarLosses = [];
 
   entries.forEach(e => {
     if (e.pnl && e.pnl !== "") {
@@ -418,48 +415,113 @@ async function updateMonthlySummary(y, m) {
       if (!isNaN(val)) { if (val > 0) totalProfit += val; else totalLoss += val; }
     }
     (e.trades || []).forEach(t => {
+      // Only count trades with a result (tp or sl)
+      if (!t.result) return;
       allTrades.push(t);
-      if (t.type === "long") longCount++; else shortCount++;
+
+      const isTP = t.result === "tp";
+      if (t.dir === "long") {
+        longTotal++;
+        if (isTP) longTP++; else longSL++;
+      } else {
+        shortTotal++;
+        if (isTP) shortTP++; else shortSL++;
+      }
+
+      if (isTP) winCount++;
+
       const rr = parseFloat(t.rr);
-      if (!isNaN(rr)) { rrValues.push(rr); if (rr > 0) winCount++; }
+      if (!isNaN(rr)) rrValues.push(isTP ? rr : -rr);
+
+      const dollar = parseFloat(t.dollar);
+      if (!isNaN(dollar) && dollar > 0) {
+        if (isTP) dollarWins.push(dollar);
+        else dollarLosses.push(dollar);
+      }
     });
   });
 
   const net = totalProfit + totalLoss;
   const hasData = totalProfit !== 0 || totalLoss !== 0 || allTrades.length > 0;
   const summaryEl = document.getElementById("monthSummary");
-  if (!hasData) { summaryEl.style.display = "none"; document.getElementById("summaryToggleBtn").textContent = "ay özeti göster"; return; }
+
+  if (!hasData) {
+    summaryEl.style.display = "none";
+    document.getElementById("summaryToggleBtn").textContent = "ay özeti göster";
+    return;
+  }
 
   summaryEl.style.display = "block";
   summaryEl.style.animation = "none"; summaryEl.offsetHeight; summaryEl.style.animation = "fadeIn 0.3s ease";
 
+  // PNL row
   document.getElementById("sumProfit").textContent = totalProfit > 0 ? `+${totalProfit.toFixed(0)}$` : "—";
-  document.getElementById("sumLoss").textContent = totalLoss < 0 ? `${totalLoss.toFixed(0)}$` : "—";
+  document.getElementById("sumLoss").textContent   = totalLoss < 0 ? `${totalLoss.toFixed(0)}$` : "—";
   const netEl = document.getElementById("sumNet");
   netEl.textContent = (net >= 0 ? "+" : "") + net.toFixed(0) + "$";
-  netEl.className = "summary-value " + (net > 0 ? "pos" : net < 0 ? "neg" : "neutral");
-
+  netEl.className = "sum-value lg " + (net > 0 ? "pos" : net < 0 ? "neg" : "");
   const absTotalLoss = Math.abs(totalLoss);
   const ratio = totalProfit + absTotalLoss > 0 ? (totalProfit / (totalProfit + absTotalLoss)) * 100 : 50;
   document.getElementById("summaryBar").style.width = ratio + "%";
   document.getElementById("summaryBar").style.background = net >= 0 ? "var(--green)" : "var(--red)";
 
-  // Stats
+  // Stats row
   const total = allTrades.length;
   const winRate = total > 0 ? Math.round((winCount / total) * 100) : null;
-  const avgRR = rrValues.length > 0 ? (rrValues.reduce((a,b)=>a+b,0)/rrValues.length) : null;
-  const bestRR = rrValues.length > 0 ? Math.max(...rrValues) : null;
-  const worstRR = rrValues.length > 0 ? Math.min(...rrValues) : null;
+  const avgRR = rrValues.length > 0 ? rrValues.reduce((a,b)=>a+b,0)/rrValues.length : null;
 
   document.getElementById("statTotal").textContent = total > 0 ? total : "—";
-  document.getElementById("statWinRate").textContent = winRate !== null ? winRate + "%" : "—";
-  document.getElementById("statWinRate").className = "stats-value" + (winRate !== null ? (winRate >= 50 ? " pos" : " neg") : "");
-  document.getElementById("statLong").textContent = longCount > 0 ? longCount : "—";
-  document.getElementById("statShort").textContent = shortCount > 0 ? shortCount : "—";
-  document.getElementById("statAvgRR").textContent = avgRR !== null ? avgRR.toFixed(2) : "—";
-  document.getElementById("statAvgRR").className = "stats-value" + (avgRR !== null ? (avgRR >= 0 ? " pos" : " neg") : "");
-  document.getElementById("statBestRR").textContent = bestRR !== null ? bestRR.toFixed(2) : "—";
-  document.getElementById("statWorstRR").textContent = worstRR !== null ? worstRR.toFixed(2) : "—";
+
+  const wrEl = document.getElementById("statWinRate");
+  wrEl.textContent = winRate !== null ? winRate + "%" : "—";
+  wrEl.className = "sum-value" + (winRate !== null ? (winRate >= 50 ? " pos" : " neg") : "");
+
+  const avgRREl = document.getElementById("statAvgRR");
+  avgRREl.textContent = avgRR !== null ? (avgRR >= 0 ? "+" : "") + avgRR.toFixed(2) + "R" : "—";
+  avgRREl.className = "sum-value" + (avgRR !== null ? (avgRR >= 0 ? " pos" : " neg") : "");
+
+  // Long / Short rows
+  document.getElementById("statLong").textContent = longTotal > 0 ? longTotal : "—";
+  document.getElementById("statLongDetail").textContent = longTotal > 0 ? `${longTP} TP  /  ${longSL} SL` : "";
+  document.getElementById("statShort").textContent = shortTotal > 0 ? shortTotal : "—";
+  document.getElementById("statShortDetail").textContent = shortTotal > 0 ? `${shortTP} TP  /  ${shortSL} SL` : "";
+
+  // Dollar avg rows
+  const avgWin  = dollarWins.length   > 0 ? dollarWins.reduce((a,b)=>a+b,0)   / dollarWins.length   : null;
+  const avgLoss = dollarLosses.length > 0 ? dollarLosses.reduce((a,b)=>a+b,0) / dollarLosses.length : null;
+  document.getElementById("statAvgWin").textContent  = avgWin  !== null ? "+" + avgWin.toFixed(0)  + "$" : "—";
+  document.getElementById("statAvgLoss").textContent = avgLoss !== null ? "-" + avgLoss.toFixed(0) + "$" : "—";
+
+  // Pair distribution
+  const pairMap = {};
+  allTrades.forEach(t => {
+    const p = (t.pair || "?").toUpperCase();
+    if (!pairMap[p]) pairMap[p] = { total: 0, tp: 0, sl: 0 };
+    pairMap[p].total++;
+    if (t.result === "tp") pairMap[p].tp++; else pairMap[p].sl++;
+  });
+
+  const pairs = Object.entries(pairMap).sort((a,b) => b[1].total - a[1].total);
+  const pairListWrap = document.getElementById("pairListWrap");
+  const pairList = document.getElementById("pairList");
+
+  if (pairs.length > 0) {
+    pairListWrap.style.display = "block";
+    pairList.innerHTML = "";
+    pairs.forEach(([pair, data]) => {
+      const row = document.createElement("div"); row.className = "pair-row";
+      row.innerHTML = `
+        <span class="pair-name">${pair}</span>
+        <div class="pair-stats">
+          <span class="pair-count">${data.total} işlem</span>
+          <span class="pair-tp">TP ${data.tp}</span>
+          <span class="pair-sl">SL ${data.sl}</span>
+        </div>`;
+      pairList.appendChild(row);
+    });
+  } else {
+    pairListWrap.style.display = "none";
+  }
 }
 
 // ── RENDER CALENDAR ──
@@ -478,8 +540,7 @@ async function render() {
 
   for (let i = 0; i < cells; i++) {
     const day = i - first + 1;
-    const cell = document.createElement("div");
-    cell.className = "cal-cell";
+    const cell = document.createElement("div"); cell.className = "cal-cell";
     if (day >= 1 && day <= days) {
       cell.classList.add("active");
       if (day===today.getDate() && curMonth===today.getMonth() && curYear===today.getFullYear()) cell.classList.add("today");
@@ -548,99 +609,120 @@ function closeModal() {
   render();
 }
 
-// ── TRADE FORM ──
+// ── TRADE FORM TOGGLES ──
 function resetTradeForm() {
   document.getElementById("tPair").value = "";
   document.getElementById("tTF").value = "";
-  document.getElementById("tTP").value = "";
-  document.getElementById("tSL").value = "";
   document.getElementById("tRR").value = "";
-  tradeType = "long";
+  document.getElementById("tDollar").value = "";
+  tradeDir = "long"; tradeResult = null;
   document.getElementById("tLongBtn").classList.add("active");
   document.getElementById("tShortBtn").classList.remove("active");
+  document.getElementById("tTPBtn").classList.remove("active");
+  document.getElementById("tSLBtn").classList.remove("active");
 }
 
 document.getElementById("tLongBtn").addEventListener("click", () => {
-  tradeType = "long";
+  tradeDir = "long";
   document.getElementById("tLongBtn").classList.add("active");
   document.getElementById("tShortBtn").classList.remove("active");
 });
 document.getElementById("tShortBtn").addEventListener("click", () => {
-  tradeType = "short";
+  tradeDir = "short";
   document.getElementById("tShortBtn").classList.add("active");
   document.getElementById("tLongBtn").classList.remove("active");
 });
+document.getElementById("tTPBtn").addEventListener("click", () => {
+  tradeResult = tradeResult === "tp" ? null : "tp";
+  document.getElementById("tTPBtn").classList.toggle("active", tradeResult === "tp");
+  document.getElementById("tSLBtn").classList.remove("active");
+  if (tradeResult === "tp") tradeResult = "tp"; // keep
+});
+document.getElementById("tSLBtn").addEventListener("click", () => {
+  tradeResult = tradeResult === "sl" ? null : "sl";
+  document.getElementById("tSLBtn").classList.toggle("active", tradeResult === "sl");
+  document.getElementById("tTPBtn").classList.remove("active");
+});
 
+// ── ADD TRADE ──
 document.getElementById("addTradeBtn").addEventListener("click", async () => {
   if (!selectedDay) return;
   const pair = document.getElementById("tPair").value.trim().toUpperCase();
-  if (!pair) { setStatus("Pair gir!"); setTimeout(()=>setStatus(""), 1500); return; }
-  const tf = document.getElementById("tTF").value.trim();
-  const tp = document.getElementById("tTP").value.trim();
-  const sl = document.getElementById("tSL").value.trim();
-  const rr = document.getElementById("tRR").value.trim();
+  if (!pair) { setStatus("Pair gir!"); setTimeout(()=>setStatus(""),1500); return; }
+  if (!tradeResult) { setStatus("TP mi SL mi seç!"); setTimeout(()=>setStatus(""),1500); return; }
 
-  const trade = { pair, type: tradeType, tf, tp, sl, rr, id: Date.now() };
+  const rawDollar = document.getElementById("tDollar").value.replace(/[^0-9.]/g, "");
+  const trade = {
+    pair,
+    dir: tradeDir,
+    result: tradeResult,
+    tf: document.getElementById("tTF").value.trim(),
+    rr: document.getElementById("tRR").value.trim(),
+    dollar: rawDollar || "",
+    id: Date.now()
+  };
+
   const entry = await loadEntry(curYear, curMonth, selectedDay);
-  entry.trades = entry.trades || [];
   entry.trades.push(trade);
   await saveEntry(curYear, curMonth, selectedDay, entry);
   renderTrades(entry.trades);
   resetTradeForm();
-  setStatus("trade eklendi ✓");
-  setTimeout(() => setStatus(""), 1500);
+  setStatus("trade eklendi ✓"); setTimeout(()=>setStatus(""), 1500);
 });
 
+// ── RENDER TRADES ──
 function renderTrades(trades) {
   const list = document.getElementById("tradeList");
   list.innerHTML = "";
   if (!trades || trades.length === 0) return;
   trades.forEach((t, idx) => {
-    const card = document.createElement("div");
-    card.className = "trade-card";
+    const card = document.createElement("div"); card.className = "trade-card";
+    const left = document.createElement("div"); left.className = "trade-card-left";
 
-    const left = document.createElement("div");
-    left.className = "trade-card-left";
+    const pairEl = document.createElement("span"); pairEl.className = "trade-card-pair";
+    pairEl.textContent = (t.pair || "—").toUpperCase();
+    left.appendChild(pairEl);
 
-    const pair = document.createElement("span");
-    pair.className = "trade-card-pair";
-    pair.textContent = t.pair || "—";
-
-    const meta = document.createElement("span");
-    meta.className = "trade-card-meta";
     const parts = [];
     if (t.tf) parts.push(t.tf);
-    if (t.tp) parts.push("TP: " + t.tp);
-    if (t.sl) parts.push("SL: " + t.sl);
-    meta.textContent = parts.join("  ·  ");
-
-    left.appendChild(pair);
-    if (parts.length) left.appendChild(meta);
-
-    const right = document.createElement("div");
-    right.className = "trade-card-right";
-
-    if (t.rr) {
-      const rrEl = document.createElement("span");
-      const rrVal = parseFloat(t.rr);
-      rrEl.className = "trade-card-rr " + (rrVal >= 0 ? "pos" : "neg");
-      rrEl.textContent = (rrVal >= 0 ? "+" : "") + t.rr + "R";
-      right.appendChild(rrEl);
+    if (t.rr) parts.push("RR: " + t.rr);
+    if (parts.length) {
+      const meta = document.createElement("span"); meta.className = "trade-card-meta";
+      meta.textContent = parts.join("  ·  "); left.appendChild(meta);
     }
 
-    const typeEl = document.createElement("span");
-    typeEl.className = "trade-card-type " + t.type;
-    typeEl.textContent = t.type === "long" ? "LONG" : "SHORT";
-    right.appendChild(typeEl);
+    const right = document.createElement("div"); right.className = "trade-card-right";
 
-    const removeBtn = document.createElement("button");
-    removeBtn.className = "trade-remove-btn";
-    removeBtn.textContent = "×";
+    // $ tutar
+    if (t.dollar && t.dollar !== "") {
+      const dolEl = document.createElement("span");
+      const isWin = t.result === "tp";
+      dolEl.className = "trade-card-dollar " + (isWin ? "pos" : "neg");
+      dolEl.textContent = (isWin ? "+" : "-") + t.dollar + "$";
+      right.appendChild(dolEl);
+    }
+
+    // Long/Short badge
+    if (t.dir) {
+      const dirEl = document.createElement("span");
+      dirEl.className = "trade-card-badge " + t.dir;
+      dirEl.textContent = t.dir === "long" ? "LONG" : "SHORT";
+      right.appendChild(dirEl);
+    }
+
+    // TP/SL badge
+    if (t.result) {
+      const resEl = document.createElement("span");
+      resEl.className = "trade-card-badge " + t.result;
+      resEl.textContent = t.result === "tp" ? "TP" : "SL";
+      right.appendChild(resEl);
+    }
+
+    const removeBtn = document.createElement("button"); removeBtn.className = "trade-remove-btn"; removeBtn.textContent = "×";
     removeBtn.addEventListener("click", () => removeTrade(idx));
     right.appendChild(removeBtn);
 
-    card.appendChild(left);
-    card.appendChild(right);
+    card.appendChild(left); card.appendChild(right);
     list.appendChild(card);
   });
 }
@@ -650,19 +732,17 @@ async function removeTrade(idx) {
   entry.trades.splice(idx, 1);
   await saveEntry(curYear, curMonth, selectedDay, entry);
   renderTrades(entry.trades);
-  setStatus("silindi ✓");
-  setTimeout(() => setStatus(""), 1500);
+  setStatus("silindi ✓"); setTimeout(()=>setStatus(""), 1500);
 }
 
 // ── PHOTOS ──
 function openViewer(src) { document.getElementById("viewerImg").src = src; document.getElementById("viewerDownload").href = src; document.getElementById("viewerOverlay").classList.add("open"); }
 function closeViewer() { document.getElementById("viewerOverlay").classList.remove("open"); }
 document.getElementById("viewerClose").addEventListener("click", closeViewer);
-document.getElementById("viewerOverlay").addEventListener("click", (e) => { if (e.target === document.getElementById("viewerOverlay")) closeViewer(); });
+document.getElementById("viewerOverlay").addEventListener("click", (e) => { if (e.target===document.getElementById("viewerOverlay")) closeViewer(); });
 
 function renderPhotos(photos) {
-  const grid = document.getElementById("photoGrid");
-  grid.innerHTML = "";
+  const grid = document.getElementById("photoGrid"); grid.innerHTML = "";
   photos.forEach((data, idx) => {
     const wrap = document.createElement("div"); wrap.className = "photo-wrap";
     const img = document.createElement("img"); img.src = data; img.addEventListener("click", () => openViewer(data));
@@ -677,10 +757,10 @@ async function removePhoto(idx) {
   entry.photos.splice(idx, 1);
   await saveEntry(curYear, curMonth, selectedDay, entry);
   renderPhotos(entry.photos);
-  setStatus("silindi ✓"); setTimeout(() => setStatus(""), 1500);
+  setStatus("silindi ✓"); setTimeout(()=>setStatus(""), 1500);
 }
 
-function resizeImage(file, maxSize = 1200) {
+function resizeImage(file, maxSize=1200) {
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -688,7 +768,7 @@ function resizeImage(file, maxSize = 1200) {
       img.onload = () => {
         const canvas = document.createElement("canvas");
         let w = img.width, h = img.height;
-        if (w > h && w > maxSize) { h = h * maxSize / w; w = maxSize; } else if (h > maxSize) { w = w * maxSize / h; h = maxSize; }
+        if (w > h && w > maxSize) { h = h*maxSize/w; w = maxSize; } else if (h > maxSize) { w = w*maxSize/h; h = maxSize; }
         canvas.width = w; canvas.height = h;
         canvas.getContext("2d").drawImage(img, 0, 0, w, h);
         resolve(canvas.toDataURL("image/webp", 0.95));
@@ -706,7 +786,7 @@ document.getElementById("fileInput").addEventListener("change", async (e) => {
   for (const file of files) entry.photos.push(await resizeImage(file));
   await saveEntry(curYear, curMonth, selectedDay, entry);
   renderPhotos(entry.photos);
-  setStatus("kaydedildi ✓"); setTimeout(() => setStatus(""), 2000); e.target.value = "";
+  setStatus("kaydedildi ✓"); setTimeout(()=>setStatus(""), 2000); e.target.value = "";
 });
 
 // ── NOTE ──
@@ -717,38 +797,35 @@ document.getElementById("noteArea").addEventListener("input", (e) => {
     const entry = await loadEntry(curYear, curMonth, selectedDay);
     entry.note = e.target.value;
     await saveEntry(curYear, curMonth, selectedDay, entry);
-    setStatus("kaydedildi ✓"); setTimeout(() => setStatus(""), 2000);
+    setStatus("kaydedildi ✓"); setTimeout(()=>setStatus(""), 2000);
   }, 800);
 });
 
-// ── PNL ──
+// ── GÜNLÜK PNL ──
 async function savePnl(value) {
   const entry = await loadEntry(curYear, curMonth, selectedDay);
   entry.pnl = value;
   await saveEntry(curYear, curMonth, selectedDay, entry);
-  setStatus("kaydedildi ✓"); setTimeout(() => setStatus(""), 2000);
-  const input = document.getElementById("pnlInput");
-  input.style.color = value.startsWith("+") ? "#4caf7d" : value.startsWith("-") ? "#e05c5c" : "#ddd";
+  setStatus("kaydedildi ✓"); setTimeout(()=>setStatus(""), 2000);
+  document.getElementById("pnlInput").style.color = value.startsWith("+") ? "#4caf7d" : value.startsWith("-") ? "#e05c5c" : "#ddd";
 }
 
 document.getElementById("karBtn").addEventListener("click", async () => {
   if (!selectedDay) return;
-  const raw = document.getElementById("pnlInput").value.replace(/[^0-9.]/g, "");
-  if (!raw) return;
+  const raw = document.getElementById("pnlInput").value.replace(/[^0-9.]/g, ""); if (!raw) return;
   const val = "+" + raw; document.getElementById("pnlInput").value = val; await savePnl(val);
 });
 document.getElementById("zararBtn").addEventListener("click", async () => {
   if (!selectedDay) return;
-  const raw = document.getElementById("pnlInput").value.replace(/[^0-9.]/g, "");
-  if (!raw) return;
+  const raw = document.getElementById("pnlInput").value.replace(/[^0-9.]/g, ""); if (!raw) return;
   const val = "-" + raw; document.getElementById("pnlInput").value = val; await savePnl(val);
 });
 
 // ── NAV ──
-document.getElementById("prevBtn").addEventListener("click", () => { if (curMonth===0){curMonth=11;curYear--;} else curMonth--; render(); });
-document.getElementById("nextBtn").addEventListener("click", () => { if (curMonth===11){curMonth=0;curYear++;} else curMonth++; render(); });
+document.getElementById("prevBtn").addEventListener("click", () => { if(curMonth===0){curMonth=11;curYear--;}else curMonth--; render(); });
+document.getElementById("nextBtn").addEventListener("click", () => { if(curMonth===11){curMonth=0;curYear++;}else curMonth++; render(); });
 document.getElementById("closeBtn").addEventListener("click", closeModal);
-document.getElementById("overlay").addEventListener("click", (e) => { if (e.target===document.getElementById("overlay")) closeModal(); });
+document.getElementById("overlay").addEventListener("click", (e) => { if(e.target===document.getElementById("overlay")) closeModal(); });
 </script>
 </body>
 </html>
