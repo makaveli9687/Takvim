@@ -17,7 +17,7 @@
   body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 24px 12px 48px; }
   .app { width: 100%; max-width: 460px; }
 
-  /* LOGIN */
+  /* ── LOGIN ── */
   .login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; gap: 24px; text-align: center; }
   .login-title { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
   .login-sub { font-size: 12px; color: var(--text-dim); letter-spacing: 0.1em; }
@@ -25,7 +25,7 @@
   .google-btn:hover { border-color: var(--text-mid); background: var(--surface2); }
   .google-icon { width: 18px; height: 18px; }
 
-  /* HEADER */
+  /* ── CALENDAR ── */
   .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
   .header-center { text-align: center; }
   .month-name { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; line-height: 1; }
@@ -34,8 +34,6 @@
   .nav-btn:hover { border-color: var(--text-mid); color: var(--text); }
   .signout-btn { background: none; border: none; color: var(--text-dim); font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: color 0.15s; }
   .signout-btn:hover { color: var(--text-mid); }
-
-  /* CALENDAR */
   .day-headers { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 6px; }
   .day-header-cell { text-align: center; font-size: 9px; color: var(--text-dim); letter-spacing: 0.15em; padding: 4px 0; }
   .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
@@ -50,18 +48,14 @@
   .pnl-label.pos { color: var(--green); }
   .pnl-label.neg { color: var(--red); }
 
-  /* SUMMARY TOGGLE BTN */
+  /* ── SUMMARY ── */
   .summary-toggle-btn { background: none; border: 1px solid var(--border2); color: var(--text-dim); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; padding: 8px 20px; border-radius: 10px; cursor: pointer; transition: border-color 0.15s, color 0.15s; margin-top: 20px; width: 100%; }
   .summary-toggle-btn:hover { border-color: var(--text-mid); color: var(--text-mid); }
-
-  /* MONTH SUMMARY CARD */
   @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
   .month-summary { margin-top: 12px; border-radius: 14px; border: 1px solid var(--border2); background: var(--surface); overflow: hidden; }
-
   .sum-row { display: grid; border-bottom: 1px solid var(--border2); }
   .sum-row.cols3 { grid-template-columns: 1fr 1px 1fr 1px 1fr; }
   .sum-row.cols2 { grid-template-columns: 1fr 1px 1fr; }
-  .sum-row.cols4 { grid-template-columns: 1fr 1px 1fr 1px 1fr 1px 1fr; }
   .sum-row.no-border { border-bottom: none; }
   .sum-divider { background: var(--border2); }
   .sum-col { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 6px; }
@@ -72,8 +66,6 @@
   .sum-value.lg { font-size: 14px; }
   .summary-bar-wrap { height: 3px; background: var(--border); overflow: hidden; }
   .summary-bar { height: 100%; transition: width 0.5s cubic-bezier(.22,1,.36,1), background 0.3s; }
-
-  /* PAIR LIST */
   .pair-list-wrap { border-top: 1px solid var(--border2); padding: 10px 12px; max-height: 140px; overflow-y: auto; }
   .pair-list-title { font-size: 8px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
   .pair-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); }
@@ -84,77 +76,126 @@
   .pair-tp { font-size: 10px; color: var(--green); }
   .pair-sl { font-size: 10px; color: var(--red); }
 
-  /* OVERLAY & MODAL */
+  /* ── DAY OVERLAY (bottom sheet) ── */
   .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 100; align-items: flex-end; justify-content: center; padding: 16px; }
   .overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 18px; width: 100%; max-width: 460px; padding: 20px; display: flex; flex-direction: column; gap: 16px; max-height: 88vh; overflow-y: auto; animation: slideUp 0.22s cubic-bezier(.22,1,.36,1); }
+  .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 18px; width: 100%; max-width: 460px; padding: 20px; display: flex; flex-direction: column; gap: 14px; max-height: 82vh; overflow-y: auto; animation: slideUp 0.22s cubic-bezier(.22,1,.36,1); }
   @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   .modal-header { display: flex; align-items: center; justify-content: space-between; }
   .modal-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); }
   .close-btn { background: none; border: none; color: var(--text-dim); font-size: 24px; cursor: pointer; line-height: 1; padding: 0 4px; }
 
-  /* PHOTOS */
-  .photo-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-  .photo-wrap { position: relative; width: 76px; height: 76px; border-radius: 9px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; }
-  .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .remove-photo { position: absolute; top: 3px; right: 3px; background: rgba(0,0,0,0.75); border: none; color: #ccc; font-size: 13px; width: 20px; height: 20px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  /* ── TRADE LIST (in day modal) ── */
+  .trade-list { display: flex; flex-direction: column; gap: 8px; }
+  .trade-card {
+    background: #111; border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 14px; display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; cursor: pointer; transition: border-color 0.15s, background 0.12s;
+  }
+  .trade-card:hover { background: var(--surface2); border-color: var(--border2); }
+  .trade-card-left { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+  .trade-card-pair { font-size: 13px; color: var(--text); font-weight: 500; }
+  .trade-card-meta { font-size: 10px; color: var(--text-dim); }
+  .trade-card-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .badge { font-size: 9px; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 5px; font-weight: 500; }
+  .badge.long  { color: var(--green); background: rgba(76,175,125,0.12); }
+  .badge.short { color: var(--red);   background: rgba(224,92,92,0.12); }
+  .badge.tp    { color: var(--green); background: rgba(76,175,125,0.12); }
+  .badge.sl    { color: var(--red);   background: rgba(224,92,92,0.12); }
+  .trade-dollar { font-size: 12px; font-weight: 500; }
+  .trade-dollar.pos { color: var(--green); }
+  .trade-dollar.neg { color: var(--red); }
+  .trade-arrow { font-size: 14px; color: var(--text-dim); }
 
-  /* VIEWER */
-  .viewer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 200; align-items: center; justify-content: center; }
-  .viewer-overlay.open { display: flex; }
-  .viewer-img { max-width: 100vw; max-height: 100vh; object-fit: contain; }
-  .viewer-close { position: fixed; top: 16px; right: 16px; background: #000; border: none; color: #fff; font-size: 20px; width: 42px; height: 42px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .viewer-download { position: fixed; top: 16px; left: 16px; background: #000; border: none; color: #fff; font-size: 18px; width: 42px; height: 42px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+  /* add trade button in day modal */
+  .add-trade-day-btn {
+    background: none; border: 1px dashed var(--border2); color: var(--text-dim);
+    border-radius: 12px; padding: 12px; font-size: 12px; font-family: 'DM Mono', monospace;
+    cursor: pointer; letter-spacing: 0.08em; transition: border-color 0.15s, color 0.15s; width: 100%;
+  }
+  .add-trade-day-btn:hover { border-color: var(--text-mid); color: var(--text-mid); }
 
+  /* day note */
+  textarea { background: #111; border: 1px solid var(--border); border-radius: 12px; color: #ddd; font-size: 12px; font-family: 'Trebuchet MS', sans-serif; line-height: 1.8; padding: 14px; resize: none; outline: none; width: 100%; min-height: 80px; transition: border-color 0.15s; }
+  textarea:focus { border-color: #3a3a3a; }
+  textarea::placeholder { color: #333; font-style: italic; }
+  .status-day { font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-align: right; min-height: 14px; }
+
+  /* ── TRADE DETAIL PAGE (fullscreen) ── */
+  .trade-page {
+    display: none; position: fixed; inset: 0; background: var(--bg);
+    z-index: 150; overflow-y: auto; padding: 0;
+    animation: pageIn 0.25s cubic-bezier(.22,1,.36,1);
+  }
+  .trade-page.open { display: block; }
+  @keyframes pageIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+  .trade-page-inner { max-width: 460px; margin: 0 auto; padding: 24px 16px 48px; display: flex; flex-direction: column; gap: 20px; }
+  .trade-page-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 4px; }
+  .trade-page-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+  .trade-page-close {
+    background: var(--surface); border: 1px solid var(--border2); color: var(--text-mid);
+    width: 40px; height: 40px; border-radius: 10px; font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* info cards on trade page */
+  .info-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; overflow: hidden; }
+  .info-row { display: grid; border-bottom: 1px solid var(--border2); }
+  .info-row.cols2 { grid-template-columns: 1fr 1px 1fr; }
+  .info-row.cols3 { grid-template-columns: 1fr 1px 1fr 1px 1fr; }
+  .info-row.no-border { border-bottom: none; }
+  .info-divider { background: var(--border2); }
+  .info-col { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; }
+  .info-label { font-size: 8px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; }
+  .info-value { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; color: var(--text); }
+  .info-value.pos { color: var(--green); }
+  .info-value.neg { color: var(--red); }
+  .info-value.mid { color: var(--text-mid); }
+
+  /* trade page section title */
+  .tp-section-title { font-size: 10px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; }
+
+  /* photos on trade page */
+  .tp-photo-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tp-photo-wrap { position: relative; width: 80px; height: 80px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; }
+  .tp-photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tp-remove-photo { position: absolute; top: 3px; right: 3px; background: rgba(0,0,0,0.75); border: none; color: #ccc; font-size: 13px; width: 20px; height: 20px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .add-photo-label { display: inline-flex; align-items: center; gap: 6px; background: none; border: 1px dashed var(--border2); color: var(--text-dim); border-radius: 9px; padding: 8px 14px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
   .add-photo-label:hover { border-color: var(--text-mid); color: var(--text-mid); }
   .add-photo-label input { display: none; }
 
-  textarea { background: #111; border: 1px solid var(--border); border-radius: 12px; color: #ddd; font-size: 12px; font-family: 'Trebuchet MS', sans-serif; line-height: 1.8; padding: 16px; resize: none; outline: none; width: 100%; min-height: 100px; transition: border-color 0.15s; }
-  textarea:focus { border-color: #3a3a3a; }
-  textarea::placeholder { color: #333; font-style: italic; }
+  /* trade note textarea */
+  .tp-note { background: #111; border: 1px solid var(--border); border-radius: 12px; color: #ddd; font-size: 12px; font-family: 'Trebuchet MS', sans-serif; line-height: 1.8; padding: 14px; resize: none; outline: none; width: 100%; min-height: 100px; transition: border-color 0.15s; }
+  .tp-note:focus { border-color: #3a3a3a; }
+  .tp-note::placeholder { color: #333; font-style: italic; }
 
-  .section-title { font-size: 10px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
+  .status-trade { font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-align: right; min-height: 14px; }
 
-  /* TRADE FORM */
-  .trade-form { background: #111; border: 1px solid var(--border); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  /* delete trade btn */
+  .delete-trade-btn { background: none; border: 1px solid #3a1a1a; color: #7a3535; border-radius: 10px; padding: 10px; font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: border-color 0.15s, color 0.15s; width: 100%; }
+  .delete-trade-btn:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── ADD TRADE FORM (inside day modal, hidden until button pressed) ── */
+  .trade-form { background: #111; border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
   .trade-form-row { display: flex; gap: 6px; }
-  .trade-input { background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-size: 12px; font-family: 'DM Mono', monospace; padding: 8px 10px; outline: none; width: 100%; transition: border-color 0.15s; }
+  .trade-input { background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-size: 12px; font-family: 'DM Mono', monospace; padding: 9px 10px; outline: none; width: 100%; transition: border-color 0.15s; }
   .trade-input:focus { border-color: var(--text-mid); }
   .trade-input::placeholder { color: var(--text-dim); }
-
-  /* toggle buttons: long/short & tp/sl */
-  .toggle-btn { flex: 1; background: none; border: 1px solid var(--border2); color: var(--text-dim); border-radius: 8px; padding: 8px; font-size: 12px; font-family: 'DM Mono', monospace; cursor: pointer; transition: all 0.15s; letter-spacing: 0.05em; }
+  .toggle-btn { flex: 1; background: none; border: 1px solid var(--border2); color: var(--text-dim); border-radius: 8px; padding: 9px; font-size: 12px; font-family: 'DM Mono', monospace; cursor: pointer; transition: all 0.15s; letter-spacing: 0.05em; }
   .toggle-btn.long.active  { border-color: #2a4a35; color: var(--green); background: rgba(76,175,125,0.08); }
   .toggle-btn.short.active { border-color: #4a2a2a; color: var(--red);   background: rgba(224,92,92,0.08); }
   .toggle-btn.tp.active    { border-color: #2a4a35; color: var(--green); background: rgba(76,175,125,0.08); }
   .toggle-btn.sl.active    { border-color: #4a2a2a; color: var(--red);   background: rgba(224,92,92,0.08); }
+  .save-trade-btn { background: none; border: 1px solid var(--border2); color: var(--text-mid); border-radius: 8px; padding: 10px; font-size: 12px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: border-color 0.15s, color 0.15s; width: 100%; }
+  .save-trade-btn:hover { border-color: var(--text); color: var(--text); }
 
-  .add-trade-btn { background: none; border: 1px dashed var(--border2); color: var(--text-dim); border-radius: 8px; padding: 8px; font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: border-color 0.15s, color 0.15s; width: 100%; }
-  .add-trade-btn:hover { border-color: var(--text-mid); color: var(--text-mid); }
-
-  /* TRADE LIST */
-  .trade-list { display: flex; flex-direction: column; gap: 6px; }
-  .trade-card { background: #111; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .trade-card-left { display: flex; flex-direction: column; gap: 3px; flex: 1; }
-  .trade-card-pair { font-size: 12px; color: var(--text); font-weight: 500; }
-  .trade-card-meta { font-size: 10px; color: var(--text-dim); }
-  .trade-card-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-  .trade-card-rr { font-size: 12px; font-weight: 500; }
-  .trade-card-rr.pos { color: var(--green); }
-  .trade-card-rr.neg { color: var(--red); }
-  .trade-card-dollar { font-size: 11px; font-weight: 500; }
-  .trade-card-dollar.pos { color: var(--green); }
-  .trade-card-dollar.neg { color: var(--red); }
-  .trade-card-badge { font-size: 9px; letter-spacing: 0.1em; padding: 2px 7px; border-radius: 5px; }
-  .trade-card-badge.long  { color: var(--green); background: rgba(76,175,125,0.12); }
-  .trade-card-badge.short { color: var(--red);   background: rgba(224,92,92,0.12); }
-  .trade-card-badge.tp    { color: var(--green); background: rgba(76,175,125,0.12); }
-  .trade-card-badge.sl    { color: var(--red);   background: rgba(224,92,92,0.12); }
-  .trade-remove-btn { background: none; border: none; color: var(--text-dim); font-size: 16px; cursor: pointer; line-height: 1; }
-  .trade-remove-btn:hover { color: var(--red); }
-
-  .status { font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-align: right; min-height: 16px; }
+  /* ── FULLSCREEN VIEWER ── */
+  .viewer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 300; align-items: center; justify-content: center; }
+  .viewer-overlay.open { display: flex; }
+  .viewer-img { max-width: 100vw; max-height: 100vh; object-fit: contain; }
+  .viewer-close { position: fixed; top: 16px; right: 16px; background: #000; border: none; color: #fff; font-size: 20px; width: 42px; height: 42px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .viewer-download { position: fixed; top: 16px; left: 16px; background: #000; border: none; color: #fff; font-size: 18px; width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
 
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
@@ -163,6 +204,7 @@
 <body>
 <div class="app">
 
+  <!-- LOGIN -->
   <div id="loginScreen" style="display:none">
     <div class="login-screen">
       <div>
@@ -178,10 +220,11 @@
         </svg>
         Google ile giriş yap
       </button>
-      <div id="loginError" style="font-size:11px; color:#e05c5c; display:none;"></div>
+      <div id="loginError" style="font-size:11px;color:#e05c5c;display:none;"></div>
     </div>
   </div>
 
+  <!-- CALENDAR -->
   <div id="calendarScreen" style="display:none">
     <div class="header">
       <button class="nav-btn" id="prevBtn">&#8249;</button>
@@ -191,7 +234,7 @@
       </div>
       <button class="nav-btn" id="nextBtn">&#8250;</button>
     </div>
-    <div style="text-align:right; margin-bottom:16px; margin-top:-16px;">
+    <div style="text-align:right;margin-bottom:16px;margin-top:-16px;">
       <button class="signout-btn" id="signOutBtn">çıkış yap</button>
     </div>
     <div class="day-headers" id="dayHeaders"></div>
@@ -199,8 +242,6 @@
 
     <button class="summary-toggle-btn" id="summaryToggleBtn">ay özeti göster</button>
     <div class="month-summary" id="monthSummary" style="display:none">
-
-      <!-- Row 1: Kâr / Net / Zarar -->
       <div class="sum-row cols3">
         <div class="sum-col"><span class="sum-label">Kâr</span><span class="sum-value pos lg" id="sumProfit">—</span></div>
         <div class="sum-divider"></div>
@@ -209,8 +250,6 @@
         <div class="sum-col"><span class="sum-label">Zarar</span><span class="sum-value neg lg" id="sumLoss">—</span></div>
       </div>
       <div class="summary-bar-wrap"><div class="summary-bar" id="summaryBar" style="width:0%"></div></div>
-
-      <!-- Row 2: İşlem / Win% / Ort RR -->
       <div class="sum-row cols3">
         <div class="sum-col"><span class="sum-label">İşlem</span><span class="sum-value" id="statTotal">—</span></div>
         <div class="sum-divider"></div>
@@ -218,106 +257,125 @@
         <div class="sum-divider"></div>
         <div class="sum-col"><span class="sum-label">Ort RR</span><span class="sum-value" id="statAvgRR">—</span></div>
       </div>
-
-      <!-- Row 3: Long (TP/SL) / Short (TP/SL) -->
       <div class="sum-row cols2">
         <div class="sum-col">
           <span class="sum-label">Long</span>
           <span class="sum-value pos" id="statLong">—</span>
-          <span class="sum-label" id="statLongDetail" style="color:var(--text-dim); font-size:9px;"></span>
+          <span class="sum-label" id="statLongDetail"></span>
         </div>
         <div class="sum-divider"></div>
         <div class="sum-col">
           <span class="sum-label">Short</span>
           <span class="sum-value neg" id="statShort">—</span>
-          <span class="sum-label" id="statShortDetail" style="color:var(--text-dim); font-size:9px;"></span>
+          <span class="sum-label" id="statShortDetail"></span>
         </div>
       </div>
-
-      <!-- Row 4: Trade $ ort -->
       <div class="sum-row cols2 no-border">
-        <div class="sum-col">
-          <span class="sum-label">Kârlı Trade Ort.</span>
-          <span class="sum-value pos" id="statAvgWin">—</span>
-        </div>
+        <div class="sum-col"><span class="sum-label">Kârlı Ort.</span><span class="sum-value pos" id="statAvgWin">—</span></div>
         <div class="sum-divider"></div>
-        <div class="sum-col">
-          <span class="sum-label">Zararlı Trade Ort.</span>
-          <span class="sum-value neg" id="statAvgLoss">—</span>
-        </div>
+        <div class="sum-col"><span class="sum-label">Zararlı Ort.</span><span class="sum-value neg" id="statAvgLoss">—</span></div>
       </div>
-
-      <!-- Pair list -->
       <div class="pair-list-wrap" id="pairListWrap" style="display:none">
         <div class="pair-list-title">Pair Dağılımı</div>
         <div id="pairList"></div>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- Viewer -->
-<div class="viewer-overlay" id="viewerOverlay">
-  <button class="viewer-close" id="viewerClose">×</button>
-  <a class="viewer-download" id="viewerDownload" download="foto.jpg">⬇</a>
-  <img class="viewer-img" id="viewerImg" src="" alt="">
-</div>
-
-<!-- Day Modal -->
+<!-- DAY MODAL (bottom sheet) -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modalTitle"></div>
-      <button class="close-btn" id="closeBtn">×</button>
+      <button class="close-btn" id="closeDayBtn">×</button>
     </div>
 
-    <div class="photo-grid" id="photoGrid"></div>
-    <label class="add-photo-label">+ Fotoğraf ekle<input type="file" id="fileInput" accept="image/*" multiple></label>
+    <!-- trade list -->
+    <div class="trade-list" id="dayTradeList"></div>
 
-    <textarea id="noteArea" placeholder="Bugün ne oldu? Notunu buraya yaz..."></textarea>
-
-    <!-- Günlük PNL -->
-    <div style="display:flex; flex-direction:column; gap:8px;">
-      <input type="text" inputmode="decimal" id="pnlInput" placeholder="Günlük tutar (örn: 250)"
-        style="background:#111; border:1px solid #222; border-radius:10px; color:#ddd; font-size:15px; font-family:'DM Mono',monospace; padding:10px 14px; outline:none; width:100%;">
-      <div style="display:flex; gap:8px;">
-        <button id="karBtn" style="flex:1; background:none; border:1px solid #2a4a35; color:#4caf7d; border-radius:10px; padding:10px; font-size:13px; font-family:'DM Mono',monospace; cursor:pointer;">Kâr</button>
-        <button id="zararBtn" style="flex:1; background:none; border:1px solid #4a2a2a; color:#e05c5c; border-radius:10px; padding:10px; font-size:13px; font-family:'DM Mono',monospace; cursor:pointer;">Zarar</button>
-      </div>
-    </div>
-
-    <!-- Tradeler -->
-    <div>
-      <div class="section-title">Tradeler</div>
-      <div class="trade-list" id="tradeList"></div>
+    <!-- add trade form (hidden by default) -->
+    <div id="addTradeFormWrap" style="display:none">
       <div class="trade-form">
-        <!-- Pair + TF -->
         <div class="trade-form-row">
           <input class="trade-input" id="tPair" placeholder="Pair (ör: EURUSD)" style="flex:2">
           <input class="trade-input" id="tTF" placeholder="TF (ör: 15m)" style="flex:1">
         </div>
-        <!-- Long / Short -->
         <div class="trade-form-row">
           <button class="toggle-btn long active" id="tLongBtn">Long</button>
           <button class="toggle-btn short" id="tShortBtn">Short</button>
         </div>
-        <!-- TP / SL sonuç -->
         <div class="trade-form-row">
           <button class="toggle-btn tp" id="tTPBtn">TP ✓</button>
           <button class="toggle-btn sl" id="tSLBtn">SL ✗</button>
         </div>
-        <!-- RR + $ tutar -->
         <div class="trade-form-row">
           <input class="trade-input" id="tRR" placeholder="RR (ör: 2.5)">
-          <input class="trade-input" id="tDollar" placeholder="$ Tutar (ör: 100)" inputmode="decimal">
+          <input class="trade-input" id="tDollar" placeholder="$ Tutar" inputmode="decimal">
         </div>
-        <button class="add-trade-btn" id="addTradeBtn">+ Trade ekle</button>
+        <button class="save-trade-btn" id="saveNewTradeBtn">Kaydet</button>
       </div>
     </div>
 
-    <div class="status" id="statusMsg"></div>
+    <button class="add-trade-day-btn" id="showAddTradeBtn">+ Trade ekle</button>
+
+    <!-- day note -->
+    <textarea id="dayNoteArea" placeholder="Günlük not..."></textarea>
+    <div class="status-day" id="statusDay"></div>
   </div>
+</div>
+
+<!-- TRADE DETAIL PAGE -->
+<div class="trade-page" id="tradePage">
+  <div class="trade-page-inner">
+    <div class="trade-page-header">
+      <div class="trade-page-title" id="tradePageTitle"></div>
+      <button class="trade-page-close" id="closeTradePageBtn">×</button>
+    </div>
+
+    <!-- info card -->
+    <div class="info-card" id="tradeInfoCard">
+      <div class="info-row cols3">
+        <div class="info-col"><span class="info-label">Yön</span><span class="info-value" id="tpDir">—</span></div>
+        <div class="info-divider"></div>
+        <div class="info-col"><span class="info-label">Sonuç</span><span class="info-value" id="tpResult">—</span></div>
+        <div class="info-divider"></div>
+        <div class="info-col"><span class="info-label">TF</span><span class="info-value mid" id="tpTF">—</span></div>
+      </div>
+      <div class="info-row cols2 no-border">
+        <div class="info-col"><span class="info-label">RR</span><span class="info-value" id="tpRR">—</span></div>
+        <div class="info-divider"></div>
+        <div class="info-col"><span class="info-label">Tutar</span><span class="info-value" id="tpDollar">—</span></div>
+      </div>
+    </div>
+
+    <!-- photos -->
+    <div>
+      <div class="tp-section-title" style="margin-bottom:10px">Fotoğraflar</div>
+      <div class="tp-photo-grid" id="tpPhotoGrid"></div>
+      <label class="add-photo-label" style="margin-top:10px">
+        + Fotoğraf ekle
+        <input type="file" id="tpFileInput" accept="image/*" multiple>
+      </label>
+    </div>
+
+    <!-- trade note -->
+    <div>
+      <div class="tp-section-title" style="margin-bottom:8px">Not</div>
+      <textarea class="tp-note" id="tpNoteArea" placeholder="Bu trade hakkında notların..."></textarea>
+    </div>
+
+    <div class="status-trade" id="statusTrade"></div>
+
+    <button class="delete-trade-btn" id="deleteTradeBtn">Trade'i sil</button>
+  </div>
+</div>
+
+<!-- FULLSCREEN VIEWER -->
+<div class="viewer-overlay" id="viewerOverlay">
+  <button class="viewer-close" id="viewerClose">×</button>
+  <a class="viewer-download" id="viewerDownload" download="foto.jpg">⬇</a>
+  <img class="viewer-img" id="viewerImg" src="" alt="">
 </div>
 
 <script type="module">
@@ -346,185 +404,84 @@ let curYear = today.getFullYear();
 let curMonth = today.getMonth();
 let selectedDay = null;
 let currentUser = null;
-let saveTimer = null;
 let dotCache = {};
-let tradeDir = "long";   // long | short
-let tradeResult = null;  // null | "tp" | "sl"
 
+// trade form state
+let tradeDir = "long";
+let tradeResult = null;
+
+// currently open trade page
+let openTradeDay = null;   // {y, m, d}
+let openTradeIdx = null;   // index in entry.trades
+
+// save timers
+let dayNoteTimer = null;
+let tradeNoteTimer = null;
+
+// ── UTILS ──
 function showScreen(name) {
   document.getElementById("loginScreen").style.display = name === "login" ? "block" : "none";
   document.getElementById("calendarScreen").style.display = name === "calendar" ? "block" : "none";
 }
-function setStatus(msg) { document.getElementById("statusMsg").textContent = msg; }
+function setStatusDay(msg) { document.getElementById("statusDay").textContent = msg; }
+function setStatusTrade(msg) { document.getElementById("statusTrade").textContent = msg; }
 
+// ── AUTH ──
 onAuthStateChanged(auth, (user) => {
   if (user) { currentUser = user; dotCache = {}; showScreen("calendar"); render(); }
   else { currentUser = null; showScreen("login"); }
 });
-
 document.getElementById("googleSignInBtn").addEventListener("click", async () => {
-  const errEl = document.getElementById("loginError"); errEl.style.display = "none";
+  const e = document.getElementById("loginError"); e.style.display = "none";
   try { await signInWithPopup(auth, new GoogleAuthProvider()); }
-  catch(e) { errEl.textContent = "Giriş başarısız: " + e.message; errEl.style.display = "block"; }
+  catch(err) { e.textContent = "Giriş başarısız: " + err.message; e.style.display = "block"; }
 });
 document.getElementById("signOutBtn").addEventListener("click", () => signOut(auth));
 
+// ── FIRESTORE ──
 function entryRef(y, m, d) { return doc(db, "users", currentUser.uid, "entries", `${y}_${m}_${d}`); }
 
 async function loadEntry(y, m, d) {
   try {
     const snap = await getDoc(entryRef(y, m, d));
     const data = snap.exists() ? snap.data() : {};
-    return { note: data.note || "", photos: data.photos || [], pnl: data.pnl || "", trades: data.trades || [] };
-  } catch(e) { console.error(e); return { note: "", photos: [], pnl: "", trades: [] }; }
+    return {
+      note: data.note || "",
+      pnl: data.pnl || "",
+      trades: (data.trades || []).map(t => ({
+        id: t.id || Date.now(),
+        pair: (t.pair || "").toUpperCase(),
+        dir: t.dir || "long",
+        result: t.result || null,
+        tf: t.tf || "",
+        rr: t.rr || "",
+        dollar: t.dollar || "",
+        note: t.note || "",
+        photos: t.photos || []
+      }))
+    };
+  } catch(e) { console.error(e); return { note: "", pnl: "", trades: [] }; }
 }
 
 async function saveEntry(y, m, d, data) {
   try {
     await setDoc(entryRef(y, m, d), data);
-    dotCache[`${y}_${m}_${d}`] = data.note.trim() !== "" || data.photos.length > 0 || data.pnl !== "" || data.trades.length > 0;
-  } catch(e) { console.error(e); setStatus("kaydetme hatası!"); }
+    dotCache[`${y}_${m}_${d}`] = data.note.trim() !== "" || data.pnl !== "" || data.trades.length > 0;
+  } catch(e) { console.error(e); }
 }
 
 async function checkDot(y, m, d) {
   const key = `${y}_${m}_${d}`;
   if (dotCache[key] !== undefined) return dotCache[key];
   const e = await loadEntry(y, m, d);
-  dotCache[key] = e.note.trim() !== "" || e.photos.length > 0 || e.pnl !== "" || e.trades.length > 0;
+  dotCache[key] = e.note.trim() !== "" || e.pnl !== "" || e.trades.length > 0;
   return dotCache[key];
 }
 
 function daysInMonth(y, m) { return new Date(y, m+1, 0).getDate(); }
 function firstDay(y, m) { let d = new Date(y,m,1).getDay(); return d===0?6:d-1; }
 
-// ── MONTHLY SUMMARY ──
-async function updateMonthlySummary(y, m) {
-  const days = daysInMonth(y, m);
-  const entries = await Promise.all(Array.from({length: days}, (_, i) => loadEntry(y, m, i+1)));
-
-  let totalProfit = 0, totalLoss = 0;
-  let allTrades = [];
-  let longTotal = 0, longTP = 0, longSL = 0;
-  let shortTotal = 0, shortTP = 0, shortSL = 0;
-  let rrValues = [], winCount = 0;
-  let dollarWins = [], dollarLosses = [];
-
-  entries.forEach(e => {
-    if (e.pnl && e.pnl !== "") {
-      const val = parseFloat(e.pnl);
-      if (!isNaN(val)) { if (val > 0) totalProfit += val; else totalLoss += val; }
-    }
-    (e.trades || []).forEach(t => {
-      // Only count trades with a result (tp or sl)
-      if (!t.result) return;
-      allTrades.push(t);
-
-      const isTP = t.result === "tp";
-      if (t.dir === "long") {
-        longTotal++;
-        if (isTP) longTP++; else longSL++;
-      } else {
-        shortTotal++;
-        if (isTP) shortTP++; else shortSL++;
-      }
-
-      if (isTP) winCount++;
-
-      const rr = parseFloat(t.rr);
-      if (!isNaN(rr)) rrValues.push(isTP ? rr : -rr);
-
-      const dollar = parseFloat(t.dollar);
-      if (!isNaN(dollar) && dollar > 0) {
-        if (isTP) dollarWins.push(dollar);
-        else dollarLosses.push(dollar);
-      }
-    });
-  });
-
-  const net = totalProfit + totalLoss;
-  const hasData = totalProfit !== 0 || totalLoss !== 0 || allTrades.length > 0;
-  const summaryEl = document.getElementById("monthSummary");
-
-  if (!hasData) {
-    summaryEl.style.display = "none";
-    document.getElementById("summaryToggleBtn").textContent = "ay özeti göster";
-    return;
-  }
-
-  summaryEl.style.display = "block";
-  summaryEl.style.animation = "none"; summaryEl.offsetHeight; summaryEl.style.animation = "fadeIn 0.3s ease";
-
-  // PNL row
-  document.getElementById("sumProfit").textContent = totalProfit > 0 ? `+${totalProfit.toFixed(0)}$` : "—";
-  document.getElementById("sumLoss").textContent   = totalLoss < 0 ? `${totalLoss.toFixed(0)}$` : "—";
-  const netEl = document.getElementById("sumNet");
-  netEl.textContent = (net >= 0 ? "+" : "") + net.toFixed(0) + "$";
-  netEl.className = "sum-value lg " + (net > 0 ? "pos" : net < 0 ? "neg" : "");
-  const absTotalLoss = Math.abs(totalLoss);
-  const ratio = totalProfit + absTotalLoss > 0 ? (totalProfit / (totalProfit + absTotalLoss)) * 100 : 50;
-  document.getElementById("summaryBar").style.width = ratio + "%";
-  document.getElementById("summaryBar").style.background = net >= 0 ? "var(--green)" : "var(--red)";
-
-  // Stats row
-  const total = allTrades.length;
-  const winRate = total > 0 ? Math.round((winCount / total) * 100) : null;
-  const avgRR = rrValues.length > 0 ? rrValues.reduce((a,b)=>a+b,0)/rrValues.length : null;
-
-  document.getElementById("statTotal").textContent = total > 0 ? total : "—";
-
-  const wrEl = document.getElementById("statWinRate");
-  wrEl.textContent = winRate !== null ? winRate + "%" : "—";
-  wrEl.className = "sum-value" + (winRate !== null ? (winRate >= 50 ? " pos" : " neg") : "");
-
-  const avgRREl = document.getElementById("statAvgRR");
-  avgRREl.textContent = avgRR !== null ? (avgRR >= 0 ? "+" : "") + avgRR.toFixed(2) + "R" : "—";
-  avgRREl.className = "sum-value" + (avgRR !== null ? (avgRR >= 0 ? " pos" : " neg") : "");
-
-  // Long / Short rows
-  document.getElementById("statLong").textContent = longTotal > 0 ? longTotal : "—";
-  document.getElementById("statLongDetail").textContent = longTotal > 0 ? `${longTP} TP  /  ${longSL} SL` : "";
-  document.getElementById("statShort").textContent = shortTotal > 0 ? shortTotal : "—";
-  document.getElementById("statShortDetail").textContent = shortTotal > 0 ? `${shortTP} TP  /  ${shortSL} SL` : "";
-
-  // Dollar avg rows
-  const avgWin  = dollarWins.length   > 0 ? dollarWins.reduce((a,b)=>a+b,0)   / dollarWins.length   : null;
-  const avgLoss = dollarLosses.length > 0 ? dollarLosses.reduce((a,b)=>a+b,0) / dollarLosses.length : null;
-  document.getElementById("statAvgWin").textContent  = avgWin  !== null ? "+" + avgWin.toFixed(0)  + "$" : "—";
-  document.getElementById("statAvgLoss").textContent = avgLoss !== null ? "-" + avgLoss.toFixed(0) + "$" : "—";
-
-  // Pair distribution
-  const pairMap = {};
-  allTrades.forEach(t => {
-    const p = (t.pair || "?").toUpperCase();
-    if (!pairMap[p]) pairMap[p] = { total: 0, tp: 0, sl: 0 };
-    pairMap[p].total++;
-    if (t.result === "tp") pairMap[p].tp++; else pairMap[p].sl++;
-  });
-
-  const pairs = Object.entries(pairMap).sort((a,b) => b[1].total - a[1].total);
-  const pairListWrap = document.getElementById("pairListWrap");
-  const pairList = document.getElementById("pairList");
-
-  if (pairs.length > 0) {
-    pairListWrap.style.display = "block";
-    pairList.innerHTML = "";
-    pairs.forEach(([pair, data]) => {
-      const row = document.createElement("div"); row.className = "pair-row";
-      row.innerHTML = `
-        <span class="pair-name">${pair}</span>
-        <div class="pair-stats">
-          <span class="pair-count">${data.total} işlem</span>
-          <span class="pair-tp">TP ${data.tp}</span>
-          <span class="pair-sl">SL ${data.sl}</span>
-        </div>`;
-      pairList.appendChild(row);
-    });
-  } else {
-    pairListWrap.style.display = "none";
-  }
-}
-
-// ── RENDER CALENDAR ──
+// ── CALENDAR RENDER ──
 async function render() {
   document.getElementById("monthName").textContent = MONTHS[curMonth];
   document.getElementById("yearLabel").textContent = curYear;
@@ -544,11 +501,9 @@ async function render() {
     if (day >= 1 && day <= days) {
       cell.classList.add("active");
       if (day===today.getDate() && curMonth===today.getMonth() && curYear===today.getFullYear()) cell.classList.add("today");
-
       const num = document.createElement("span"); num.className = "day-num"; num.textContent = day; cell.appendChild(num);
       const dot = document.createElement("span"); dot.className = "entry-dot"; dot.style.visibility = "hidden"; cell.appendChild(dot);
       const pnlEl = document.createElement("span"); pnlEl.className = "pnl-label"; pnlEl.style.visibility = "hidden"; cell.appendChild(pnlEl);
-
       checkDot(curYear, curMonth, day).then(has => { if (has) dot.style.visibility = "visible"; });
       loadEntry(curYear, curMonth, day).then(entry => {
         if (entry.pnl && entry.pnl !== "") {
@@ -561,55 +516,180 @@ async function render() {
           }
         }
       });
-      cell.addEventListener("click", () => openModal(day));
+      cell.addEventListener("click", () => openDayModal(day));
     }
     grid.appendChild(cell);
   }
 }
 
-// ── SUMMARY TOGGLE ──
+// ── SUMMARY ──
 document.getElementById("summaryToggleBtn").addEventListener("click", async () => {
-  const summaryEl = document.getElementById("monthSummary");
+  const el = document.getElementById("monthSummary");
   const btn = document.getElementById("summaryToggleBtn");
-  if (summaryEl.style.display !== "none") {
-    summaryEl.style.display = "none";
-    btn.textContent = "ay özeti göster";
-  } else {
-    btn.textContent = "yükleniyor...";
-    await updateMonthlySummary(curYear, curMonth);
-    btn.textContent = "ay özetini gizle";
-  }
+  if (el.style.display !== "none") { el.style.display = "none"; btn.textContent = "ay özeti göster"; }
+  else { btn.textContent = "yükleniyor..."; await updateMonthlySummary(curYear, curMonth); btn.textContent = "ay özetini gizle"; }
 });
 
-// ── MODAL ──
-async function openModal(day) {
+async function updateMonthlySummary(y, m) {
+  const days = daysInMonth(y, m);
+  const entries = await Promise.all(Array.from({length: days}, (_, i) => loadEntry(y, m, i+1)));
+
+  let totalProfit = 0, totalLoss = 0;
+  let allTrades = [], winCount = 0;
+  let longTotal = 0, longTP = 0, longSL = 0;
+  let shortTotal = 0, shortTP = 0, shortSL = 0;
+  let rrValues = [], dollarWins = [], dollarLosses = [];
+
+  entries.forEach(e => {
+    if (e.pnl && e.pnl !== "") {
+      const v = parseFloat(e.pnl);
+      if (!isNaN(v)) { if (v > 0) totalProfit += v; else totalLoss += v; }
+    }
+    (e.trades || []).forEach(t => {
+      if (!t.result) return;
+      allTrades.push(t);
+      const isTP = t.result === "tp";
+      if (t.dir === "long") { longTotal++; if (isTP) longTP++; else longSL++; }
+      else { shortTotal++; if (isTP) shortTP++; else shortSL++; }
+      if (isTP) winCount++;
+      const rr = parseFloat(t.rr);
+      if (!isNaN(rr)) rrValues.push(isTP ? rr : -rr);
+      const dollar = parseFloat(t.dollar);
+      if (!isNaN(dollar) && dollar > 0) { if (isTP) dollarWins.push(dollar); else dollarLosses.push(dollar); }
+    });
+  });
+
+  const net = totalProfit + totalLoss;
+  const hasData = totalProfit !== 0 || totalLoss !== 0 || allTrades.length > 0;
+  const summaryEl = document.getElementById("monthSummary");
+  if (!hasData) { summaryEl.style.display = "none"; document.getElementById("summaryToggleBtn").textContent = "ay özeti göster"; return; }
+
+  summaryEl.style.display = "block";
+  summaryEl.style.animation = "none"; summaryEl.offsetHeight; summaryEl.style.animation = "fadeIn 0.3s ease";
+
+  document.getElementById("sumProfit").textContent = totalProfit > 0 ? `+${totalProfit.toFixed(0)}$` : "—";
+  document.getElementById("sumLoss").textContent = totalLoss < 0 ? `${totalLoss.toFixed(0)}$` : "—";
+  const netEl = document.getElementById("sumNet");
+  netEl.textContent = (net >= 0 ? "+" : "") + net.toFixed(0) + "$";
+  netEl.className = "sum-value lg " + (net > 0 ? "pos" : net < 0 ? "neg" : "");
+  const absLoss = Math.abs(totalLoss);
+  const ratio = totalProfit + absLoss > 0 ? (totalProfit / (totalProfit + absLoss)) * 100 : 50;
+  document.getElementById("summaryBar").style.width = ratio + "%";
+  document.getElementById("summaryBar").style.background = net >= 0 ? "var(--green)" : "var(--red)";
+
+  const total = allTrades.length;
+  const winRate = total > 0 ? Math.round((winCount / total) * 100) : null;
+  const avgRR = rrValues.length > 0 ? rrValues.reduce((a,b)=>a+b,0)/rrValues.length : null;
+
+  document.getElementById("statTotal").textContent = total > 0 ? total : "—";
+  const wrEl = document.getElementById("statWinRate");
+  wrEl.textContent = winRate !== null ? winRate + "%" : "—";
+  wrEl.className = "sum-value" + (winRate !== null ? (winRate >= 50 ? " pos" : " neg") : "");
+  const rrEl = document.getElementById("statAvgRR");
+  rrEl.textContent = avgRR !== null ? (avgRR >= 0 ? "+" : "") + avgRR.toFixed(2) + "R" : "—";
+  rrEl.className = "sum-value" + (avgRR !== null ? (avgRR >= 0 ? " pos" : " neg") : "");
+
+  document.getElementById("statLong").textContent = longTotal > 0 ? longTotal : "—";
+  document.getElementById("statLongDetail").textContent = longTotal > 0 ? `${longTP} TP  /  ${longSL} SL` : "";
+  document.getElementById("statShort").textContent = shortTotal > 0 ? shortTotal : "—";
+  document.getElementById("statShortDetail").textContent = shortTotal > 0 ? `${shortTP} TP  /  ${shortSL} SL` : "";
+
+  const avgWin = dollarWins.length > 0 ? dollarWins.reduce((a,b)=>a+b,0)/dollarWins.length : null;
+  const avgLoss2 = dollarLosses.length > 0 ? dollarLosses.reduce((a,b)=>a+b,0)/dollarLosses.length : null;
+  document.getElementById("statAvgWin").textContent = avgWin !== null ? "+" + avgWin.toFixed(0) + "$" : "—";
+  document.getElementById("statAvgLoss").textContent = avgLoss2 !== null ? "-" + avgLoss2.toFixed(0) + "$" : "—";
+
+  const pairMap = {};
+  allTrades.forEach(t => {
+    const p = (t.pair || "?").toUpperCase();
+    if (!pairMap[p]) pairMap[p] = { total: 0, tp: 0, sl: 0 };
+    pairMap[p].total++; if (t.result === "tp") pairMap[p].tp++; else pairMap[p].sl++;
+  });
+  const pairs = Object.entries(pairMap).sort((a,b) => b[1].total - a[1].total);
+  const pairListWrap = document.getElementById("pairListWrap");
+  const pairList = document.getElementById("pairList");
+  if (pairs.length > 0) {
+    pairListWrap.style.display = "block"; pairList.innerHTML = "";
+    pairs.forEach(([pair, data]) => {
+      const row = document.createElement("div"); row.className = "pair-row";
+      row.innerHTML = `<span class="pair-name">${pair}</span><div class="pair-stats"><span class="pair-count">${data.total} işlem</span><span class="pair-tp">TP ${data.tp}</span><span class="pair-sl">SL ${data.sl}</span></div>`;
+      pairList.appendChild(row);
+    });
+  } else { pairListWrap.style.display = "none"; }
+}
+
+// ── DAY MODAL ──
+async function openDayModal(day) {
   selectedDay = day;
   document.getElementById("modalTitle").textContent = `${day} ${MONTHS[curMonth]} ${curYear}`;
-  document.getElementById("noteArea").value = "";
-  document.getElementById("photoGrid").innerHTML = "";
-  document.getElementById("tradeList").innerHTML = "";
+  document.getElementById("dayTradeList").innerHTML = "";
+  document.getElementById("dayNoteArea").value = "";
+  document.getElementById("addTradeFormWrap").style.display = "none";
+  document.getElementById("showAddTradeBtn").textContent = "+ Trade ekle";
   resetTradeForm();
-  setStatus("yükleniyor...");
+  setStatusDay("yükleniyor...");
   document.getElementById("overlay").classList.add("open");
 
   const entry = await loadEntry(curYear, curMonth, day);
-  document.getElementById("noteArea").value = entry.note || "";
-  const pnlVal = entry.pnl || "";
-  const pnlInput = document.getElementById("pnlInput");
-  pnlInput.value = pnlVal;
-  pnlInput.style.color = pnlVal.startsWith("+") ? "#4caf7d" : pnlVal.startsWith("-") ? "#e05c5c" : "#ddd";
-  renderPhotos(entry.photos || []);
-  renderTrades(entry.trades || []);
-  setStatus("");
+  document.getElementById("dayNoteArea").value = entry.note || "";
+  renderDayTrades(entry.trades || []);
+  setStatusDay("");
 }
 
-function closeModal() {
+function closeDayModal() {
   document.getElementById("overlay").classList.remove("open");
   selectedDay = null;
   render();
 }
 
-// ── TRADE FORM TOGGLES ──
+document.getElementById("closeDayBtn").addEventListener("click", closeDayModal);
+document.getElementById("overlay").addEventListener("click", (e) => { if (e.target === document.getElementById("overlay")) closeDayModal(); });
+
+// render trade cards in day modal
+function renderDayTrades(trades) {
+  const list = document.getElementById("dayTradeList");
+  list.innerHTML = "";
+  if (!trades || trades.length === 0) return;
+  trades.forEach((t, idx) => {
+    const card = document.createElement("div"); card.className = "trade-card";
+
+    const left = document.createElement("div"); left.className = "trade-card-left";
+    const pairEl = document.createElement("span"); pairEl.className = "trade-card-pair"; pairEl.textContent = t.pair || "—";
+    left.appendChild(pairEl);
+    const metaParts = [];
+    if (t.tf) metaParts.push(t.tf);
+    if (t.rr) metaParts.push("RR " + t.rr);
+    if (metaParts.length) {
+      const meta = document.createElement("span"); meta.className = "trade-card-meta"; meta.textContent = metaParts.join("  ·  ");
+      left.appendChild(meta);
+    }
+
+    const right = document.createElement("div"); right.className = "trade-card-right";
+    if (t.dollar) {
+      const isWin = t.result === "tp";
+      const dEl = document.createElement("span"); dEl.className = "trade-dollar " + (isWin ? "pos" : "neg");
+      dEl.textContent = (isWin ? "+" : "-") + t.dollar + "$"; right.appendChild(dEl);
+    }
+    if (t.dir) { const b = document.createElement("span"); b.className = "badge " + t.dir; b.textContent = t.dir === "long" ? "LONG" : "SHORT"; right.appendChild(b); }
+    if (t.result) { const b = document.createElement("span"); b.className = "badge " + t.result; b.textContent = t.result === "tp" ? "TP" : "SL"; right.appendChild(b); }
+    const arrow = document.createElement("span"); arrow.className = "trade-arrow"; arrow.textContent = "›"; right.appendChild(arrow);
+
+    card.appendChild(left); card.appendChild(right);
+    card.addEventListener("click", () => openTradePage(curYear, curMonth, selectedDay, idx));
+    list.appendChild(card);
+  });
+}
+
+// ── ADD TRADE FORM ──
+document.getElementById("showAddTradeBtn").addEventListener("click", () => {
+  const wrap = document.getElementById("addTradeFormWrap");
+  const btn = document.getElementById("showAddTradeBtn");
+  const isOpen = wrap.style.display !== "none";
+  wrap.style.display = isOpen ? "none" : "block";
+  btn.textContent = isOpen ? "+ Trade ekle" : "İptal";
+  if (!isOpen) resetTradeForm();
+});
+
 function resetTradeForm() {
   document.getElementById("tPair").value = "";
   document.getElementById("tTF").value = "";
@@ -633,131 +713,146 @@ document.getElementById("tShortBtn").addEventListener("click", () => {
   document.getElementById("tLongBtn").classList.remove("active");
 });
 document.getElementById("tTPBtn").addEventListener("click", () => {
-  tradeResult = tradeResult === "tp" ? null : "tp";
-  document.getElementById("tTPBtn").classList.toggle("active", tradeResult === "tp");
-  document.getElementById("tSLBtn").classList.remove("active");
-  if (tradeResult === "tp") tradeResult = "tp"; // keep
+  if (tradeResult === "tp") { tradeResult = null; document.getElementById("tTPBtn").classList.remove("active"); }
+  else { tradeResult = "tp"; document.getElementById("tTPBtn").classList.add("active"); document.getElementById("tSLBtn").classList.remove("active"); }
 });
 document.getElementById("tSLBtn").addEventListener("click", () => {
-  tradeResult = tradeResult === "sl" ? null : "sl";
-  document.getElementById("tSLBtn").classList.toggle("active", tradeResult === "sl");
-  document.getElementById("tTPBtn").classList.remove("active");
+  if (tradeResult === "sl") { tradeResult = null; document.getElementById("tSLBtn").classList.remove("active"); }
+  else { tradeResult = "sl"; document.getElementById("tSLBtn").classList.add("active"); document.getElementById("tTPBtn").classList.remove("active"); }
 });
 
-// ── ADD TRADE ──
-document.getElementById("addTradeBtn").addEventListener("click", async () => {
+document.getElementById("saveNewTradeBtn").addEventListener("click", async () => {
   if (!selectedDay) return;
   const pair = document.getElementById("tPair").value.trim().toUpperCase();
-  if (!pair) { setStatus("Pair gir!"); setTimeout(()=>setStatus(""),1500); return; }
-  if (!tradeResult) { setStatus("TP mi SL mi seç!"); setTimeout(()=>setStatus(""),1500); return; }
+  if (!pair) { setStatusDay("Pair gir!"); setTimeout(()=>setStatusDay(""), 1500); return; }
+  if (!tradeResult) { setStatusDay("TP mi SL mi seç!"); setTimeout(()=>setStatusDay(""), 1500); return; }
 
-  const rawDollar = document.getElementById("tDollar").value.replace(/[^0-9.]/g, "");
   const trade = {
+    id: Date.now(),
     pair,
     dir: tradeDir,
     result: tradeResult,
     tf: document.getElementById("tTF").value.trim(),
     rr: document.getElementById("tRR").value.trim(),
-    dollar: rawDollar || "",
-    id: Date.now()
+    dollar: document.getElementById("tDollar").value.replace(/[^0-9.]/g, ""),
+    note: "",
+    photos: []
   };
 
   const entry = await loadEntry(curYear, curMonth, selectedDay);
   entry.trades.push(trade);
   await saveEntry(curYear, curMonth, selectedDay, entry);
-  renderTrades(entry.trades);
+  renderDayTrades(entry.trades);
+  document.getElementById("addTradeFormWrap").style.display = "none";
+  document.getElementById("showAddTradeBtn").textContent = "+ Trade ekle";
   resetTradeForm();
-  setStatus("trade eklendi ✓"); setTimeout(()=>setStatus(""), 1500);
+  setStatusDay("trade eklendi ✓"); setTimeout(()=>setStatusDay(""), 1500);
 });
 
-// ── RENDER TRADES ──
-function renderTrades(trades) {
-  const list = document.getElementById("tradeList");
-  list.innerHTML = "";
-  if (!trades || trades.length === 0) return;
-  trades.forEach((t, idx) => {
-    const card = document.createElement("div"); card.className = "trade-card";
-    const left = document.createElement("div"); left.className = "trade-card-left";
+// ── DAY NOTE ──
+document.getElementById("dayNoteArea").addEventListener("input", (e) => {
+  if (!selectedDay) return;
+  clearTimeout(dayNoteTimer); setStatusDay("kaydediliyor...");
+  dayNoteTimer = setTimeout(async () => {
+    const entry = await loadEntry(curYear, curMonth, selectedDay);
+    entry.note = e.target.value;
+    await saveEntry(curYear, curMonth, selectedDay, entry);
+    setStatusDay("kaydedildi ✓"); setTimeout(()=>setStatusDay(""), 2000);
+  }, 800);
+});
 
-    const pairEl = document.createElement("span"); pairEl.className = "trade-card-pair";
-    pairEl.textContent = (t.pair || "—").toUpperCase();
-    left.appendChild(pairEl);
+// ── TRADE DETAIL PAGE ──
+async function openTradePage(y, m, d, idx) {
+  openTradeDay = { y, m, d };
+  openTradeIdx = idx;
 
-    const parts = [];
-    if (t.tf) parts.push(t.tf);
-    if (t.rr) parts.push("RR: " + t.rr);
-    if (parts.length) {
-      const meta = document.createElement("span"); meta.className = "trade-card-meta";
-      meta.textContent = parts.join("  ·  "); left.appendChild(meta);
-    }
+  const entry = await loadEntry(y, m, d);
+  const t = entry.trades[idx];
+  if (!t) return;
 
-    const right = document.createElement("div"); right.className = "trade-card-right";
+  document.getElementById("tradePageTitle").textContent = `${t.pair} — ${d} ${MONTHS[m]}`;
 
-    // $ tutar
-    if (t.dollar && t.dollar !== "") {
-      const dolEl = document.createElement("span");
-      const isWin = t.result === "tp";
-      dolEl.className = "trade-card-dollar " + (isWin ? "pos" : "neg");
-      dolEl.textContent = (isWin ? "+" : "-") + t.dollar + "$";
-      right.appendChild(dolEl);
-    }
+  // info card
+  const dirEl = document.getElementById("tpDir");
+  dirEl.textContent = t.dir === "long" ? "LONG" : "SHORT";
+  dirEl.className = "info-value " + (t.dir === "long" ? "pos" : "neg");
 
-    // Long/Short badge
-    if (t.dir) {
-      const dirEl = document.createElement("span");
-      dirEl.className = "trade-card-badge " + t.dir;
-      dirEl.textContent = t.dir === "long" ? "LONG" : "SHORT";
-      right.appendChild(dirEl);
-    }
+  const resEl = document.getElementById("tpResult");
+  if (t.result) { resEl.textContent = t.result === "tp" ? "TP ✓" : "SL ✗"; resEl.className = "info-value " + (t.result === "tp" ? "pos" : "neg"); }
+  else { resEl.textContent = "—"; resEl.className = "info-value mid"; }
 
-    // TP/SL badge
-    if (t.result) {
-      const resEl = document.createElement("span");
-      resEl.className = "trade-card-badge " + t.result;
-      resEl.textContent = t.result === "tp" ? "TP" : "SL";
-      right.appendChild(resEl);
-    }
+  document.getElementById("tpTF").textContent = t.tf || "—";
 
-    const removeBtn = document.createElement("button"); removeBtn.className = "trade-remove-btn"; removeBtn.textContent = "×";
-    removeBtn.addEventListener("click", () => removeTrade(idx));
-    right.appendChild(removeBtn);
+  const rrEl = document.getElementById("tpRR");
+  if (t.rr) {
+    const rrNum = parseFloat(t.rr);
+    const isWin = t.result === "tp";
+    rrEl.textContent = (isWin ? "+" : "-") + t.rr + "R";
+    rrEl.className = "info-value " + (isWin ? "pos" : "neg");
+  } else { rrEl.textContent = "—"; rrEl.className = "info-value mid"; }
 
-    card.appendChild(left); card.appendChild(right);
-    list.appendChild(card);
-  });
+  const dolEl = document.getElementById("tpDollar");
+  if (t.dollar) {
+    const isWin = t.result === "tp";
+    dolEl.textContent = (isWin ? "+" : "-") + t.dollar + "$";
+    dolEl.className = "info-value " + (isWin ? "pos" : "neg");
+  } else { dolEl.textContent = "—"; dolEl.className = "info-value mid"; }
+
+  // note
+  document.getElementById("tpNoteArea").value = t.note || "";
+
+  // photos
+  renderTradePhotos(t.photos || [], idx);
+
+  document.getElementById("tradePage").classList.add("open");
 }
 
-async function removeTrade(idx) {
-  const entry = await loadEntry(curYear, curMonth, selectedDay);
-  entry.trades.splice(idx, 1);
-  await saveEntry(curYear, curMonth, selectedDay, entry);
-  renderTrades(entry.trades);
-  setStatus("silindi ✓"); setTimeout(()=>setStatus(""), 1500);
+function closeTradePageFn() {
+  document.getElementById("tradePage").classList.remove("open");
+  // refresh day trades list
+  if (selectedDay) {
+    loadEntry(curYear, curMonth, selectedDay).then(entry => renderDayTrades(entry.trades || []));
+  }
+  openTradeDay = null; openTradeIdx = null;
 }
 
-// ── PHOTOS ──
-function openViewer(src) { document.getElementById("viewerImg").src = src; document.getElementById("viewerDownload").href = src; document.getElementById("viewerOverlay").classList.add("open"); }
-function closeViewer() { document.getElementById("viewerOverlay").classList.remove("open"); }
-document.getElementById("viewerClose").addEventListener("click", closeViewer);
-document.getElementById("viewerOverlay").addEventListener("click", (e) => { if (e.target===document.getElementById("viewerOverlay")) closeViewer(); });
+document.getElementById("closeTradePageBtn").addEventListener("click", closeTradePageFn);
 
-function renderPhotos(photos) {
-  const grid = document.getElementById("photoGrid"); grid.innerHTML = "";
-  photos.forEach((data, idx) => {
-    const wrap = document.createElement("div"); wrap.className = "photo-wrap";
-    const img = document.createElement("img"); img.src = data; img.addEventListener("click", () => openViewer(data));
-    const btn = document.createElement("button"); btn.className = "remove-photo"; btn.textContent = "×";
-    btn.addEventListener("click", (e) => { e.stopPropagation(); removePhoto(idx); });
+// trade note autosave
+document.getElementById("tpNoteArea").addEventListener("input", (e) => {
+  if (openTradeDay === null || openTradeIdx === null) return;
+  clearTimeout(tradeNoteTimer); setStatusTrade("kaydediliyor...");
+  tradeNoteTimer = setTimeout(async () => {
+    const { y, m, d } = openTradeDay;
+    const entry = await loadEntry(y, m, d);
+    if (entry.trades[openTradeIdx]) {
+      entry.trades[openTradeIdx].note = e.target.value;
+      await saveEntry(y, m, d, entry);
+      setStatusTrade("kaydedildi ✓"); setTimeout(()=>setStatusTrade(""), 2000);
+    }
+  }, 800);
+});
+
+// trade photos
+function renderTradePhotos(photos, tradeIdx) {
+  const grid = document.getElementById("tpPhotoGrid"); grid.innerHTML = "";
+  photos.forEach((src, pIdx) => {
+    const wrap = document.createElement("div"); wrap.className = "tp-photo-wrap";
+    const img = document.createElement("img"); img.src = src; img.addEventListener("click", () => openViewer(src));
+    const btn = document.createElement("button"); btn.className = "tp-remove-photo"; btn.textContent = "×";
+    btn.addEventListener("click", (e) => { e.stopPropagation(); removeTradePhoto(pIdx); });
     wrap.appendChild(img); wrap.appendChild(btn); grid.appendChild(wrap);
   });
 }
 
-async function removePhoto(idx) {
-  const entry = await loadEntry(curYear, curMonth, selectedDay);
-  entry.photos.splice(idx, 1);
-  await saveEntry(curYear, curMonth, selectedDay, entry);
-  renderPhotos(entry.photos);
-  setStatus("silindi ✓"); setTimeout(()=>setStatus(""), 1500);
+async function removeTradePhoto(pIdx) {
+  if (openTradeDay === null || openTradeIdx === null) return;
+  const { y, m, d } = openTradeDay;
+  const entry = await loadEntry(y, m, d);
+  entry.trades[openTradeIdx].photos.splice(pIdx, 1);
+  await saveEntry(y, m, d, entry);
+  renderTradePhotos(entry.trades[openTradeIdx].photos, openTradeIdx);
+  setStatusTrade("silindi ✓"); setTimeout(()=>setStatusTrade(""), 1500);
 }
 
 function resizeImage(file, maxSize=1200) {
@@ -779,53 +874,38 @@ function resizeImage(file, maxSize=1200) {
   });
 }
 
-document.getElementById("fileInput").addEventListener("change", async (e) => {
+document.getElementById("tpFileInput").addEventListener("change", async (e) => {
+  if (openTradeDay === null || openTradeIdx === null) return;
   const files = Array.from(e.target.files); if (!files.length) return;
-  setStatus("fotoğraflar yükleniyor...");
-  const entry = await loadEntry(curYear, curMonth, selectedDay);
-  for (const file of files) entry.photos.push(await resizeImage(file));
-  await saveEntry(curYear, curMonth, selectedDay, entry);
-  renderPhotos(entry.photos);
-  setStatus("kaydedildi ✓"); setTimeout(()=>setStatus(""), 2000); e.target.value = "";
+  setStatusTrade("fotoğraflar yükleniyor...");
+  const { y, m, d } = openTradeDay;
+  const entry = await loadEntry(y, m, d);
+  for (const file of files) entry.trades[openTradeIdx].photos.push(await resizeImage(file));
+  await saveEntry(y, m, d, entry);
+  renderTradePhotos(entry.trades[openTradeIdx].photos, openTradeIdx);
+  setStatusTrade("kaydedildi ✓"); setTimeout(()=>setStatusTrade(""), 2000); e.target.value = "";
 });
 
-// ── NOTE ──
-document.getElementById("noteArea").addEventListener("input", (e) => {
-  if (!selectedDay) return;
-  clearTimeout(saveTimer); setStatus("kaydediliyor...");
-  saveTimer = setTimeout(async () => {
-    const entry = await loadEntry(curYear, curMonth, selectedDay);
-    entry.note = e.target.value;
-    await saveEntry(curYear, curMonth, selectedDay, entry);
-    setStatus("kaydedildi ✓"); setTimeout(()=>setStatus(""), 2000);
-  }, 800);
+// delete trade
+document.getElementById("deleteTradeBtn").addEventListener("click", async () => {
+  if (openTradeDay === null || openTradeIdx === null) return;
+  if (!confirm("Bu trade silinsin mi?")) return;
+  const { y, m, d } = openTradeDay;
+  const entry = await loadEntry(y, m, d);
+  entry.trades.splice(openTradeIdx, 1);
+  await saveEntry(y, m, d, entry);
+  closeTradePageFn();
 });
 
-// ── GÜNLÜK PNL ──
-async function savePnl(value) {
-  const entry = await loadEntry(curYear, curMonth, selectedDay);
-  entry.pnl = value;
-  await saveEntry(curYear, curMonth, selectedDay, entry);
-  setStatus("kaydedildi ✓"); setTimeout(()=>setStatus(""), 2000);
-  document.getElementById("pnlInput").style.color = value.startsWith("+") ? "#4caf7d" : value.startsWith("-") ? "#e05c5c" : "#ddd";
-}
-
-document.getElementById("karBtn").addEventListener("click", async () => {
-  if (!selectedDay) return;
-  const raw = document.getElementById("pnlInput").value.replace(/[^0-9.]/g, ""); if (!raw) return;
-  const val = "+" + raw; document.getElementById("pnlInput").value = val; await savePnl(val);
-});
-document.getElementById("zararBtn").addEventListener("click", async () => {
-  if (!selectedDay) return;
-  const raw = document.getElementById("pnlInput").value.replace(/[^0-9.]/g, ""); if (!raw) return;
-  const val = "-" + raw; document.getElementById("pnlInput").value = val; await savePnl(val);
-});
+// ── VIEWER ──
+function openViewer(src) { document.getElementById("viewerImg").src = src; document.getElementById("viewerDownload").href = src; document.getElementById("viewerOverlay").classList.add("open"); }
+function closeViewer() { document.getElementById("viewerOverlay").classList.remove("open"); }
+document.getElementById("viewerClose").addEventListener("click", closeViewer);
+document.getElementById("viewerOverlay").addEventListener("click", (e) => { if (e.target===document.getElementById("viewerOverlay")) closeViewer(); });
 
 // ── NAV ──
 document.getElementById("prevBtn").addEventListener("click", () => { if(curMonth===0){curMonth=11;curYear--;}else curMonth--; render(); });
 document.getElementById("nextBtn").addEventListener("click", () => { if(curMonth===11){curMonth=0;curYear++;}else curMonth++; render(); });
-document.getElementById("closeBtn").addEventListener("click", closeModal);
-document.getElementById("overlay").addEventListener("click", (e) => { if(e.target===document.getElementById("overlay")) closeModal(); });
 </script>
 </body>
 </html>
