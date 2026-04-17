@@ -567,24 +567,23 @@ async function updateMonthlySummary(y, m) {
   let rrValues = [], dollarWins = [], dollarLosses = [];
 
   entries.forEach(e => {
-    if (e.pnl && e.pnl !== "") {
-      const v = parseFloat(e.pnl);
-      if (!isNaN(v)) { if (v > 0) totalProfit += v; else totalLoss += v; }
-    }
     (e.trades || []).forEach(t => {
       if (!t.result) return;
       allTrades.push(t);
       const isTP = t.result === "tp";
       const isBE = t.result === "be";
-      // BE does not count for win/loss
       if (!isBE) {
+        // add to profit/loss totals from trade dollar
+        const dollar = parseFloat(t.dollar);
+        if (!isNaN(dollar) && dollar > 0) {
+          if (isTP) { totalProfit += dollar; dollarWins.push(dollar); }
+          else { totalLoss -= dollar; dollarLosses.push(dollar); }
+        }
         if (t.dir === "long") { longTotal++; if (isTP) longTP++; else longSL++; }
         else { shortTotal++; if (isTP) shortTP++; else shortSL++; }
         if (isTP) winCount++;
         const rr = parseFloat(t.rr);
         if (!isNaN(rr)) rrValues.push(isTP ? rr : -rr);
-        const dollar = parseFloat(t.dollar);
-        if (!isNaN(dollar) && dollar > 0) { if (isTP) dollarWins.push(dollar); else dollarLosses.push(dollar); }
       }
     });
   });
