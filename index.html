@@ -1,395 +1,1049 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Risk Manager</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { background: #07070d; }
-    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: #111; } ::-webkit-scrollbar-thumb { background: #333; }
-    input { background: #0f0f1a; border: 1px solid #222; color: #e0e0e0; padding: 10px 14px; font-family: 'DM Mono', monospace; font-size: 14px; outline: none; border-radius: 4px; width: 100%; transition: border-color 0.2s; }
-    input:focus { border-color: #f0b429; }
-    input::placeholder { color: #333; }
-    button { cursor: pointer; font-family: 'DM Mono', monospace; border: none; transition: all 0.15s; }
-    .tab { background: transparent; color: #555; padding: 6px 14px; border-radius: 3px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
-    .tab.active { background: #1a1a28; color: #f0b429; }
-    .tab:hover { color: #aaa; }
-    @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(240,180,41,0.4); } 70% { box-shadow: 0 0 0 20px rgba(240,180,41,0); } 100% { box-shadow: 0 0 0 0 rgba(240,180,41,0); } }
-    .pulse { animation: pulseGlow 0.6s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .fadein { animation: fadeIn 0.3s ease-out; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Takvim</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0c0c0c; --surface: #141414; --surface2: #1a1a1a;
+    --border: #222; --border2: #2a2a2a;
+    --text: #e0e0e0; --text-dim: #555; --text-mid: #888;
+    --accent: #c8b8a2; --today: #2a2520; --today-border: #4a3f35;
+    --green: #4caf7d; --red: #e05c5c; --blue: #5b8dee;
+    --font-display: 'Inter', sans-serif;
+  }
+  body.light {
+    --bg: #f5f4f0; --surface: #ffffff; --surface2: #f0eeea;
+    --border: #e0ddd8; --border2: #d4d0ca;
+    --text: #1a1814; --text-dim: #a09890; --text-mid: #7a736a;
+    --accent: #8b6f47; --today: #fdf3e7; --today-border: #d4956a;
+    --green: #2d8a57; --red: #c0392b; --blue: #2563eb;
+  }
+  body.light .day-num { color: #999; }
+  body.light .cal-cell.today .day-num { color: var(--accent); }
+  body.light .trade-form { background: var(--surface2); }
+  body.light textarea, body.light .tp-note { background: var(--surface2); border-color: var(--border); }
+  body.light .trade-input { background: var(--surface); border-color: var(--border); color: var(--text); }
+  body.light .trade-card { background: var(--surface2); }
+  body.light .trade-edit-form { background: var(--surface2); }
+
+  /* SETTINGS PANEL */
+  .settings-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 200; align-items: flex-end; justify-content: center; padding: 16px; }
+  .settings-overlay.open { display: flex; }
+  .settings-panel { background: var(--surface); border: 1px solid var(--border2); border-radius: 20px; width: 100%; max-width: 460px; padding: 24px; display: flex; flex-direction: column; gap: 20px; animation: slideUp 0.22s cubic-bezier(.22,1,.36,1); }
+  .settings-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+  .settings-header { display: flex; align-items: center; justify-content: space-between; }
+  .settings-close { background: none; border: none; color: var(--text-dim); font-size: 24px; cursor: pointer; line-height: 1; }
+
+  .settings-section-label { font-size: 9px; color: var(--text-dim); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .theme-row { display: flex; gap: 10px; }
+  .theme-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    background: var(--surface2); border: 2px solid var(--border2);
+    border-radius: 14px; padding: 16px 10px; cursor: pointer; transition: border-color 0.15s;
+  }
+  .theme-btn.active { border-color: var(--blue); }
+  .theme-preview { width: 100%; height: 52px; border-radius: 8px; overflow: hidden; position: relative; }
+  .theme-preview-dark { background: #0c0c0c; }
+  .theme-preview-light { background: #f5f4f0; }
+  .theme-preview-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 16px; display: flex; gap: 2px; padding: 3px; }
+  .theme-preview-dark .theme-preview-bar { background: #141414; }
+  .theme-preview-light .theme-preview-bar { background: #ffffff; }
+  .theme-preview-dot { flex: 1; border-radius: 3px; }
+  .theme-preview-dark .theme-preview-dot { background: #2a2a2a; }
+  .theme-preview-light .theme-preview-dot { background: #e0ddd8; }
+  .theme-preview-header { height: 36px; display: flex; align-items: center; justify-content: center; }
+  .theme-preview-month-dark { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: #e0e0e0; }
+  .theme-preview-month-light { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: #1a1814; }
+  .theme-label { font-size: 11px; color: var(--text-mid); font-family: 'DM Mono', monospace; letter-spacing: 0.05em; }
+
+  /* settings gear button */
+  .settings-btn { background: none; border: 1px solid var(--border2); color: var(--text-mid); width: 36px; height: 36px; border-radius: 9px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s, color 0.15s; flex-shrink: 0; }
+  .settings-btn:hover { border-color: var(--text-mid); color: var(--text); }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 24px 12px 48px; }
+  .app { width: 100%; max-width: 460px; }
+
+  .login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; gap: 24px; text-align: center; }
+  .login-title { font-family: var(--font-display); font-size: 38px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; line-height: 1; }
+  .login-sub { font-size: 12px; color: var(--text-dim); letter-spacing: 0.1em; }
+  .google-btn { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border2); color: var(--text); border-radius: 12px; padding: 12px 24px; font-size: 13px; font-family: 'DM Mono', monospace; cursor: pointer; transition: border-color 0.15s, background 0.15s; letter-spacing: 0.05em; }
+  .google-btn:hover { border-color: var(--text-mid); background: var(--surface2); }
+  .google-icon { width: 18px; height: 18px; }
+
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .header-center { text-align: center; }
+  .month-name { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--text); letter-spacing: -0.03em; line-height: 1; }
+  .year-label { font-size: 11px; color: var(--text-dim); letter-spacing: 0.25em; margin-top: 2px; }
+  .nav-btn { background: none; border: 1px solid var(--border2); color: var(--text-mid); width: 40px; height: 40px; border-radius: 10px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s, color 0.15s; }
+  .nav-btn:hover { border-color: var(--text-mid); color: var(--text); }
+  .signout-btn { background: none; border: none; color: var(--text-dim); font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: color 0.15s; }
+  .signout-btn:hover { color: var(--text-mid); }
+  .day-headers { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 6px; }
+  .day-header-cell { text-align: center; font-size: 9px; color: var(--text-dim); letter-spacing: 0.15em; padding: 4px 0; }
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .cal-cell { aspect-ratio: 1; border-radius: 9px; position: relative; display: flex; align-items: center; justify-content: center; transition: background 0.12s; }
+  .cal-cell.active { background: var(--surface); border: 1px solid var(--border); cursor: pointer; }
+  .cal-cell.active:hover { background: var(--surface2); border-color: var(--border2); }
+  .cal-cell.today { background: var(--today); border: 1px solid var(--today-border) !important; }
+  .day-num { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500; color: #aaa; line-height: 1; position: absolute; top: 22%; left: 50%; transform: translateX(-50%); }
+  .cal-cell.today .day-num { color: var(--accent); }
+  .entry-dot { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); width: 3px; height: 3px; border-radius: 50%; background: var(--text-mid); }
+  .pnl-label { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); font-size: 9px; font-weight: 600; letter-spacing: 0.01em; line-height: 1; white-space: nowrap; }
+  .pnl-label.pos { color: var(--green); }
+  .pnl-label.neg { color: var(--red); }
+
+  .summary-toggle-btn { background: none; border: 1px solid var(--border2); color: var(--text-dim); font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; padding: 8px 20px; border-radius: 10px; cursor: pointer; transition: border-color 0.15s, color 0.15s; margin-top: 20px; width: 100%; }
+  .summary-toggle-btn:hover { border-color: var(--text-mid); color: var(--text-mid); }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+  .month-summary { margin-top: 12px; border-radius: 14px; border: 1px solid var(--border2); background: var(--surface); overflow: hidden; }
+  .sum-row { display: grid; border-bottom: 1px solid var(--border2); }
+  .sum-row.cols2 { grid-template-columns: 1fr 1px 1fr; }
+  .sum-row.cols3 { grid-template-columns: 1fr 1px 1fr 1px 1fr; }
+  .sum-row.no-border { border-bottom: none; }
+  .sum-divider { background: var(--border2); }
+  .sum-col { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 6px; }
+  .sum-label { font-size: 8px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; text-align: center; }
+  .sum-value { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.02em; line-height: 1; color: var(--text-mid); }
+  .sum-value.pos { color: var(--green); }
+  .sum-value.neg { color: var(--red); }
+  .sum-value.lg { font-size: 14px; }
+  .summary-bar-wrap { height: 3px; background: var(--border); overflow: hidden; }
+  .summary-bar { height: 100%; transition: width 0.5s cubic-bezier(.22,1,.36,1), background 0.3s; }
+
+  .detail-toggle-btn { background: none; border: none; color: var(--text-mid); font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; padding: 10px; cursor: pointer; width: 100%; border-top: 1px solid var(--border2); transition: color 0.15s; }
+  .detail-toggle-btn:hover { color: var(--text); }
+  .detail-stats { display: none; border-top: 1px solid var(--border2); }
+  .detail-stats.open { display: block; }
+  .detail-section { border-bottom: 1px solid var(--border2); padding: 12px; }
+  .detail-section:last-child { border-bottom: none; }
+  .detail-section-title { font-size: 9px; color: var(--text-dim); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .detail-table { width: 100%; border-collapse: collapse; }
+  .detail-table th { font-size: 8px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 6px; text-align: left; border-bottom: 1px solid var(--border); }
+  .detail-table td { font-size: 11px; color: var(--text); padding: 7px 6px; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; }
+  .detail-table tr:last-child td { border-bottom: none; }
+  .detail-table td.pos { color: var(--green); }
+  .detail-table td.neg { color: var(--red); }
+
+  .pair-list-wrap { border-top: 1px solid var(--border2); padding: 10px 12px; max-height: 140px; overflow-y: auto; }
+  .pair-list-title { font-size: 8px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
+  .pair-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .pair-row:last-child { border-bottom: none; }
+  .pair-name { font-size: 12px; color: var(--text); }
+  .pair-stats { display: flex; gap: 10px; align-items: center; }
+  .pair-count { font-size: 11px; color: var(--text-mid); }
+  .pair-tp { font-size: 10px; color: var(--green); }
+  .pair-sl { font-size: 10px; color: var(--red); }
+
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 100; align-items: flex-end; justify-content: center; padding: 16px; }
+  .overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 18px; width: 100%; max-width: 460px; padding: 20px; display: flex; flex-direction: column; gap: 14px; max-height: 82vh; overflow-y: auto; animation: slideUp 0.22s cubic-bezier(.22,1,.36,1); }
+  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; }
+  .modal-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+  .close-btn { background: none; border: none; color: var(--text-dim); font-size: 24px; cursor: pointer; line-height: 1; padding: 0 4px; }
+
+  .trade-list { display: flex; flex-direction: column; gap: 8px; }
+  .trade-card { background: #111; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; transition: border-color 0.15s, background 0.12s; }
+  .trade-card:hover { background: var(--surface2); border-color: var(--border2); }
+  .trade-card-left { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+  .trade-card-pair { font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+  .trade-card-meta { font-size: 10px; color: var(--text-dim); }
+  .trade-card-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .badge { font-size: 9px; letter-spacing: 0.1em; padding: 3px 8px; border-radius: 5px; font-weight: 500; }
+  .badge.long  { color: var(--green); background: rgba(76,175,125,0.12); }
+  .badge.short { color: var(--red);   background: rgba(224,92,92,0.12); }
+  .badge.tp    { color: var(--green); background: rgba(76,175,125,0.12); }
+  .badge.sl    { color: var(--red);   background: rgba(224,92,92,0.12); }
+  .badge.be    { color: var(--blue);  background: rgba(91,141,238,0.12); }
+  .trade-dollar { font-size: 12px; font-weight: 500; }
+  .trade-dollar.pos { color: var(--green); }
+  .trade-dollar.neg { color: var(--red); }
+  .trade-arrow { font-size: 14px; color: var(--text-dim); }
+  .add-trade-day-btn { background: none; border: 1px dashed var(--border2); color: var(--text-dim); border-radius: 12px; padding: 12px; font-size: 12px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: border-color 0.15s, color 0.15s; width: 100%; }
+  .add-trade-day-btn:hover { border-color: var(--text-mid); color: var(--text-mid); }
+  textarea { background: #111; border: 1px solid var(--border); border-radius: 12px; color: #ddd; font-size: 12px; font-family: 'Trebuchet MS', sans-serif; line-height: 1.8; padding: 14px; resize: none; outline: none; width: 100%; min-height: 80px; transition: border-color 0.15s; }
+  textarea:focus { border-color: #3a3a3a; }
+  textarea::placeholder { color: #333; font-style: italic; }
+  .status-day { font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-align: right; min-height: 14px; }
+
+  .trade-page { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 150; overflow-y: auto; }
+  .trade-page.open { display: block; animation: pageIn 0.25s cubic-bezier(.22,1,.36,1); }
+  @keyframes pageIn { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .trade-page-inner { max-width: 460px; margin: 0 auto; padding: 24px 16px 48px; display: flex; flex-direction: column; gap: 20px; }
+  .trade-page-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 4px; }
+  .trade-page-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; line-height: 1.1; }
+  .trade-page-close { background: var(--surface); border: 1px solid var(--border2); color: var(--text-mid); width: 40px; height: 40px; border-radius: 10px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+  .info-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; overflow: hidden; }
+  .info-row { display: grid; border-bottom: 1px solid var(--border2); }
+  .info-row.cols2 { grid-template-columns: 1fr 1px 1fr; }
+  .info-row.cols3 { grid-template-columns: 1fr 1px 1fr 1px 1fr; }
+  .info-row.no-border { border-bottom: none; }
+  .info-divider { background: var(--border2); }
+  .info-col { display: flex; flex-direction: column; gap: 4px; padding: 11px 12px; }
+  .info-label { font-size: 8px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; }
+  .info-value { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--text); }
+  .info-value.pos { color: var(--green); }
+  .info-value.neg { color: var(--red); }
+  .info-value.blue { color: var(--blue); }
+  .info-value.mid { color: var(--text-mid); }
+
+  .tp-section-title { font-size: 10px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; }
+  .tp-photo-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tp-photo-wrap { position: relative; width: 80px; height: 80px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; }
+  .tp-photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tp-remove-photo { position: absolute; top: 3px; right: 3px; background: rgba(0,0,0,0.75); border: none; color: #ccc; font-size: 13px; width: 20px; height: 20px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .add-photo-label { display: inline-flex; align-items: center; gap: 6px; background: none; border: 1px dashed var(--border2); color: var(--text-dim); border-radius: 9px; padding: 8px 14px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
+  .add-photo-label:hover { border-color: var(--text-mid); color: var(--text-mid); }
+  .add-photo-label input { display: none; }
+  .tp-note { background: #111; border: 1px solid var(--border); border-radius: 12px; color: #ddd; font-size: 12px; font-family: 'Trebuchet MS', sans-serif; line-height: 1.8; padding: 14px; resize: none; outline: none; width: 100%; min-height: 100px; transition: border-color 0.15s; }
+  .tp-note:focus { border-color: #3a3a3a; }
+  .tp-note::placeholder { color: #333; font-style: italic; }
+  .status-trade { font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-align: right; min-height: 14px; }
+  .trade-action-btns { display: flex; gap: 8px; }
+  .edit-trade-btn { flex: 1; background: none; border: 1px solid var(--border2); color: var(--text-mid); border-radius: 10px; padding: 10px; font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: border-color 0.15s, color 0.15s; }
+  .edit-trade-btn:hover { border-color: var(--text); color: var(--text); }
+  .delete-trade-btn { flex: 1; background: none; border: 1px solid #3a1a1a; color: #7a3535; border-radius: 10px; padding: 10px; font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: border-color 0.15s, color 0.15s; }
+  .delete-trade-btn:hover { border-color: var(--red); color: var(--red); }
+
+  .trade-form { background: #111; border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .trade-form-row { display: flex; gap: 6px; }
+  .trade-input { background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-size: 12px; font-family: 'DM Mono', monospace; padding: 9px 10px; outline: none; width: 100%; transition: border-color 0.15s; }
+  .trade-input:focus { border-color: var(--text-mid); }
+  .trade-input::placeholder { color: var(--text-dim); }
+  .trade-input.error { border-color: var(--red) !important; }
+  .toggle-btn { flex: 1; background: none; border: 1px solid var(--border2); color: var(--text-dim); border-radius: 8px; padding: 9px 4px; font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; transition: all 0.15s; letter-spacing: 0.03em; }
+  .toggle-btn.error { border-color: var(--red) !important; color: var(--red) !important; }
+  .toggle-btn.long.active   { border-color: #2a4a35; color: var(--green); background: rgba(76,175,125,0.08); }
+  .toggle-btn.short.active  { border-color: #4a2a2a; color: var(--red);   background: rgba(224,92,92,0.08); }
+  .toggle-btn.tp.active     { border-color: #2a4a35; color: var(--green); background: rgba(76,175,125,0.08); }
+  .toggle-btn.sl.active     { border-color: #4a2a2a; color: var(--red);   background: rgba(224,92,92,0.08); }
+  .toggle-btn.be.active     { border-color: #1e2e4a; color: var(--blue);  background: rgba(91,141,238,0.08); }
+  .toggle-btn.kz.active     { border-color: #3a3020; color: var(--accent);background: rgba(200,184,162,0.08); }
+  .toggle-btn.setup-a.active{ border-color: #2a4a35; color: var(--green); background: rgba(76,175,125,0.08); }
+  .toggle-btn.setup-b.active{ border-color: #3a3020; color: var(--accent);background: rgba(200,184,162,0.08); }
+  .toggle-btn.setup-c.active{ border-color: #4a2a2a; color: var(--red);   background: rgba(224,92,92,0.08); }
+  .toggle-btn.trend-w.active{ border-color: #2a4a35; color: var(--green); background: rgba(76,175,125,0.08); }
+  .toggle-btn.trend-a.active{ border-color: #4a2a2a; color: var(--red);   background: rgba(224,92,92,0.08); }
+  .toggle-btn.rev.active    { border-color: #1e2e4a; color: var(--blue);  background: rgba(91,141,238,0.08); }
+  .form-section-label { font-size: 9px; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: -2px; }
+  .save-trade-btn { background: none; border: 1px solid var(--border2); color: var(--text-mid); border-radius: 8px; padding: 10px; font-size: 12px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: border-color 0.15s, color 0.15s; width: 100%; }
+  .save-trade-btn:hover { border-color: var(--text); color: var(--text); }
+  .trade-edit-form { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; padding: 16px; display: none; flex-direction: column; gap: 10px; }
+  .trade-edit-form.open { display: flex; }
+
+  .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1e1a1a; border: 1px solid var(--red); color: #e0b0b0; font-family: 'DM Mono', monospace; font-size: 12px; padding: 12px 20px; border-radius: 12px; z-index: 500; opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; cursor: pointer; }
+
+  .viewer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 300; align-items: center; justify-content: center; }
+  .viewer-overlay.open { display: flex; }
+  .viewer-img { max-width: 100vw; max-height: 100vh; object-fit: contain; }
+  .viewer-close { position: fixed; top: 16px; right: 16px; background: #000; border: none; color: #fff; font-size: 20px; width: 42px; height: 42px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .viewer-download { position: fixed; top: 16px; left: 16px; background: #000; border: none; color: #fff; font-size: 18px; width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+</style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+<div class="app">
+  <div id="loginScreen" style="display:none">
+    <div class="login-screen">
+      <div>
+        <div class="login-title">Takvim</div>
+        <div class="login-sub" style="margin-top:8px">kişisel not &amp; fotoğraf takvimi</div>
+      </div>
+      <button class="google-btn" id="googleSignInBtn">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Google ile giriş yap
+      </button>
+      <div id="loginError" style="font-size:11px;color:#e05c5c;display:none;"></div>
+    </div>
+  </div>
 
-    // Veriler tarayıcıda saklanır (localStorage) — sayfayı kapatsan bile kaybolmaz.
-    const store = {
-      get: (key) => { try { return localStorage.getItem(key); } catch (_) { return null; } },
-      set: (key, val) => { try { localStorage.setItem(key, val); } catch (_) {} },
-    };
-
-    function getRisk(pnl, rules) {
-      if (pnl <= rules.drawdownThreshold) return rules.drawdownRisk;
-      if (pnl >= rules.profitThreshold) return rules.profitRisk;
-      return rules.baseRisk;
-    }
-
-    function getRiskLabel(pnl, rules) {
-      if (pnl <= rules.drawdownThreshold) return { label: "DRAWDOWN MODE", color: "#ff3b3b" };
-      if (pnl >= rules.profitThreshold) return { label: "PROFIT MODE", color: "#00e5a0" };
-      return { label: "NORMAL MODE", color: "#f0b429" };
-    }
-
-    const initialRules = {
-      baseRisk: 300,
-      profitThreshold: 1000,
-      profitRisk: 350,
-      drawdownThreshold: -1100,
-      drawdownRisk: 200,
-    };
-
-    function App() {
-      const [accounts, setAccounts] = useState([]);
-      const [selectedId, setSelectedId] = useState(null);
-      const [loaded, setLoaded] = useState(false);
-      const [view, setView] = useState("dashboard");
-      const [newAccName, setNewAccName] = useState("");
-      const [newAccBalance, setNewAccBalance] = useState("");
-      const [pnlInput, setPnlInput] = useState("");
-      const [editRules, setEditRules] = useState(null);
-      const [pulse, setPulse] = useState(false);
-
-      useEffect(() => {
-        try {
-          const res = store.get("rm-accounts");
-          if (res) {
-            const parsed = JSON.parse(res);
-            setAccounts(parsed);
-            if (parsed.length > 0) setSelectedId(parsed[0].id);
-          }
-        } catch (_) {}
-        setLoaded(true);
-      }, []);
-
-      const saveAccounts = (accs) => { store.set("rm-accounts", JSON.stringify(accs)); };
-
-      const selectedAccount = accounts.find((a) => a.id === selectedId);
-
-      const addAccount = () => {
-        if (!newAccName.trim() || !newAccBalance) return;
-        const acc = {
-          id: Date.now().toString(),
-          name: newAccName.trim(),
-          balance: parseFloat(newAccBalance),
-          pnl: 0,
-          rules: { ...initialRules },
-        };
-        const updated = [...accounts, acc];
-        setAccounts(updated);
-        saveAccounts(updated);
-        setSelectedId(acc.id);
-        setNewAccName("");
-        setNewAccBalance("");
-        setView("dashboard");
-      };
-
-      const deleteAccount = (id) => {
-        const updated = accounts.filter((a) => a.id !== id);
-        setAccounts(updated);
-        saveAccounts(updated);
-        if (selectedId === id) setSelectedId(updated[0] ? updated[0].id : null);
-      };
-
-      const updatePnl = (val) => {
-        if (!selectedAccount) return;
-        const num = parseFloat(val);
-        if (isNaN(num)) return;
-        const updated = accounts.map((a) => a.id === selectedId ? { ...a, pnl: num } : a);
-        setAccounts(updated);
-        saveAccounts(updated);
-        setPulse(true);
-        setTimeout(() => setPulse(false), 600);
-      };
-
-      const saveRules = () => {
-        if (!editRules) return;
-        const numericRules = {
-          baseRisk: parseFloat(editRules.baseRisk) || 0,
-          profitThreshold: parseFloat(editRules.profitThreshold) || 0,
-          profitRisk: parseFloat(editRules.profitRisk) || 0,
-          drawdownThreshold: parseFloat(editRules.drawdownThreshold) || 0,
-          drawdownRisk: parseFloat(editRules.drawdownRisk) || 0,
-        };
-        const updated = accounts.map((a) => a.id === selectedId ? { ...a, rules: numericRules } : a);
-        setAccounts(updated);
-        saveAccounts(updated);
-        setView("dashboard");
-        setEditRules(null);
-      };
-
-      const resetPnl = () => {
-        const updated = accounts.map((a) => a.id === selectedId ? { ...a, pnl: 0 } : a);
-        setAccounts(updated);
-        saveAccounts(updated);
-        setPnlInput("");
-      };
-
-      if (!loaded) return <div style={{ background: "#0a0a0f", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#444", fontFamily: "monospace" }}>LOADING...</div>;
-
-      const acc = selectedAccount;
-      const risk = acc ? getRisk(acc.pnl, acc.rules) : 0;
-      const riskInfo = acc ? getRiskLabel(acc.pnl, acc.rules) : null;
-      const pnlColor = acc ? (acc.pnl > 0 ? "#00e5a0" : acc.pnl < 0 ? "#ff3b3b" : "#888") : "#888";
-
-      return (
-        <div style={{ minHeight: "100vh", background: "#07070d", fontFamily: "'DM Mono', 'Courier New', monospace", color: "#e0e0e0" }}>
-          {/* Header */}
-          <div style={{ borderBottom: "1px solid #1a1a1a", padding: "16px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, background: "#07070d", zIndex: 10 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#f0b429", boxShadow: "0 0 8px #f0b429" }} />
-              <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 800, letterSpacing: 2, color: "#fff" }}>RISK MGR</span>
-            </div>
-            <div style={{ display: "flex", gap: 4 }}>
-              <button className={"tab " + (view === "dashboard" ? "active" : "")} onClick={() => setView("dashboard")}>Dashboard</button>
-              <button className={"tab " + (view === "addAccount" ? "active" : "")} onClick={() => setView("addAccount")}>+ Hesap</button>
-            </div>
-          </div>
-
-          <div style={{ maxWidth: 680, margin: "0 auto", padding: "28px 20px" }}>
-
-            {view === "addAccount" && (
-              <div className="fadein">
-                <div style={{ fontSize: 11, color: "#555", letterSpacing: 2, marginBottom: 20 }}>YENİ HESAP EKLE</div>
-                <div style={{ background: "#0d0d18", border: "1px solid #1e1e2e", borderRadius: 8, padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
-                  <div>
-                    <div style={{ fontSize: 11, color: "#555", marginBottom: 6, letterSpacing: 1 }}>HESAP ADI</div>
-                    <input placeholder="Örn: Prop Firm A" value={newAccName} onChange={e => setNewAccName(e.target.value)} />
-                  </div>
-                  <div>
-                    <div style={{ fontSize: 11, color: "#555", marginBottom: 6, letterSpacing: 1 }}>BAŞLANGIÇ BAKİYESİ ($)</div>
-                    <input type="text" inputMode="numeric" placeholder="2000" value={newAccBalance} onChange={e => { let v = e.target.value.replace(/[^0-9]/g, ""); v = v.replace(/^0+(\d)/, "$1"); setNewAccBalance(v); }} />
-                  </div>
-                  <div style={{ fontSize: 11, color: "#444", padding: "10px 12px", background: "#111", borderRadius: 4 }}>
-                    Risk kuralları hesap oluşturduktan sonra düzenlenebilir. Varsayılan: Base 300 / Kâr&gt;1000→350 / DD&lt;-1100→200
-                  </div>
-                  <button onClick={addAccount} style={{ background: "#f0b429", color: "#07070d", padding: "12px 24px", fontWeight: 500, fontSize: 13, letterSpacing: 1, borderRadius: 4 }}>
-                    HESAP OLUŞTUR
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {view === "editRules" && acc && (
-              <div className="fadein">
-                <div style={{ fontSize: 11, color: "#555", letterSpacing: 2, marginBottom: 20 }}>RİSK KURALLARI — {acc.name.toUpperCase()}</div>
-                <div style={{ background: "#0d0d18", border: "1px solid #1e1e2e", borderRadius: 8, padding: 24, display: "flex", flexDirection: "column", gap: 18 }}>
-                  {[
-                    { key: "baseRisk", label: "NORMAL RİSK ($)", desc: "Varsayılan risk miktarı", neg: false },
-                    { key: "profitThreshold", label: "KÂR EŞİĞİ ($)", desc: "Bu kârı geçince risk artar", neg: false },
-                    { key: "profitRisk", label: "KÂR SONRASI RİSK ($)", desc: "Eşik geçildikten sonraki risk", neg: false },
-                    { key: "drawdownThreshold", label: "DRAWDOWN EŞİĞİ ($)", desc: "Bu zarar seviyesinde risk düşer (− işaretli, örn -1100)", neg: true },
-                    { key: "drawdownRisk", label: "DRAWDOWN SONRASI RİSK ($)", desc: "Eşik altında uygulanacak risk", neg: false },
-                  ].map(({ key, label, desc, neg }) => {
-                    const cur = String(editRules[key]);
-                    const isNeg = cur.startsWith("-");
-                    return (
-                      <div key={key}>
-                        <div style={{ fontSize: 11, color: "#555", marginBottom: 2, letterSpacing: 1 }}>{label}</div>
-                        <div style={{ fontSize: 10, color: "#333", marginBottom: 6 }}>{desc}</div>
-                        <div style={{ display: "flex", gap: 8 }}>
-                          {neg && (
-                            <button
-                              onClick={() => {
-                                const abs = cur.replace("-", "");
-                                setEditRules({ ...editRules, [key]: isNeg ? abs : (abs ? "-" + abs : abs) });
-                              }}
-                              style={{ background: "#1a1a28", color: isNeg ? "#ff3b3b" : "#888", padding: "10px 14px", borderRadius: 4, fontSize: 16, border: "1px solid #2a2a3a", minWidth: 44 }}>
-                              +/−
-                            </button>
-                          )}
-                          <input
-                            type="text"
-                            inputMode="numeric"
-                            value={editRules[key]}
-                            onChange={e => {
-                              let v = e.target.value.replace(/[^0-9]/g, "");
-                              v = v.replace(/^0+(\d)/, "$1");
-                              if (neg && isNeg && v) v = "-" + v;
-                              setEditRules({ ...editRules, [key]: v });
-                            }}
-                            style={{ flex: 1 }}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <button onClick={saveRules} style={{ flex: 1, background: "#f0b429", color: "#07070d", padding: "12px", fontWeight: 500, fontSize: 13, letterSpacing: 1, borderRadius: 4 }}>KAYDET</button>
-                    <button onClick={() => setView("dashboard")} style={{ flex: 1, background: "#1a1a28", color: "#888", padding: "12px", fontSize: 13, letterSpacing: 1, borderRadius: 4 }}>İPTAL</button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {view === "dashboard" && (
-              <div className="fadein">
-                {accounts.length === 0 ? (
-                  <div style={{ textAlign: "center", padding: "60px 20px", color: "#333" }}>
-                    <div style={{ fontSize: 32, marginBottom: 12 }}>◈</div>
-                    <div style={{ fontSize: 13, marginBottom: 20 }}>Henüz hesap yok</div>
-                    <button onClick={() => setView("addAccount")} style={{ background: "#1a1a28", color: "#f0b429", padding: "10px 24px", borderRadius: 4, fontSize: 13, border: "1px solid #2a2a3a" }}>İlk hesabı ekle →</button>
-                  </div>
-                ) : (
-                  <>
-                    <div style={{ display: "flex", gap: 8, marginBottom: 24, flexWrap: "wrap" }}>
-                      {accounts.map((a) => (
-                        <button key={a.id} onClick={() => setSelectedId(a.id)}
-                          style={{ padding: "8px 16px", borderRadius: 4, fontSize: 12, letterSpacing: 1,
-                            background: selectedId === a.id ? "#1a1a28" : "transparent",
-                            color: selectedId === a.id ? "#f0b429" : "#444",
-                            border: selectedId === a.id ? "1px solid #2e2e42" : "1px solid #1a1a1a",
-                          }}>
-                          {a.name.toUpperCase()}
-                        </button>
-                      ))}
-                    </div>
-
-                    {acc && (
-                      <>
-                        <div className={pulse ? "pulse" : ""} style={{ background: "#0d0d18", border: "1px solid " + riskInfo.color + "22", borderRadius: 10, padding: "32px 28px", marginBottom: 20, position: "relative", overflow: "hidden" }}>
-                          <div style={{ position: "absolute", top: 0, right: 0, width: 200, height: 200, background: "radial-gradient(circle, " + riskInfo.color + "08 0%, transparent 70%)", borderRadius: "50%" }} />
-
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
-                            <div>
-                              <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, marginBottom: 4 }}>AKTİF HESAP</div>
-                              <div style={{ fontSize: 18, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: "#fff" }}>{acc.name}</div>
-                            </div>
-                            <div style={{ textAlign: "right" }}>
-                              <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, marginBottom: 4 }}>BAKİYE</div>
-                              <div style={{ fontSize: 18, color: "#888" }}>${acc.balance.toLocaleString()}</div>
-                            </div>
-                          </div>
-
-                          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: riskInfo.color + "15", border: "1px solid " + riskInfo.color + "40", borderRadius: 3, padding: "4px 10px", marginBottom: 20 }}>
-                            <div style={{ width: 6, height: 6, borderRadius: "50%", background: riskInfo.color, boxShadow: "0 0 6px " + riskInfo.color }} />
-                            <span style={{ fontSize: 10, color: riskInfo.color, letterSpacing: 2, fontWeight: 500 }}>{riskInfo.label}</span>
-                          </div>
-
-                          <div style={{ marginBottom: 24 }}>
-                            <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, marginBottom: 8 }}>RİSK ET</div>
-                            <div style={{ fontSize: 64, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: riskInfo.color, lineHeight: 1, letterSpacing: -2 }}>
-                              ${risk}
-                            </div>
-                            <div style={{ fontSize: 11, color: "#333", marginTop: 6 }}>
-                              {((risk / acc.balance) * 100).toFixed(2)}% — bakiyenin
-                            </div>
-                          </div>
-
-                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
-                            {[
-                              { label: "NORMAL", val: "$" + acc.rules.baseRisk, active: acc.pnl > acc.rules.drawdownThreshold && acc.pnl < acc.rules.profitThreshold },
-                              { label: "KÂR +" + acc.rules.profitThreshold, val: "$" + acc.rules.profitRisk, active: acc.pnl >= acc.rules.profitThreshold },
-                              { label: "DD " + acc.rules.drawdownThreshold, val: "$" + acc.rules.drawdownRisk, active: acc.pnl <= acc.rules.drawdownThreshold },
-                            ].map(({ label, val, active }) => (
-                              <div key={label} style={{ padding: "10px 12px", background: active ? "#151520" : "#0a0a12", border: "1px solid " + (active ? "#2e2e44" : "#151515"), borderRadius: 6 }}>
-                                <div style={{ fontSize: 9, color: active ? "#888" : "#333", letterSpacing: 1, marginBottom: 4 }}>{label}</div>
-                                <div style={{ fontSize: 16, color: active ? "#fff" : "#333", fontFamily: "'Syne', sans-serif", fontWeight: 700 }}>{val}</div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div style={{ background: "#0d0d18", border: "1px solid #1e1e2e", borderRadius: 8, padding: 20, marginBottom: 16 }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-                            <div style={{ fontSize: 10, color: "#555", letterSpacing: 2 }}>GÜNCEL P&L</div>
-                            <div style={{ fontSize: 22, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: pnlColor }}>
-                              {acc.pnl > 0 ? "+" : ""}{acc.pnl.toLocaleString()}$
-                            </div>
-                          </div>
-
-                          <div style={{ height: 2, background: "#1a1a28", borderRadius: 2, marginBottom: 14, overflow: "hidden" }}>
-                            <div style={{
-                              height: "100%",
-                              width: Math.min(Math.abs(acc.pnl) / Math.max(Math.abs(acc.rules.profitThreshold), Math.abs(acc.rules.drawdownThreshold)) * 100, 100) + "%",
-                              background: pnlColor, borderRadius: 2, transition: "width 0.3s ease",
-                            }} />
-                          </div>
-
-                          <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-                            <button
-                              onClick={() => setPnlInput(pnlInput.replace("-", ""))}
-                              style={{
-                                flex: 1, padding: "14px", borderRadius: 6, fontSize: 14, fontWeight: 600, letterSpacing: 1,
-                                background: !pnlInput.startsWith("-") ? "#00e5a015" : "#0a0a12",
-                                border: !pnlInput.startsWith("-") ? "1px solid #00e5a060" : "1px solid #1a1a1a",
-                                color: !pnlInput.startsWith("-") ? "#00e5a0" : "#444",
-                              }}>
-                              ▲ KÂR
-                            </button>
-                            <button
-                              onClick={() => { const abs = pnlInput.replace("-", ""); setPnlInput(abs ? "-" + abs : "-"); }}
-                              style={{
-                                flex: 1, padding: "14px", borderRadius: 6, fontSize: 14, fontWeight: 600, letterSpacing: 1,
-                                background: pnlInput.startsWith("-") ? "#ff3b3b15" : "#0a0a12",
-                                border: pnlInput.startsWith("-") ? "1px solid #ff3b3b60" : "1px solid #1a1a1a",
-                                color: pnlInput.startsWith("-") ? "#ff3b3b" : "#444",
-                              }}>
-                              ▼ ZARAR
-                            </button>
-                          </div>
-
-                          <input
-                            type="text"
-                            inputMode="numeric"
-                            placeholder="Miktar yaz (örn: 350)"
-                            value={pnlInput.replace("-", "")}
-                            onChange={e => {
-                              let val = e.target.value.replace(/[^0-9]/g, "");
-                              val = val.replace(/^0+(\d)/, "$1");
-                              if (pnlInput.startsWith("-") && val) val = "-" + val;
-                              setPnlInput(val);
-                            }}
-                            onKeyDown={e => e.key === "Enter" && updatePnl(pnlInput)}
-                            style={{ marginBottom: 10, textAlign: "center", fontSize: 18 }}
-                          />
-
-                          <div style={{ display: "flex", gap: 8 }}>
-                            <button onClick={() => updatePnl(pnlInput)} style={{ flex: 1, background: "#f0b429", color: "#07070d", padding: "14px", borderRadius: 6, fontSize: 13, fontWeight: 600, letterSpacing: 1 }}>GÜNCELLE</button>
-                            <button onClick={resetPnl} style={{ background: "#1a1a28", color: "#666", padding: "14px 18px", borderRadius: 6, fontSize: 13 }}>↺ Sıfırla</button>
-                          </div>
-                        </div>
-
-                        <div style={{ display: "flex", gap: 8 }}>
-                          <button onClick={() => { setEditRules({ ...acc.rules }); setView("editRules"); }}
-                            style={{ flex: 1, background: "#111", border: "1px solid #1e1e2e", color: "#666", padding: "10px", fontSize: 11, letterSpacing: 1, borderRadius: 4 }}>
-                            ⚙ KURALLARI DÜZENLE
-                          </button>
-                          <button onClick={() => { if (confirm('"' + acc.name + '" silinsin mi?')) deleteAccount(acc.id); }}
-                            style={{ background: "#111", border: "1px solid #1e1e2e", color: "#3a1a1a", padding: "10px 14px", fontSize: 11, borderRadius: 4 }}>
-                            ✕
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </>
-                )}
-              </div>
-            )}
-          </div>
+  <div id="calendarScreen" style="display:none">
+    <div class="header">
+      <button class="nav-btn" id="prevBtn">&#8249;</button>
+      <div class="header-center">
+        <div class="month-name" id="monthName"></div>
+        <div class="year-label" id="yearLabel"></div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <button class="nav-btn" id="nextBtn">&#8250;</button>
+        <button class="settings-btn" id="settingsBtn">⚙</button>
+      </div>
+    </div>
+    <div style="text-align:right;margin-bottom:16px;margin-top:-12px;">
+      <button class="signout-btn" id="signOutBtn">çıkış yap</button>
+    </div>
+    <div class="day-headers" id="dayHeaders"></div>
+    <div class="calendar-grid" id="calGrid"></div>
+    <button class="summary-toggle-btn" id="summaryToggleBtn">ay özeti göster</button>
+    <div class="month-summary" id="monthSummary" style="display:none">
+      <div class="sum-row cols3">
+        <div class="sum-col"><span class="sum-label">Kâr</span><span class="sum-value pos lg" id="sumProfit">—</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-col"><span class="sum-label">Net</span><span class="sum-value lg" id="sumNet">—</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-col"><span class="sum-label">Zarar</span><span class="sum-value neg lg" id="sumLoss">—</span></div>
+      </div>
+      <div class="summary-bar-wrap"><div class="summary-bar" id="summaryBar" style="width:0%"></div></div>
+      <div class="sum-row cols3">
+        <div class="sum-col"><span class="sum-label">İşlem</span><span class="sum-value" id="statTotal">—</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-col"><span class="sum-label">Win%</span><span class="sum-value" id="statWinRate">—</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-col"><span class="sum-label">Ort RR</span><span class="sum-value" id="statAvgRR">—</span></div>
+      </div>
+      <div class="sum-row cols2">
+        <div class="sum-col"><span class="sum-label">Long</span><span class="sum-value pos" id="statLong">—</span><span class="sum-label" id="statLongDetail"></span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-col"><span class="sum-label">Short</span><span class="sum-value neg" id="statShort">—</span><span class="sum-label" id="statShortDetail"></span></div>
+      </div>
+      <div class="sum-row cols2 no-border">
+        <div class="sum-col"><span class="sum-label">Kârlı Ort.</span><span class="sum-value pos" id="statAvgWin">—</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-col"><span class="sum-label">Zararlı Ort.</span><span class="sum-value neg" id="statAvgLoss">—</span></div>
+      </div>
+      <div class="pair-list-wrap" id="pairListWrap" style="display:none">
+        <div class="pair-list-title">Pair Dağılımı</div>
+        <div id="pairList"></div>
+      </div>
+      <button class="detail-toggle-btn" id="detailToggleBtn">▾ Detaylı İstatistik</button>
+      <div class="detail-stats" id="detailStats">
+        <div class="detail-section">
+          <div class="detail-section-title">İşlem Tipi</div>
+          <table class="detail-table"><thead><tr><th>Tip</th><th>İşlem</th><th>TP / SL</th><th>Win%</th></tr></thead><tbody id="revTableBody"></tbody></table>
         </div>
-      );
-    }
+        <div class="detail-section">
+          <div class="detail-section-title">Killzone</div>
+          <table class="detail-table"><thead><tr><th>Seans</th><th>İşlem</th><th>TP / SL</th><th>Win%</th></tr></thead><tbody id="kzTableBody"></tbody></table>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">Setup Kalitesi</div>
+          <table class="detail-table"><thead><tr><th>Setup</th><th>İşlem</th><th>TP / SL</th><th>Ort. RR</th></tr></thead><tbody id="setupTableBody"></tbody></table>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">Trend</div>
+          <table class="detail-table"><thead><tr><th>Yön</th><th>İşlem</th><th>TP / SL</th><th>Net Kâr</th></tr></thead><tbody id="trendTableBody"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-  </script>
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle"></div>
+      <button class="close-btn" id="closeDayBtn">×</button>
+    </div>
+    <div class="trade-list" id="dayTradeList"></div>
+    <div id="addTradeFormWrap" style="display:none">
+      <div class="trade-form">
+        <div class="trade-form-row">
+          <input class="trade-input" id="tPair" placeholder="Pair" style="flex:2">
+          <input class="trade-input" id="tTF" placeholder="TF" style="flex:1">
+        </div>
+        <div class="trade-form-row">
+          <button class="toggle-btn long" id="tLongBtn">Long</button>
+          <button class="toggle-btn short" id="tShortBtn">Short</button>
+        </div>
+        <div class="trade-form-row">
+          <button class="toggle-btn tp" id="tTPBtn">TP ✓</button>
+          <button class="toggle-btn sl" id="tSLBtn">SL ✗</button>
+          <button class="toggle-btn be" id="tBEBtn">BE</button>
+        </div>
+        <div class="trade-form-row">
+          <input class="trade-input" id="tRR" placeholder="RR" type="number" inputmode="decimal" step="any" min="0">
+          <input class="trade-input" id="tDollar" placeholder="$ Tutar" type="number" inputmode="decimal" step="any" min="0">
+        </div>
+        <div class="form-section-label">İşlem Tipi</div>
+        <div class="trade-form-row">
+          <button class="toggle-btn rev" id="tRev_r">Reversal</button>
+          <button class="toggle-btn rev" id="tRev_c">Continuation</button>
+        </div>
+        <div class="form-section-label">Killzone</div>
+        <div class="trade-form-row">
+          <button class="toggle-btn kz" id="tKZ_asia">Asia</button>
+          <button class="toggle-btn kz" id="tKZ_ldn">London</button>
+          <button class="toggle-btn kz" id="tKZ_nyam">NY AM</button>
+          <button class="toggle-btn kz" id="tKZ_lunch">NY Lunch</button>
+          <button class="toggle-btn kz" id="tKZ_nypm">NY PM</button>
+        </div>
+        <div class="form-section-label">Setup Kalitesi</div>
+        <div class="trade-form-row">
+          <button class="toggle-btn setup-a" id="tSetup_a">A+</button>
+          <button class="toggle-btn setup-b" id="tSetup_b">B</button>
+          <button class="toggle-btn setup-c" id="tSetup_c">C</button>
+        </div>
+        <div class="form-section-label">Trend</div>
+        <div class="trade-form-row">
+          <button class="toggle-btn trend-w" id="tTrend_w">Trend Yönü</button>
+          <button class="toggle-btn trend-a" id="tTrend_a">Trend Tersi</button>
+        </div>
+        <button class="save-trade-btn" id="saveNewTradeBtn">Kaydet</button>
+      </div>
+    </div>
+    <button class="add-trade-day-btn" id="showAddTradeBtn">+ Trade ekle</button>
+    <textarea id="dayNoteArea" placeholder="Günlük not..."></textarea>
+    <div class="status-day" id="statusDay"></div>
+  </div>
+</div>
+
+<div class="trade-page" id="tradePage">
+  <div class="trade-page-inner">
+    <div class="trade-page-header">
+      <div class="trade-page-title" id="tradePageTitle"></div>
+      <button class="trade-page-close" id="closeTradePageBtn">×</button>
+    </div>
+    <div class="info-card" id="tradeInfoCard">
+      <div class="info-row cols3">
+        <div class="info-col"><span class="info-label">Yön</span><span class="info-value" id="tpDir">—</span></div>
+        <div class="info-divider"></div>
+        <div class="info-col"><span class="info-label">Sonuç</span><span class="info-value" id="tpResult">—</span></div>
+        <div class="info-divider"></div>
+        <div class="info-col"><span class="info-label">TF</span><span class="info-value mid" id="tpTF">—</span></div>
+      </div>
+      <div class="info-row cols2">
+        <div class="info-col"><span class="info-label">RR</span><span class="info-value" id="tpRR">—</span></div>
+        <div class="info-divider"></div>
+        <div class="info-col"><span class="info-label">Tutar</span><span class="info-value" id="tpDollar">—</span></div>
+      </div>
+      <div class="info-row cols3">
+        <div class="info-col"><span class="info-label">Killzone</span><span class="info-value mid" id="tpKZ">—</span></div>
+        <div class="info-divider"></div>
+        <div class="info-col"><span class="info-label">Setup</span><span class="info-value mid" id="tpSetup">—</span></div>
+        <div class="info-divider"></div>
+        <div class="info-col"><span class="info-label">Trend</span><span class="info-value mid" id="tpTrend">—</span></div>
+      </div>
+      <div class="info-row cols2 no-border">
+        <div class="info-col"><span class="info-label">İşlem Tipi</span><span class="info-value mid" id="tpRev">—</span></div>
+        <div class="info-divider"></div>
+        <div class="info-col"></div>
+      </div>
+    </div>
+    <div class="trade-edit-form" id="tradeEditForm">
+      <div class="trade-form-row">
+        <input class="trade-input" id="ePair" placeholder="Pair" style="flex:2">
+        <input class="trade-input" id="eTF" placeholder="TF" style="flex:1">
+      </div>
+      <div class="trade-form-row">
+        <button class="toggle-btn long" id="eLongBtn">Long</button>
+        <button class="toggle-btn short" id="eShortBtn">Short</button>
+      </div>
+      <div class="trade-form-row">
+        <button class="toggle-btn tp" id="eTPBtn">TP ✓</button>
+        <button class="toggle-btn sl" id="eSLBtn">SL ✗</button>
+        <button class="toggle-btn be" id="eBEBtn">BE</button>
+      </div>
+      <div class="trade-form-row">
+        <input class="trade-input" id="eRR" placeholder="RR" type="number" inputmode="decimal" step="any" min="0">
+        <input class="trade-input" id="eDollar" placeholder="$ Tutar" type="number" inputmode="decimal" step="any" min="0">
+      </div>
+      <div class="form-section-label">İşlem Tipi</div>
+      <div class="trade-form-row">
+        <button class="toggle-btn rev" id="eRev_r">Reversal</button>
+        <button class="toggle-btn rev" id="eRev_c">Continuation</button>
+      </div>
+      <div class="form-section-label">Killzone</div>
+      <div class="trade-form-row">
+        <button class="toggle-btn kz" id="eKZ_asia">Asia</button>
+        <button class="toggle-btn kz" id="eKZ_ldn">London</button>
+        <button class="toggle-btn kz" id="eKZ_nyam">NY AM</button>
+        <button class="toggle-btn kz" id="eKZ_lunch">NY Lunch</button>
+        <button class="toggle-btn kz" id="eKZ_nypm">NY PM</button>
+      </div>
+      <div class="form-section-label">Setup Kalitesi</div>
+      <div class="trade-form-row">
+        <button class="toggle-btn setup-a" id="eSetup_a">A+</button>
+        <button class="toggle-btn setup-b" id="eSetup_b">B</button>
+        <button class="toggle-btn setup-c" id="eSetup_c">C</button>
+      </div>
+      <div class="form-section-label">Trend</div>
+      <div class="trade-form-row">
+        <button class="toggle-btn trend-w" id="eTrend_w">Trend Yönü</button>
+        <button class="toggle-btn trend-a" id="eTrend_a">Trend Tersi</button>
+      </div>
+      <button class="save-trade-btn" id="saveEditTradeBtn">Değişiklikleri Kaydet</button>
+    </div>
+    <div>
+      <div class="tp-section-title" style="margin-bottom:10px">Fotoğraflar</div>
+      <div class="tp-photo-grid" id="tpPhotoGrid"></div>
+      <label class="add-photo-label" style="margin-top:10px">+ Fotoğraf ekle<input type="file" id="tpFileInput" accept="image/*" multiple></label>
+    </div>
+    <div>
+      <div class="tp-section-title" style="margin-bottom:8px">Not</div>
+      <textarea class="tp-note" id="tpNoteArea" placeholder="Bu trade hakkında notların..."></textarea>
+    </div>
+    <div class="status-trade" id="statusTrade"></div>
+    <div class="trade-action-btns">
+      <button class="edit-trade-btn" id="editTradeBtn">Düzenle</button>
+      <button class="delete-trade-btn" id="deleteTradeBtn">Sil</button>
+    </div>
+  </div>
+</div>
+
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-panel">
+    <div class="settings-header">
+      <div class="settings-title">Ayarlar</div>
+      <button class="settings-close" id="settingsClose">×</button>
+    </div>
+    <div>
+      <div class="settings-section-label">Tema</div>
+      <div class="theme-row">
+        <button class="theme-btn active" id="themeDark">
+          <div class="theme-preview theme-preview-dark">
+            <div class="theme-preview-header"><span class="theme-preview-month-dark">Haziran</span></div>
+            <div class="theme-preview-bar">
+              <div class="theme-preview-dot"></div>
+              <div class="theme-preview-dot"></div>
+              <div class="theme-preview-dot"></div>
+              <div class="theme-preview-dot"></div>
+            </div>
+          </div>
+          <span class="theme-label">Koyu</span>
+        </button>
+        <button class="theme-btn" id="themeLight">
+          <div class="theme-preview theme-preview-light">
+            <div class="theme-preview-header"><span class="theme-preview-month-light">Haziran</span></div>
+            <div class="theme-preview-bar">
+              <div class="theme-preview-dot"></div>
+              <div class="theme-preview-dot"></div>
+              <div class="theme-preview-dot"></div>
+              <div class="theme-preview-dot"></div>
+            </div>
+          </div>
+          <span class="theme-label">Açık</span>
+        </button>
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <button class="signout-btn" id="signOutBtn2">çıkış yap</button>
+    </div>
+  </div>
+</div>
+
+<div class="viewer-overlay" id="viewerOverlay">
+  <button class="viewer-close" id="viewerClose">×</button>
+  <a class="viewer-download" id="viewerDownload" download="foto.jpg">⬇</a>
+  <img class="viewer-img" id="viewerImg" src="" alt="">
+</div>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCXIDM95RlrYzLcrsoRhIU6M99O35uOkN8",
+  authDomain: "trade-takvimi.firebaseapp.com",
+  projectId: "trade-takvimi",
+  storageBucket: "trade-takvimi.firebasestorage.app",
+  messagingSenderId: "277386285934",
+  appId: "1:277386285934:web:71721232cac09f3764677f"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const MONTHS = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const DAYS = ["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
+const KZ_LABELS = {asia:"Asia",ldn:"London",nyam:"NY AM",lunch:"NY Lunch",nypm:"NY PM"};
+const SETUP_LABELS = {a:"A+",b:"B",c:"C"};
+const TREND_LABELS = {w:"Trend Yönü",a:"Trend Tersi"};
+const REV_LABELS = {r:"Reversal",c:"Continuation"};
+
+const today = new Date();
+let curYear = today.getFullYear(), curMonth = today.getMonth();
+let selectedDay = null, currentUser = null, dotCache = {};
+let tradeDir=null, tradeResult=null, tradeKZ=null, tradeSetup=null, tradeTrend=null, tradeRev=null;
+let editDir=null, editResult=null, editKZ=null, editSetup=null, editTrend=null, editRev=null;
+let openTradeDay=null, openTradeIdx=null, isEditMode=false;
+let dayNoteTimer=null, tradeNoteTimer=null, toastTimer=null;
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  t.onclick = () => t.classList.remove("show");
+  toastTimer = setTimeout(() => t.classList.remove("show"), 4000);
+}
+function showScreen(n) {
+  document.getElementById("loginScreen").style.display = n==="login"?"block":"none";
+  document.getElementById("calendarScreen").style.display = n==="calendar"?"block":"none";
+}
+function setStatusDay(m) { document.getElementById("statusDay").textContent = m; }
+function setStatusTrade(m) { document.getElementById("statusTrade").textContent = m; }
+
+onAuthStateChanged(auth, user => {
+  if (user) { currentUser=user; dotCache={}; showScreen("calendar"); render(); }
+  else { currentUser=null; showScreen("login"); }
+});
+document.getElementById("googleSignInBtn").addEventListener("click", async () => {
+  const e = document.getElementById("loginError"); e.style.display="none";
+  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+  catch(err) { e.textContent="Giriş başarısız: "+err.message; e.style.display="block"; }
+});
+document.getElementById("signOutBtn").addEventListener("click", () => signOut(auth));
+
+function entryRef(y,m,d) { return doc(db,"users",currentUser.uid,"entries",`${y}_${m}_${d}`); }
+async function loadEntry(y,m,d) {
+  try {
+    const snap = await getDoc(entryRef(y,m,d));
+    const data = snap.exists() ? snap.data() : {};
+    return {
+      note: data.note||"", pnl: data.pnl||"",
+      trades: (data.trades||[]).map(t=>({
+        id:t.id||Date.now(), pair:(t.pair||"").toUpperCase(),
+        dir:t.dir||null, result:t.result||null, tf:t.tf||"",
+        rr:t.rr||"", dollar:t.dollar||"",
+        kz:t.kz||null, setup:t.setup||null, trend:t.trend||null, rev:t.rev||null,
+        note:t.note||"", photos:t.photos||[]
+      }))
+    };
+  } catch(e) { console.error(e); return {note:"",pnl:"",trades:[]}; }
+}
+async function saveEntry(y,m,d,data) {
+  try {
+    await setDoc(entryRef(y,m,d), data);
+    dotCache[`${y}_${m}_${d}`] = data.note.trim()!==""||data.pnl!==""||data.trades.length>0;
+  } catch(e) { console.error(e); }
+}
+async function checkDot(y,m,d) {
+  const key=`${y}_${m}_${d}`;
+  if (dotCache[key]!==undefined) return dotCache[key];
+  const e = await loadEntry(y,m,d);
+  dotCache[key] = e.note.trim()!==""||e.pnl!==""||e.trades.length>0;
+  return dotCache[key];
+}
+function daysInMonth(y,m) { return new Date(y,m+1,0).getDate(); }
+function firstDay(y,m) { let d=new Date(y,m,1).getDay(); return d===0?6:d-1; }
+
+async function render() {
+  document.getElementById("monthName").textContent = MONTHS[curMonth];
+  document.getElementById("yearLabel").textContent = curYear;
+  document.getElementById("dayHeaders").innerHTML = DAYS.map(d=>`<div class="day-header-cell">${d}</div>`).join("");
+  document.getElementById("monthSummary").style.display = "none";
+  document.getElementById("summaryToggleBtn").textContent = "ay özeti göster";
+  const grid = document.getElementById("calGrid"); grid.innerHTML="";
+  const days=daysInMonth(curYear,curMonth), first=firstDay(curYear,curMonth);
+  const cells=Math.ceil((first+days)/7)*7;
+  for (let i=0;i<cells;i++) {
+    const day=i-first+1, cell=document.createElement("div"); cell.className="cal-cell";
+    if (day>=1&&day<=days) {
+      cell.classList.add("active");
+      if (day===today.getDate()&&curMonth===today.getMonth()&&curYear===today.getFullYear()) cell.classList.add("today");
+      const num=document.createElement("span"); num.className="day-num"; num.textContent=day; cell.appendChild(num);
+      const dot=document.createElement("span"); dot.className="entry-dot"; dot.style.visibility="hidden"; cell.appendChild(dot);
+      const pnlEl=document.createElement("span"); pnlEl.className="pnl-label"; pnlEl.style.visibility="hidden"; cell.appendChild(pnlEl);
+      checkDot(curYear,curMonth,day).then(has=>{ if(has) dot.style.visibility="visible"; });
+      loadEntry(curYear,curMonth,day).then(entry=>{
+        let total=0, hasTrades=false;
+        (entry.trades||[]).forEach(t=>{
+          if (!t.result||t.result==="be") return;
+          const d=parseFloat(t.dollar);
+          if (!isNaN(d)&&d>0) { hasTrades=true; if(t.result==="tp") total+=d; else total-=d; }
+        });
+        if (hasTrades) {
+          pnlEl.textContent=(total>=0?"+":"")+total.toFixed(0)+"$";
+          pnlEl.className="pnl-label "+(total>=0?"pos":"neg");
+          pnlEl.style.visibility="visible"; dot.style.visibility="hidden";
+        } else if (entry.pnl&&entry.pnl!=="") {
+          const val=parseFloat(entry.pnl);
+          if (!isNaN(val)) {
+            pnlEl.textContent=(val>=0?"+":"")+val+"$";
+            pnlEl.className="pnl-label "+(val>=0?"pos":"neg");
+            pnlEl.style.visibility="visible"; dot.style.visibility="hidden";
+          }
+        }
+      });
+      cell.addEventListener("click",()=>openDayModal(day));
+    }
+    grid.appendChild(cell);
+  }
+}
+
+document.getElementById("summaryToggleBtn").addEventListener("click", async () => {
+  const el=document.getElementById("monthSummary"), btn=document.getElementById("summaryToggleBtn");
+  if (el.style.display!=="none") { el.style.display="none"; btn.textContent="ay özeti göster"; }
+  else { btn.textContent="yükleniyor..."; await updateMonthlySummary(curYear,curMonth); btn.textContent="ay özetini gizle"; }
+});
+document.getElementById("detailToggleBtn").addEventListener("click", () => {
+  const ds=document.getElementById("detailStats"), btn=document.getElementById("detailToggleBtn");
+  const isOpen=ds.classList.toggle("open");
+  btn.textContent=isOpen?"▴ Detaylı İstatistik":"▾ Detaylı İstatistik";
+});
+
+async function updateMonthlySummary(y,m) {
+  const days=daysInMonth(y,m);
+  const entries=await Promise.all(Array.from({length:days},(_,i)=>loadEntry(y,m,i+1)));
+  let totalProfit=0,totalLoss=0,allTrades=[],winCount=0;
+  let longTotal=0,longTP=0,longSL=0,shortTotal=0,shortTP=0,shortSL=0;
+  let rrValues=[],dollarWins=[],dollarLosses=[];
+  const kzMap={},setupMap={},trendMap={},revMap={};
+  entries.forEach(e=>{
+    (e.trades||[]).forEach(t=>{
+      if (!t.result) return;
+      allTrades.push(t);
+      const isTP=t.result==="tp", isBE=t.result==="be";
+      if (!isBE) {
+        const dollar=parseFloat(t.dollar);
+        if (!isNaN(dollar)&&dollar>0) { if(isTP){totalProfit+=dollar;dollarWins.push(dollar);}else{totalLoss-=dollar;dollarLosses.push(dollar);} }
+        if (t.dir==="long"){longTotal++;if(isTP)longTP++;else longSL++;}else{shortTotal++;if(isTP)shortTP++;else shortSL++;}
+        if (isTP) winCount++;
+        const rr=parseFloat(t.rr); if(!isNaN(rr)) rrValues.push(isTP?rr:-rr);
+        if(t.kz){if(!kzMap[t.kz])kzMap[t.kz]={total:0,tp:0,sl:0};kzMap[t.kz].total++;if(isTP)kzMap[t.kz].tp++;else kzMap[t.kz].sl++;}
+        if(t.setup){if(!setupMap[t.setup])setupMap[t.setup]={total:0,tp:0,sl:0,rrs:[]};setupMap[t.setup].total++;if(isTP)setupMap[t.setup].tp++;else setupMap[t.setup].sl++;if(!isNaN(rr))setupMap[t.setup].rrs.push(isTP?rr:-rr);}
+        if(t.trend){if(!trendMap[t.trend])trendMap[t.trend]={total:0,tp:0,sl:0,net:0};trendMap[t.trend].total++;if(isTP)trendMap[t.trend].tp++;else trendMap[t.trend].sl++;const d=parseFloat(t.dollar);if(!isNaN(d)&&d>0)trendMap[t.trend].net+=isTP?d:-d;}
+        if(t.rev){if(!revMap[t.rev])revMap[t.rev]={total:0,tp:0,sl:0};revMap[t.rev].total++;if(isTP)revMap[t.rev].tp++;else revMap[t.rev].sl++;}
+      }
+    });
+  });
+  const net=totalProfit+totalLoss;
+  const hasData=totalProfit!==0||totalLoss!==0||allTrades.length>0;
+  const summaryEl=document.getElementById("monthSummary");
+  if (!hasData){summaryEl.style.display="none";document.getElementById("summaryToggleBtn").textContent="ay özeti göster";return;}
+  summaryEl.style.display="block"; summaryEl.style.animation="none"; summaryEl.offsetHeight; summaryEl.style.animation="fadeIn 0.3s ease";
+  document.getElementById("sumProfit").textContent=totalProfit>0?`+${totalProfit.toFixed(0)}$`:"—";
+  document.getElementById("sumLoss").textContent=totalLoss<0?`${totalLoss.toFixed(0)}$`:"—";
+  const netEl=document.getElementById("sumNet");
+  netEl.textContent=(net>=0?"+":"")+net.toFixed(0)+"$"; netEl.className="sum-value lg "+(net>0?"pos":net<0?"neg":"");
+  const absLoss=Math.abs(totalLoss), ratio=totalProfit+absLoss>0?(totalProfit/(totalProfit+absLoss))*100:50;
+  document.getElementById("summaryBar").style.width=ratio+"%";
+  document.getElementById("summaryBar").style.background=net>=0?"var(--green)":"var(--red)";
+  const ratedTrades=allTrades.filter(t=>t.result!=="be"), total=ratedTrades.length;
+  const winRate=total>0?Math.round((winCount/total)*100):null;
+  const avgRR=rrValues.length>0?rrValues.reduce((a,b)=>a+b,0)/rrValues.length:null;
+  document.getElementById("statTotal").textContent=allTrades.length>0?allTrades.length:"—";
+  const wrEl=document.getElementById("statWinRate"); wrEl.textContent=winRate!==null?winRate+"%":"—"; wrEl.className="sum-value"+(winRate!==null?(winRate>=50?" pos":" neg"):"");
+  const rrEl=document.getElementById("statAvgRR"); rrEl.textContent=avgRR!==null?(avgRR>=0?"+":"")+avgRR.toFixed(2)+"R":"—"; rrEl.className="sum-value"+(avgRR!==null?(avgRR>=0?" pos":" neg"):"");
+  document.getElementById("statLong").textContent=longTotal>0?longTotal:"—";
+  document.getElementById("statLongDetail").textContent=longTotal>0?`${longTP} TP / ${longSL} SL`:"";
+  document.getElementById("statShort").textContent=shortTotal>0?shortTotal:"—";
+  document.getElementById("statShortDetail").textContent=shortTotal>0?`${shortTP} TP / ${shortSL} SL`:"";
+  const avgWin=dollarWins.length>0?dollarWins.reduce((a,b)=>a+b,0)/dollarWins.length:null;
+  const avgLoss2=dollarLosses.length>0?dollarLosses.reduce((a,b)=>a+b,0)/dollarLosses.length:null;
+  document.getElementById("statAvgWin").textContent=avgWin!==null?"+"+avgWin.toFixed(0)+"$":"—";
+  document.getElementById("statAvgLoss").textContent=avgLoss2!==null?"-"+avgLoss2.toFixed(0)+"$":"—";
+  const pairMap={};
+  allTrades.forEach(t=>{const p=(t.pair||"?").toUpperCase();if(!pairMap[p])pairMap[p]={total:0,tp:0,sl:0,be:0};pairMap[p].total++;if(t.result==="tp")pairMap[p].tp++;else if(t.result==="sl")pairMap[p].sl++;else pairMap[p].be++;});
+  const pairs=Object.entries(pairMap).sort((a,b)=>b[1].total-a[1].total);
+  const pairListWrap=document.getElementById("pairListWrap"), pairList=document.getElementById("pairList");
+  if(pairs.length>0){pairListWrap.style.display="block";pairList.innerHTML="";pairs.forEach(([pair,data])=>{const row=document.createElement("div");row.className="pair-row";let detail=`<span class="pair-tp">TP ${data.tp}</span><span class="pair-sl">SL ${data.sl}</span>`;if(data.be>0)detail+=`<span style="font-size:10px;color:var(--blue)">BE ${data.be}</span>`;row.innerHTML=`<span class="pair-name">${pair}</span><div class="pair-stats"><span class="pair-count">${data.total} işlem</span>${detail}</div>`;pairList.appendChild(row);});}
+  else pairListWrap.style.display="none";
+  const revBody=document.getElementById("revTableBody"); revBody.innerHTML="";
+  ["r","c"].forEach(key=>{if(!revMap[key])return;const d=revMap[key],wr=d.total>0?Math.round((d.tp/d.total)*100):0;const tr=document.createElement("tr");tr.innerHTML=`<td>${REV_LABELS[key]}</td><td>${d.total}</td><td><span style="color:var(--green)">${d.tp} TP</span> / <span style="color:var(--red)">${d.sl} SL</span></td><td class="${wr>=50?'pos':'neg'}">${wr}%</td>`;revBody.appendChild(tr);});
+  const kzOrder=["asia","ldn","nyam","lunch","nypm"], kzBody=document.getElementById("kzTableBody"); kzBody.innerHTML="";
+  kzOrder.forEach(key=>{if(!kzMap[key])return;const d=kzMap[key],wr=d.total>0?Math.round((d.tp/d.total)*100):0;const tr=document.createElement("tr");tr.innerHTML=`<td>${KZ_LABELS[key]}</td><td>${d.total}</td><td><span style="color:var(--green)">${d.tp} TP</span> / <span style="color:var(--red)">${d.sl} SL</span></td><td class="${wr>=50?'pos':'neg'}">${wr}%</td>`;kzBody.appendChild(tr);});
+  const setupOrder=["a","b","c"], setupBody=document.getElementById("setupTableBody"); setupBody.innerHTML="";
+  setupOrder.forEach(key=>{if(!setupMap[key])return;const d=setupMap[key],avgR=d.rrs.length>0?d.rrs.reduce((a,b)=>a+b,0)/d.rrs.length:null;const tr=document.createElement("tr");tr.innerHTML=`<td>${SETUP_LABELS[key]}</td><td>${d.total}</td><td><span style="color:var(--green)">${d.tp} TP</span> / <span style="color:var(--red)">${d.sl} SL</span></td><td class="${avgR!==null?(avgR>=0?'pos':'neg'):''}">${avgR!==null?(avgR>=0?'+':'')+avgR.toFixed(2)+'R':'—'}</td>`;setupBody.appendChild(tr);});
+  const trendOrder=["w","a"], trendBody=document.getElementById("trendTableBody"); trendBody.innerHTML="";
+  trendOrder.forEach(key=>{if(!trendMap[key])return;const d=trendMap[key];const tr=document.createElement("tr");tr.innerHTML=`<td>${TREND_LABELS[key]}</td><td>${d.total}</td><td><span style="color:var(--green)">${d.tp} TP</span> / <span style="color:var(--red)">${d.sl} SL</span></td><td class="${d.net>=0?'pos':'neg'}">${d.net>=0?'+':''}${d.net.toFixed(0)}$</td>`;trendBody.appendChild(tr);});
+}
+
+async function openDayModal(day) {
+  selectedDay=day;
+  document.getElementById("modalTitle").textContent=`${day} ${MONTHS[curMonth]} ${curYear}`;
+  document.getElementById("dayTradeList").innerHTML="";
+  document.getElementById("dayNoteArea").value="";
+  document.getElementById("addTradeFormWrap").style.display="none";
+  document.getElementById("showAddTradeBtn").textContent="+ Trade ekle";
+  resetNewTradeForm(); setStatusDay("yükleniyor...");
+  document.getElementById("overlay").classList.add("open");
+  const entry=await loadEntry(curYear,curMonth,day);
+  document.getElementById("dayNoteArea").value=entry.note||"";
+  renderDayTrades(entry.trades||[]); setStatusDay("");
+}
+function closeDayModal() { document.getElementById("overlay").classList.remove("open"); selectedDay=null; render(); }
+document.getElementById("closeDayBtn").addEventListener("click",closeDayModal);
+document.getElementById("overlay").addEventListener("click",e=>{ if(e.target===document.getElementById("overlay")) closeDayModal(); });
+
+function renderDayTrades(trades) {
+  const list=document.getElementById("dayTradeList"); list.innerHTML="";
+  if(!trades||trades.length===0) return;
+  trades.forEach((t,idx)=>{
+    const card=document.createElement("div"); card.className="trade-card";
+    const left=document.createElement("div"); left.className="trade-card-left";
+    const pairEl=document.createElement("span"); pairEl.className="trade-card-pair"; pairEl.textContent=t.pair||"—"; left.appendChild(pairEl);
+    const metaParts=[];
+    if(t.tf) metaParts.push(t.tf);
+    if(t.rr) metaParts.push("RR "+t.rr);
+    if(t.kz) metaParts.push(KZ_LABELS[t.kz]||t.kz);
+    if(t.setup) metaParts.push(SETUP_LABELS[t.setup]||t.setup);
+    if(metaParts.length){const meta=document.createElement("span");meta.className="trade-card-meta";meta.textContent=metaParts.join("  ·  ");left.appendChild(meta);}
+    const right=document.createElement("div"); right.className="trade-card-right";
+    if(t.dollar&&t.result!=="be"){const isWin=t.result==="tp";const dEl=document.createElement("span");dEl.className="trade-dollar "+(isWin?"pos":"neg");dEl.textContent=(isWin?"+":"-")+t.dollar+"$";right.appendChild(dEl);}
+    if(t.dir){const b=document.createElement("span");b.className="badge "+t.dir;b.textContent=t.dir==="long"?"LONG":"SHORT";right.appendChild(b);}
+    if(t.result){const b=document.createElement("span");b.className="badge "+t.result;b.textContent=t.result==="tp"?"TP":t.result==="sl"?"SL":"BE";right.appendChild(b);}
+    const arrow=document.createElement("span"); arrow.className="trade-arrow"; arrow.textContent="›"; right.appendChild(arrow);
+    card.appendChild(left); card.appendChild(right);
+    card.addEventListener("click",()=>openTradePage(curYear,curMonth,selectedDay,idx));
+    list.appendChild(card);
+  });
+}
+
+document.getElementById("showAddTradeBtn").addEventListener("click",()=>{
+  const wrap=document.getElementById("addTradeFormWrap"),btn=document.getElementById("showAddTradeBtn");
+  const isOpen=wrap.style.display!=="none";
+  wrap.style.display=isOpen?"none":"block";
+  btn.textContent=isOpen?"+ Trade ekle":"İptal";
+  if(!isOpen) resetNewTradeForm();
+});
+
+function resetNewTradeForm() {
+  document.getElementById("tPair").value=""; document.getElementById("tTF").value="";
+  document.getElementById("tRR").value=""; document.getElementById("tDollar").value="";
+  tradeDir=null; tradeResult=null; tradeKZ=null; tradeSetup=null; tradeTrend=null; tradeRev=null;
+  ["tLongBtn","tShortBtn","tTPBtn","tSLBtn","tBEBtn","tKZ_asia","tKZ_ldn","tKZ_nyam","tKZ_lunch","tKZ_nypm","tSetup_a","tSetup_b","tSetup_c","tTrend_w","tTrend_a","tRev_r","tRev_c"].forEach(id=>document.getElementById(id).classList.remove("active","error"));
+  document.getElementById("tPair").classList.remove("error");
+}
+
+function makeExclusive(ids,getValue,setValue) {
+  ids.forEach(id=>{
+    document.getElementById(id).addEventListener("click",()=>{
+      const val=getValue(id);
+      const alreadyActive=document.getElementById(id).classList.contains("active");
+      ids.forEach(i=>document.getElementById(i).classList.remove("active","error"));
+      if(!alreadyActive){document.getElementById(id).classList.add("active");setValue(val);}
+      else setValue(null);
+    });
+  });
+}
+
+document.getElementById("tLongBtn").addEventListener("click",()=>{
+  const already=tradeDir==="long"; tradeDir=already?null:"long";
+  document.getElementById("tLongBtn").classList.toggle("active",tradeDir==="long");
+  document.getElementById("tShortBtn").classList.remove("active","error");
+  if(tradeDir==="long")document.getElementById("tLongBtn").classList.remove("error");
+});
+document.getElementById("tShortBtn").addEventListener("click",()=>{
+  const already=tradeDir==="short"; tradeDir=already?null:"short";
+  document.getElementById("tShortBtn").classList.toggle("active",tradeDir==="short");
+  document.getElementById("tLongBtn").classList.remove("active","error");
+  if(tradeDir==="short")document.getElementById("tShortBtn").classList.remove("error");
+});
+makeExclusive(["tTPBtn","tSLBtn","tBEBtn"],id=>id==="tTPBtn"?"tp":id==="tSLBtn"?"sl":"be",val=>{tradeResult=val;});
+makeExclusive(["tKZ_asia","tKZ_ldn","tKZ_nyam","tKZ_lunch","tKZ_nypm"],id=>id.replace("tKZ_",""),val=>{tradeKZ=val;});
+makeExclusive(["tSetup_a","tSetup_b","tSetup_c"],id=>id.replace("tSetup_",""),val=>{tradeSetup=val;});
+makeExclusive(["tTrend_w","tTrend_a"],id=>id.replace("tTrend_",""),val=>{tradeTrend=val;});
+makeExclusive(["tRev_r","tRev_c"],id=>id.replace("tRev_",""),val=>{tradeRev=val;});
+
+document.getElementById("saveNewTradeBtn").addEventListener("click", async ()=>{
+  if(!selectedDay) return;
+  const pair=document.getElementById("tPair").value.trim().toUpperCase();
+  let hasError=false;
+  document.getElementById("tPair").classList.toggle("error",!pair); if(!pair) hasError=true;
+  if(!tradeDir){document.getElementById("tLongBtn").classList.add("error");document.getElementById("tShortBtn").classList.add("error");hasError=true;}
+  else{document.getElementById("tLongBtn").classList.remove("error");document.getElementById("tShortBtn").classList.remove("error");}
+  if(!tradeResult){["tTPBtn","tSLBtn","tBEBtn"].forEach(id=>document.getElementById(id).classList.add("error"));hasError=true;}
+  else{["tTPBtn","tSLBtn","tBEBtn"].forEach(id=>document.getElementById(id).classList.remove("error"));}
+  if(hasError){showToast("Pair, Yön ve Sonuç zorunludur");return;}
+  const missing=[];
+  if(!tradeRev){["tRev_r","tRev_c"].forEach(id=>document.getElementById(id).classList.add("error"));missing.push("İşlem Tipi");}
+  else{["tRev_r","tRev_c"].forEach(id=>document.getElementById(id).classList.remove("error"));}
+  if(!tradeKZ){["tKZ_asia","tKZ_ldn","tKZ_nyam","tKZ_lunch","tKZ_nypm"].forEach(id=>document.getElementById(id).classList.add("error"));missing.push("Killzone");}
+  else{["tKZ_asia","tKZ_ldn","tKZ_nyam","tKZ_lunch","tKZ_nypm"].forEach(id=>document.getElementById(id).classList.remove("error"));}
+  if(!tradeSetup){["tSetup_a","tSetup_b","tSetup_c"].forEach(id=>document.getElementById(id).classList.add("error"));missing.push("Setup");}
+  else{["tSetup_a","tSetup_b","tSetup_c"].forEach(id=>document.getElementById(id).classList.remove("error"));}
+  if(!tradeTrend){["tTrend_w","tTrend_a"].forEach(id=>document.getElementById(id).classList.add("error"));missing.push("Trend");}
+  else{["tTrend_w","tTrend_a"].forEach(id=>document.getElementById(id).classList.remove("error"));}
+  if(missing.length>0){showToast("Bazı alanlar boş: "+missing.join(", "));}
+  const trade={id:Date.now(),pair,dir:tradeDir,result:tradeResult,tf:document.getElementById("tTF").value.trim(),rr:document.getElementById("tRR").value,dollar:document.getElementById("tDollar").value,kz:tradeKZ,setup:tradeSetup,trend:tradeTrend,rev:tradeRev,note:"",photos:[]};
+  const entry=await loadEntry(curYear,curMonth,selectedDay);
+  entry.trades.push(trade);
+  await saveEntry(curYear,curMonth,selectedDay,entry);
+  renderDayTrades(entry.trades);
+  document.getElementById("addTradeFormWrap").style.display="none";
+  document.getElementById("showAddTradeBtn").textContent="+ Trade ekle";
+  resetNewTradeForm(); setStatusDay("trade eklendi ✓"); setTimeout(()=>setStatusDay(""),1500);
+});
+
+document.getElementById("dayNoteArea").addEventListener("input",e=>{
+  if(!selectedDay) return; clearTimeout(dayNoteTimer); setStatusDay("kaydediliyor...");
+  dayNoteTimer=setTimeout(async()=>{const entry=await loadEntry(curYear,curMonth,selectedDay);entry.note=e.target.value;await saveEntry(curYear,curMonth,selectedDay,entry);setStatusDay("kaydedildi ✓");setTimeout(()=>setStatusDay(""),2000);},800);
+});
+
+async function openTradePage(y,m,d,idx) {
+  openTradeDay={y,m,d}; openTradeIdx=idx; isEditMode=false;
+  document.getElementById("tradeEditForm").classList.remove("open");
+  document.getElementById("tradeInfoCard").style.display="block";
+  document.getElementById("editTradeBtn").textContent="Düzenle";
+  const entry=await loadEntry(y,m,d); const t=entry.trades[idx]; if(!t) return;
+  fillTradePageInfo(t);
+  document.getElementById("tpNoteArea").value=t.note||"";
+  renderTradePhotos(t.photos||[]);
+  document.getElementById("tradePage").classList.add("open");
+}
+function fillTradePageInfo(t) {
+  document.getElementById("tradePageTitle").textContent=`${t.pair} — ${openTradeDay.d} ${MONTHS[openTradeDay.m]}`;
+  const dirEl=document.getElementById("tpDir"); dirEl.textContent=t.dir==="long"?"LONG":t.dir==="short"?"SHORT":"—"; dirEl.className="info-value "+(t.dir==="long"?"pos":t.dir==="short"?"neg":"mid");
+  const resEl=document.getElementById("tpResult");
+  if(t.result==="tp"){resEl.textContent="TP ✓";resEl.className="info-value pos";}
+  else if(t.result==="sl"){resEl.textContent="SL ✗";resEl.className="info-value neg";}
+  else if(t.result==="be"){resEl.textContent="BE";resEl.className="info-value blue";}
+  else{resEl.textContent="—";resEl.className="info-value mid";}
+  document.getElementById("tpTF").textContent=t.tf||"—";
+  const rrEl=document.getElementById("tpRR");
+  if(t.rr&&t.result!=="be"){const isWin=t.result==="tp";rrEl.textContent=(isWin?"+":"-")+t.rr+"R";rrEl.className="info-value "+(isWin?"pos":"neg");}
+  else{rrEl.textContent="—";rrEl.className="info-value mid";}
+  const dolEl=document.getElementById("tpDollar");
+  if(t.dollar&&t.result!=="be"){const isWin=t.result==="tp";dolEl.textContent=(isWin?"+":"-")+t.dollar+"$";dolEl.className="info-value "+(isWin?"pos":"neg");}
+  else{dolEl.textContent="—";dolEl.className="info-value mid";}
+  document.getElementById("tpKZ").textContent=t.kz?(KZ_LABELS[t.kz]||t.kz):"—";
+  document.getElementById("tpSetup").textContent=t.setup?(SETUP_LABELS[t.setup]||t.setup):"—";
+  document.getElementById("tpTrend").textContent=t.trend?(TREND_LABELS[t.trend]||t.trend):"—";
+  document.getElementById("tpRev").textContent=t.rev?(REV_LABELS[t.rev]||t.rev):"—";
+}
+function closeTradePageFn() {
+  document.getElementById("tradePage").classList.remove("open");
+  if(selectedDay) loadEntry(curYear,curMonth,selectedDay).then(entry=>renderDayTrades(entry.trades||[]));
+  openTradeDay=null; openTradeIdx=null; isEditMode=false;
+}
+document.getElementById("closeTradePageBtn").addEventListener("click",closeTradePageFn);
+
+document.getElementById("editTradeBtn").addEventListener("click", async ()=>{
+  if(!openTradeDay||openTradeIdx===null) return;
+  if(isEditMode){
+    isEditMode=false; document.getElementById("tradeEditForm").classList.remove("open");
+    document.getElementById("tradeInfoCard").style.display="block";
+    document.getElementById("editTradeBtn").textContent="Düzenle"; return;
+  }
+  isEditMode=true; document.getElementById("editTradeBtn").textContent="İptal";
+  document.getElementById("tradeInfoCard").style.display="none";
+  document.getElementById("tradeEditForm").classList.add("open");
+  const entry=await loadEntry(openTradeDay.y,openTradeDay.m,openTradeDay.d);
+  const t=entry.trades[openTradeIdx]; if(!t) return;
+  document.getElementById("ePair").value=t.pair||""; document.getElementById("eTF").value=t.tf||"";
+  document.getElementById("eRR").value=t.rr||""; document.getElementById("eDollar").value=t.dollar||"";
+  editDir=t.dir||null; editResult=t.result||null; editKZ=t.kz||null; editSetup=t.setup||null; editTrend=t.trend||null; editRev=t.rev||null;
+  document.getElementById("eLongBtn").classList.toggle("active",editDir==="long");
+  document.getElementById("eShortBtn").classList.toggle("active",editDir==="short");
+  ["eTPBtn","eSLBtn","eBEBtn"].forEach(id=>{const v=id==="eTPBtn"?"tp":id==="eSLBtn"?"sl":"be";document.getElementById(id).classList.toggle("active",editResult===v);});
+  ["eKZ_asia","eKZ_ldn","eKZ_nyam","eKZ_lunch","eKZ_nypm"].forEach(id=>document.getElementById(id).classList.toggle("active",editKZ===id.replace("eKZ_","")));
+  ["eSetup_a","eSetup_b","eSetup_c"].forEach(id=>document.getElementById(id).classList.toggle("active",editSetup===id.replace("eSetup_","")));
+  ["eTrend_w","eTrend_a"].forEach(id=>document.getElementById(id).classList.toggle("active",editTrend===id.replace("eTrend_","")));
+  ["eRev_r","eRev_c"].forEach(id=>document.getElementById(id).classList.toggle("active",editRev===id.replace("eRev_","")));
+});
+
+document.getElementById("eLongBtn").addEventListener("click",()=>{const a=editDir==="long";editDir=a?null:"long";document.getElementById("eLongBtn").classList.toggle("active",editDir==="long");document.getElementById("eShortBtn").classList.remove("active");});
+document.getElementById("eShortBtn").addEventListener("click",()=>{const a=editDir==="short";editDir=a?null:"short";document.getElementById("eShortBtn").classList.toggle("active",editDir==="short");document.getElementById("eLongBtn").classList.remove("active");});
+makeExclusive(["eTPBtn","eSLBtn","eBEBtn"],id=>id==="eTPBtn"?"tp":id==="eSLBtn"?"sl":"be",val=>{editResult=val;});
+makeExclusive(["eKZ_asia","eKZ_ldn","eKZ_nyam","eKZ_lunch","eKZ_nypm"],id=>id.replace("eKZ_",""),val=>{editKZ=val;});
+makeExclusive(["eSetup_a","eSetup_b","eSetup_c"],id=>id.replace("eSetup_",""),val=>{editSetup=val;});
+makeExclusive(["eTrend_w","eTrend_a"],id=>id.replace("eTrend_",""),val=>{editTrend=val;});
+makeExclusive(["eRev_r","eRev_c"],id=>id.replace("eRev_",""),val=>{editRev=val;});
+
+document.getElementById("saveEditTradeBtn").addEventListener("click", async ()=>{
+  if(!openTradeDay||openTradeIdx===null) return;
+  const pair=document.getElementById("ePair").value.trim().toUpperCase();
+  if(!pair){setStatusTrade("Pair gir!");setTimeout(()=>setStatusTrade(""),1500);return;}
+  if(!editResult){setStatusTrade("TP / SL / BE seç!");setTimeout(()=>setStatusTrade(""),1500);return;}
+  const missing=[];
+  if(!editRev) missing.push("İşlem Tipi"); if(!editKZ) missing.push("Killzone");
+  if(!editSetup) missing.push("Setup"); if(!editTrend) missing.push("Trend");
+  if(missing.length>0) showToast("Bazı alanlar boş: "+missing.join(", "));
+  const {y,m,d}=openTradeDay; const entry=await loadEntry(y,m,d); const t=entry.trades[openTradeIdx];
+  t.pair=pair; t.dir=editDir; t.result=editResult;
+  t.tf=document.getElementById("eTF").value.trim();
+  t.rr=document.getElementById("eRR").value; t.dollar=document.getElementById("eDollar").value;
+  t.kz=editKZ; t.setup=editSetup; t.trend=editTrend; t.rev=editRev;
+  await saveEntry(y,m,d,entry); fillTradePageInfo(t); isEditMode=false;
+  document.getElementById("tradeEditForm").classList.remove("open");
+  document.getElementById("tradeInfoCard").style.display="block";
+  document.getElementById("editTradeBtn").textContent="Düzenle";
+  setStatusTrade("kaydedildi ✓"); setTimeout(()=>setStatusTrade(""),2000);
+});
+
+document.getElementById("tpNoteArea").addEventListener("input",e=>{
+  if(!openTradeDay||openTradeIdx===null) return; clearTimeout(tradeNoteTimer); setStatusTrade("kaydediliyor...");
+  tradeNoteTimer=setTimeout(async()=>{const {y,m,d}=openTradeDay;const entry=await loadEntry(y,m,d);if(entry.trades[openTradeIdx]){entry.trades[openTradeIdx].note=e.target.value;await saveEntry(y,m,d,entry);}setStatusTrade("kaydedildi ✓");setTimeout(()=>setStatusTrade(""),2000);},800);
+});
+
+function renderTradePhotos(photos) {
+  const grid=document.getElementById("tpPhotoGrid"); grid.innerHTML="";
+  photos.forEach((src,pIdx)=>{
+    const wrap=document.createElement("div"); wrap.className="tp-photo-wrap";
+    const img=document.createElement("img"); img.src=src; img.addEventListener("click",()=>openViewer(src));
+    const btn=document.createElement("button"); btn.className="tp-remove-photo"; btn.textContent="×";
+    btn.addEventListener("click",e=>{e.stopPropagation();removeTradePhoto(pIdx);});
+    wrap.appendChild(img); wrap.appendChild(btn); grid.appendChild(wrap);
+  });
+}
+async function removeTradePhoto(pIdx) {
+  if(!openTradeDay||openTradeIdx===null) return;
+  const {y,m,d}=openTradeDay; const entry=await loadEntry(y,m,d);
+  entry.trades[openTradeIdx].photos.splice(pIdx,1);
+  await saveEntry(y,m,d,entry); renderTradePhotos(entry.trades[openTradeIdx].photos);
+  setStatusTrade("silindi ✓"); setTimeout(()=>setStatusTrade(""),1500);
+}
+function resizeImage(file,maxSize=1200) {
+  return new Promise(resolve=>{
+    const reader=new FileReader();
+    reader.onload=e=>{const img=new Image();img.onload=()=>{const canvas=document.createElement("canvas");let w=img.width,h=img.height;if(w>h&&w>maxSize){h=h*maxSize/w;w=maxSize;}else if(h>maxSize){w=w*maxSize/h;h=maxSize;}canvas.width=w;canvas.height=h;canvas.getContext("2d").drawImage(img,0,0,w,h);resolve(canvas.toDataURL("image/webp",0.95));};img.src=e.target.result;};
+    reader.readAsDataURL(file);
+  });
+}
+document.getElementById("tpFileInput").addEventListener("change", async e=>{
+  if(!openTradeDay||openTradeIdx===null) return;
+  const files=Array.from(e.target.files); if(!files.length) return;
+  setStatusTrade("fotoğraflar yükleniyor...");
+  const {y,m,d}=openTradeDay; const entry=await loadEntry(y,m,d);
+  for(const file of files) entry.trades[openTradeIdx].photos.push(await resizeImage(file));
+  await saveEntry(y,m,d,entry); renderTradePhotos(entry.trades[openTradeIdx].photos);
+  setStatusTrade("kaydedildi ✓"); setTimeout(()=>setStatusTrade(""),2000); e.target.value="";
+});
+document.getElementById("deleteTradeBtn").addEventListener("click", async ()=>{
+  if(!openTradeDay||openTradeIdx===null) return;
+  if(!confirm("Bu trade silinsin mi?")) return;
+  const {y,m,d}=openTradeDay; const entry=await loadEntry(y,m,d);
+  entry.trades.splice(openTradeIdx,1); await saveEntry(y,m,d,entry); closeTradePageFn();
+});
+
+function openViewer(src){document.getElementById("viewerImg").src=src;document.getElementById("viewerDownload").href=src;document.getElementById("viewerOverlay").classList.add("open");}
+function closeViewer(){document.getElementById("viewerOverlay").classList.remove("open");}
+document.getElementById("viewerClose").addEventListener("click",closeViewer);
+document.getElementById("viewerOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("viewerOverlay"))closeViewer();});
+
+document.getElementById("prevBtn").addEventListener("click",()=>{if(curMonth===0){curMonth=11;curYear--;}else curMonth--;render();});
+document.getElementById("nextBtn").addEventListener("click",()=>{if(curMonth===11){curMonth=0;curYear++;}else curMonth++;render();});
+
+// ── SETTINGS ──
+function openSettings() { document.getElementById("settingsOverlay").classList.add("open"); }
+function closeSettings() { document.getElementById("settingsOverlay").classList.remove("open"); }
+document.getElementById("settingsBtn").addEventListener("click", openSettings);
+document.getElementById("settingsClose").addEventListener("click", closeSettings);
+document.getElementById("settingsOverlay").addEventListener("click", e => { if (e.target === document.getElementById("settingsOverlay")) closeSettings(); });
+document.getElementById("signOutBtn2").addEventListener("click", () => signOut(auth));
+
+// ── THEME ──
+function applyTheme(theme) {
+  if (theme === "light") {
+    document.body.classList.add("light");
+    document.getElementById("themeDark").classList.remove("active");
+    document.getElementById("themeLight").classList.add("active");
+  } else {
+    document.body.classList.remove("light");
+    document.getElementById("themeDark").classList.add("active");
+    document.getElementById("themeLight").classList.remove("active");
+  }
+  localStorage.setItem("theme", theme);
+}
+document.getElementById("themeDark").addEventListener("click", () => applyTheme("dark"));
+document.getElementById("themeLight").addEventListener("click", () => applyTheme("light"));
+// load saved theme
+applyTheme(localStorage.getItem("theme") || "dark");
+</script>
 </body>
 </html>
