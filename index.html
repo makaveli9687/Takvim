@@ -564,6 +564,20 @@
         style="width:100%; background:var(--surface2); border:1px solid var(--border2); border-radius:10px;
                color:var(--text); font-family:'DM Mono',monospace; font-size:13px; padding:10px 14px;
                outline:none; transition:border-color 0.15s;">
+      <div style="display:flex; gap:8px; margin-top:10px;">
+        <button class="welcome-color-btn active" data-color="green"
+          style="flex:1; height:22px; border-radius:6px; border:2px solid transparent;
+                 background:linear-gradient(105deg,#2d6e4a,#4caf7d,#a8f0c8,#4caf7d,#2d6e4a);
+                 cursor:pointer; transition:border-color 0.15s;"></button>
+        <button class="welcome-color-btn" data-color="teal"
+          style="flex:1; height:22px; border-radius:6px; border:2px solid transparent;
+                 background:linear-gradient(105deg,#0d7a7a,#1ac8c8,#8ff5f5,#1ac8c8,#0d7a7a);
+                 cursor:pointer; transition:border-color 0.15s;"></button>
+        <button class="welcome-color-btn" data-color="red"
+          style="flex:1; height:22px; border-radius:6px; border:2px solid transparent;
+                 background:linear-gradient(105deg,#8b1a1a,#e05c5c,#ffaaaa,#e05c5c,#8b1a1a);
+                 cursor:pointer; transition:border-color 0.15s;"></button>
+      </div>
     </div>
 
     <!-- Para Birimi -->
@@ -1242,7 +1256,36 @@ function updateWelcome() {
   }
 }
 
-// ── THEME ──
+// ── WELCOME COLOR ──
+const WELCOME_GRADIENTS = {
+  green: { dark: "linear-gradient(105deg,#2d6e4a 0%,#4caf7d 35%,#a8f0c8 50%,#4caf7d 65%,#2d6e4a 100%)", light: "linear-gradient(105deg,#1e6e42 0%,#2d8a57 35%,#6dc49a 50%,#2d8a57 65%,#1e6e42 100%)" },
+  teal:  { dark: "linear-gradient(105deg,#0d7a7a 0%,#1ac8c8 35%,#8ff5f5 50%,#1ac8c8 65%,#0d7a7a 100%)", light: "linear-gradient(105deg,#096b6b 0%,#12a0a0 35%,#6ae0e0 50%,#12a0a0 65%,#096b6b 100%)" },
+  red:   { dark: "linear-gradient(105deg,#8b1a1a 0%,#e05c5c 35%,#ffaaaa 50%,#e05c5c 65%,#8b1a1a 100%)", light: "linear-gradient(105deg,#7a1010 0%,#c0392b 35%,#f08080 50%,#c0392b 65%,#7a1010 100%)" },
+};
+const WELCOME_BORDER_COLORS = { green: "#4caf7d", teal: "#1ac8c8", red: "#e05c5c" };
+let welcomeColor = localStorage.getItem("welcomeColor") || "green";
+
+function applyWelcomeColor(color) {
+  welcomeColor = color;
+  localStorage.setItem("welcomeColor", color);
+  const isLight = document.body.classList.contains("light");
+  const grad = WELCOME_GRADIENTS[color][isLight ? "light" : "dark"];
+  document.querySelectorAll(".welcome-text").forEach(el => {
+    el.style.backgroundImage = grad;
+    el.style.backgroundSize = "200% auto";
+    el.style.webkitBackgroundClip = "text";
+    el.style.webkitTextFillColor = "transparent";
+    el.style.backgroundClip = "text";
+  });
+  document.querySelectorAll(".welcome-color-btn").forEach(b => {
+    b.style.borderColor = b.dataset.color === color ? WELCOME_BORDER_COLORS[color] : "transparent";
+  });
+}
+
+document.querySelectorAll(".welcome-color-btn").forEach(b => {
+  b.addEventListener("click", () => applyWelcomeColor(b.dataset.color));
+});
+applyWelcomeColor(welcomeColor);
 function applyTheme(theme) {
   if (theme === "light") {
     document.body.classList.add("light");
@@ -1254,6 +1297,7 @@ function applyTheme(theme) {
     document.getElementById("themeLight").classList.remove("active");
   }
   localStorage.setItem("theme", theme);
+  applyWelcomeColor(welcomeColor);
 }
 document.getElementById("themeDark").addEventListener("click", () => applyTheme("dark"));
 document.getElementById("themeLight").addEventListener("click", () => applyTheme("light"));
