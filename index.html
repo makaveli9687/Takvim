@@ -1137,7 +1137,6 @@ function applyCurrency(c) {
   document.querySelectorAll(".curr-btn").forEach(b => b.classList.toggle("active", b.dataset.curr === c));
 }
 document.querySelectorAll(".curr-btn").forEach(b => b.addEventListener("click", () => { applyCurrency(b.dataset.curr); render(); }));
-applyCurrency(currency);
 
 // ── LANGUAGE ──
 const STRINGS = {
@@ -1207,11 +1206,10 @@ const STRINGS = {
 let lang = localStorage.getItem("lang") || "tr";
 function S(key) { return (STRINGS[lang]||STRINGS.tr)[key] || key; }
 
-function applyLang(l) {
+function applyLang(l, skipRender = false) {
   lang = l;
   localStorage.setItem("lang", l);
   document.querySelectorAll(".lang-btn").forEach(b => b.classList.toggle("active", b.dataset.lang === l));
-  // update static UI strings
   document.getElementById("settingsPanelTitle").textContent = S("settings");
   document.getElementById("labelName").textContent = S("labelName");
   document.getElementById("labelCurrency").textContent = S("labelCurrency");
@@ -1230,7 +1228,7 @@ function applyLang(l) {
   document.querySelector(".login-sub").textContent = S("appSub");
   document.getElementById("signOutBtn").textContent = S("signOut");
   document.getElementById("signOutBtn2").textContent = S("signOut");
-  render();
+  if (!skipRender) render();
 }
 document.querySelectorAll(".lang-btn").forEach(b => b.addEventListener("click", () => applyLang(b.dataset.lang)));
 
@@ -1285,7 +1283,7 @@ function applyWelcomeColor(color) {
 document.querySelectorAll(".welcome-color-btn").forEach(b => {
   b.addEventListener("click", () => applyWelcomeColor(b.dataset.color));
 });
-applyWelcomeColor(welcomeColor);
+
 function applyTheme(theme) {
   if (theme === "light") {
     document.body.classList.add("light");
@@ -1302,9 +1300,12 @@ function applyTheme(theme) {
 document.getElementById("themeDark").addEventListener("click", () => applyTheme("dark"));
 document.getElementById("themeLight").addEventListener("click", () => applyTheme("light"));
 
-// init all settings
+// ── INIT (sıra önemli) ──
 applyTheme(localStorage.getItem("theme") || "dark");
-applyLang(lang);
+applyLang(lang, true);   // UI yazılarını güncelle, render'ı tetikleme
+applyWelcomeColor(localStorage.getItem("welcomeColor") || "green");
+applyCurrency(localStorage.getItem("currency") || "$");
+updateWelcome();
 </script>
 </body>
 </html>
