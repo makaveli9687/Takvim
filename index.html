@@ -63,6 +63,15 @@
   /* settings gear button */
   .settings-btn { background: none; border: 1px solid var(--border2); color: var(--text-mid); width: 36px; height: 36px; border-radius: 9px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s, color 0.15s; flex-shrink: 0; }
   .settings-btn:hover { border-color: var(--text-mid); color: var(--text); }
+
+  .curr-btn, .lang-btn {
+    flex: 1; background: var(--surface2); border: 1px solid var(--border2);
+    color: var(--text-mid); border-radius: 9px; padding: 9px 6px;
+    font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer;
+    transition: all 0.15s; letter-spacing: 0.03em; text-align: center;
+  }
+  .curr-btn.active, .lang-btn.active { border-color: var(--blue); color: var(--blue); background: rgba(91,141,238,0.08); }
+  .curr-btn:hover, .lang-btn:hover { border-color: var(--text-mid); color: var(--text); }
   body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 24px 12px 48px; }
   .app { width: 100%; max-width: 460px; }
 
@@ -167,6 +176,9 @@
   textarea { background: #111; border: 1px solid var(--border); border-radius: 12px; color: #ddd; font-size: 12px; font-family: 'Trebuchet MS', sans-serif; line-height: 1.8; padding: 14px; resize: none; outline: none; width: 100%; min-height: 80px; transition: border-color 0.15s; }
   textarea:focus { border-color: #3a3a3a; }
   textarea::placeholder { color: #333; font-style: italic; }
+  body.light textarea { background: var(--surface2); color: var(--text); border-color: var(--border); }
+  body.light textarea:focus { border-color: var(--border2); }
+  body.light textarea::placeholder { color: var(--text-dim); }
   .status-day { font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-align: right; min-height: 14px; }
 
   .trade-page { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 150; overflow-y: auto; }
@@ -202,6 +214,9 @@
   .tp-note { background: #111; border: 1px solid var(--border); border-radius: 12px; color: #ddd; font-size: 12px; font-family: 'Trebuchet MS', sans-serif; line-height: 1.8; padding: 14px; resize: none; outline: none; width: 100%; min-height: 100px; transition: border-color 0.15s; }
   .tp-note:focus { border-color: #3a3a3a; }
   .tp-note::placeholder { color: #333; font-style: italic; }
+  body.light .tp-note { background: var(--surface2); color: var(--text); border-color: var(--border); }
+  body.light .tp-note:focus { border-color: var(--border2); }
+  body.light .tp-note::placeholder { color: var(--text-dim); }
   .status-trade { font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-align: right; min-height: 14px; }
   .trade-action-btns { display: flex; gap: 8px; }
   .edit-trade-btn { flex: 1; background: none; border: 1px solid var(--border2); color: var(--text-mid); border-radius: 10px; padding: 10px; font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; letter-spacing: 0.08em; transition: border-color 0.15s, color 0.15s; }
@@ -284,6 +299,7 @@
     <div style="text-align:right;margin-bottom:16px;margin-top:-12px;">
       <button class="signout-btn" id="signOutBtn">çıkış yap</button>
     </div>
+    <div id="welcomeMsg" style="font-size:12px;color:var(--text-mid);margin-bottom:12px;margin-top:-8px;display:none;letter-spacing:0.05em;"></div>
     <div class="day-headers" id="dayHeaders"></div>
     <div class="calendar-grid" id="calGrid"></div>
     <button class="summary-toggle-btn" id="summaryToggleBtn">ay özeti göster</button>
@@ -495,40 +511,68 @@
 <div class="settings-overlay" id="settingsOverlay">
   <div class="settings-panel">
     <div class="settings-header">
-      <div class="settings-title">Ayarlar</div>
+      <div class="settings-title" id="settingsPanelTitle">Ayarlar</div>
       <button class="settings-close" id="settingsClose">×</button>
     </div>
+
+    <!-- İsim -->
     <div>
-      <div class="settings-section-label">Tema</div>
+      <div class="settings-section-label" id="labelName">İsim</div>
+      <input type="text" id="userNameInput" placeholder="Adını gir..."
+        style="width:100%; background:var(--surface2); border:1px solid var(--border2); border-radius:10px;
+               color:var(--text); font-family:'DM Mono',monospace; font-size:13px; padding:10px 14px;
+               outline:none; transition:border-color 0.15s;">
+    </div>
+
+    <!-- Para Birimi -->
+    <div>
+      <div class="settings-section-label" id="labelCurrency">Para Birimi</div>
+      <div style="display:flex; gap:8px;">
+        <button class="curr-btn active" data-curr="$">$ Dolar</button>
+        <button class="curr-btn" data-curr="€">€ Euro</button>
+        <button class="curr-btn" data-curr="£">£ Sterlin</button>
+        <button class="curr-btn" data-curr="₺">₺ Lira</button>
+      </div>
+    </div>
+
+    <!-- Dil -->
+    <div>
+      <div class="settings-section-label" id="labelLang">Dil</div>
+      <div style="display:flex; gap:8px;">
+        <button class="lang-btn active" data-lang="tr">🇹🇷 Türkçe</button>
+        <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+      </div>
+    </div>
+
+    <!-- Tema -->
+    <div>
+      <div class="settings-section-label" id="labelTheme">Tema</div>
       <div class="theme-row">
         <button class="theme-btn active" id="themeDark">
           <div class="theme-preview theme-preview-dark">
             <div class="theme-preview-header"><span class="theme-preview-month-dark">Haziran</span></div>
             <div class="theme-preview-bar">
-              <div class="theme-preview-dot"></div>
-              <div class="theme-preview-dot"></div>
-              <div class="theme-preview-dot"></div>
-              <div class="theme-preview-dot"></div>
+              <div class="theme-preview-dot"></div><div class="theme-preview-dot"></div>
+              <div class="theme-preview-dot"></div><div class="theme-preview-dot"></div>
             </div>
           </div>
-          <span class="theme-label">Koyu</span>
+          <span class="theme-label" id="labelDark">Koyu</span>
         </button>
         <button class="theme-btn" id="themeLight">
           <div class="theme-preview theme-preview-light">
             <div class="theme-preview-header"><span class="theme-preview-month-light">Haziran</span></div>
             <div class="theme-preview-bar">
-              <div class="theme-preview-dot"></div>
-              <div class="theme-preview-dot"></div>
-              <div class="theme-preview-dot"></div>
-              <div class="theme-preview-dot"></div>
+              <div class="theme-preview-dot"></div><div class="theme-preview-dot"></div>
+              <div class="theme-preview-dot"></div><div class="theme-preview-dot"></div>
             </div>
           </div>
-          <span class="theme-label">Açık</span>
+          <span class="theme-label" id="labelLight">Açık</span>
         </button>
       </div>
     </div>
+
     <div style="text-align:right;">
-      <button class="signout-btn" id="signOutBtn2">çıkış yap</button>
+      <button class="signout-btn" id="signOutBtn2" style="font-size:12px;">çıkış yap</button>
     </div>
   </div>
 </div>
@@ -632,11 +676,13 @@ function daysInMonth(y,m) { return new Date(y,m+1,0).getDate(); }
 function firstDay(y,m) { let d=new Date(y,m,1).getDay(); return d===0?6:d-1; }
 
 async function render() {
-  document.getElementById("monthName").textContent = MONTHS[curMonth];
+  const MONTHS_L = S("MONTHS"), DAYS_L = S("DAYS");
+  document.getElementById("monthName").textContent = MONTHS_L[curMonth];
   document.getElementById("yearLabel").textContent = curYear;
-  document.getElementById("dayHeaders").innerHTML = DAYS.map(d=>`<div class="day-header-cell">${d}</div>`).join("");
+  document.getElementById("dayHeaders").innerHTML = DAYS_L.map(d=>`<div class="day-header-cell">${d}</div>`).join("");
   document.getElementById("monthSummary").style.display = "none";
-  document.getElementById("summaryToggleBtn").textContent = "ay özeti göster";
+  document.getElementById("summaryToggleBtn").textContent = S("summaryShow");
+  updateWelcome();
   const grid = document.getElementById("calGrid"); grid.innerHTML="";
   const days=daysInMonth(curYear,curMonth), first=firstDay(curYear,curMonth);
   const cells=Math.ceil((first+days)/7)*7;
@@ -657,13 +703,13 @@ async function render() {
           if (!isNaN(d)&&d>0) { hasTrades=true; if(t.result==="tp") total+=d; else total-=d; }
         });
         if (hasTrades) {
-          pnlEl.textContent=(total>=0?"+":"")+total.toFixed(0)+"$";
+          pnlEl.textContent=(total>=0?"+":"")+total.toFixed(0)+currency;
           pnlEl.className="pnl-label "+(total>=0?"pos":"neg");
           pnlEl.style.visibility="visible"; dot.style.visibility="hidden";
         } else if (entry.pnl&&entry.pnl!=="") {
           const val=parseFloat(entry.pnl);
           if (!isNaN(val)) {
-            pnlEl.textContent=(val>=0?"+":"")+val+"$";
+            pnlEl.textContent=(val>=0?"+":"")+val+currency;
             pnlEl.className="pnl-label "+(val>=0?"pos":"neg");
             pnlEl.style.visibility="visible"; dot.style.visibility="hidden";
           }
@@ -716,10 +762,10 @@ async function updateMonthlySummary(y,m) {
   const summaryEl=document.getElementById("monthSummary");
   if (!hasData){summaryEl.style.display="none";document.getElementById("summaryToggleBtn").textContent="ay özeti göster";return;}
   summaryEl.style.display="block"; summaryEl.style.animation="none"; summaryEl.offsetHeight; summaryEl.style.animation="fadeIn 0.3s ease";
-  document.getElementById("sumProfit").textContent=totalProfit>0?`+${totalProfit.toFixed(0)}$`:"—";
-  document.getElementById("sumLoss").textContent=totalLoss<0?`${totalLoss.toFixed(0)}$`:"—";
+  document.getElementById("sumProfit").textContent=totalProfit>0?`+${totalProfit.toFixed(0)}${currency}`:"—";
+  document.getElementById("sumLoss").textContent=totalLoss<0?`${totalLoss.toFixed(0)}${currency}`:"—";
   const netEl=document.getElementById("sumNet");
-  netEl.textContent=(net>=0?"+":"")+net.toFixed(0)+"$"; netEl.className="sum-value lg "+(net>0?"pos":net<0?"neg":"");
+  netEl.textContent=(net>=0?"+":"")+net.toFixed(0)+currency; netEl.className="sum-value lg "+(net>0?"pos":net<0?"neg":"");
   const absLoss=Math.abs(totalLoss), ratio=totalProfit+absLoss>0?(totalProfit/(totalProfit+absLoss))*100:50;
   document.getElementById("summaryBar").style.width=ratio+"%";
   document.getElementById("summaryBar").style.background=net>=0?"var(--green)":"var(--red)";
@@ -735,8 +781,8 @@ async function updateMonthlySummary(y,m) {
   document.getElementById("statShortDetail").textContent=shortTotal>0?`${shortTP} TP / ${shortSL} SL`:"";
   const avgWin=dollarWins.length>0?dollarWins.reduce((a,b)=>a+b,0)/dollarWins.length:null;
   const avgLoss2=dollarLosses.length>0?dollarLosses.reduce((a,b)=>a+b,0)/dollarLosses.length:null;
-  document.getElementById("statAvgWin").textContent=avgWin!==null?"+"+avgWin.toFixed(0)+"$":"—";
-  document.getElementById("statAvgLoss").textContent=avgLoss2!==null?"-"+avgLoss2.toFixed(0)+"$":"—";
+  document.getElementById("statAvgWin").textContent=avgWin!==null?"+"+avgWin.toFixed(0)+currency:"—";
+  document.getElementById("statAvgLoss").textContent=avgLoss2!==null?"-"+avgLoss2.toFixed(0)+currency:"—";
   const pairMap={};
   allTrades.forEach(t=>{const p=(t.pair||"?").toUpperCase();if(!pairMap[p])pairMap[p]={total:0,tp:0,sl:0,be:0};pairMap[p].total++;if(t.result==="tp")pairMap[p].tp++;else if(t.result==="sl")pairMap[p].sl++;else pairMap[p].be++;});
   const pairs=Object.entries(pairMap).sort((a,b)=>b[1].total-a[1].total);
@@ -750,12 +796,12 @@ async function updateMonthlySummary(y,m) {
   const setupOrder=["a","b","c"], setupBody=document.getElementById("setupTableBody"); setupBody.innerHTML="";
   setupOrder.forEach(key=>{if(!setupMap[key])return;const d=setupMap[key],avgR=d.rrs.length>0?d.rrs.reduce((a,b)=>a+b,0)/d.rrs.length:null;const tr=document.createElement("tr");tr.innerHTML=`<td>${SETUP_LABELS[key]}</td><td>${d.total}</td><td><span style="color:var(--green)">${d.tp} TP</span> / <span style="color:var(--red)">${d.sl} SL</span></td><td class="${avgR!==null?(avgR>=0?'pos':'neg'):''}">${avgR!==null?(avgR>=0?'+':'')+avgR.toFixed(2)+'R':'—'}</td>`;setupBody.appendChild(tr);});
   const trendOrder=["w","a"], trendBody=document.getElementById("trendTableBody"); trendBody.innerHTML="";
-  trendOrder.forEach(key=>{if(!trendMap[key])return;const d=trendMap[key];const tr=document.createElement("tr");tr.innerHTML=`<td>${TREND_LABELS[key]}</td><td>${d.total}</td><td><span style="color:var(--green)">${d.tp} TP</span> / <span style="color:var(--red)">${d.sl} SL</span></td><td class="${d.net>=0?'pos':'neg'}">${d.net>=0?'+':''}${d.net.toFixed(0)}$</td>`;trendBody.appendChild(tr);});
+  trendOrder.forEach(key=>{if(!trendMap[key])return;const d=trendMap[key];const tr=document.createElement("tr");tr.innerHTML=`<td>${TREND_LABELS[key]}</td><td>${d.total}</td><td><span style="color:var(--green)">${d.tp} TP</span> / <span style="color:var(--red)">${d.sl} SL</span></td><td class="${d.net>=0?'pos':'neg'}">${d.net>=0?'+':''}${d.net.toFixed(0)}${currency}</td>`;trendBody.appendChild(tr);});
 }
 
 async function openDayModal(day) {
   selectedDay=day;
-  document.getElementById("modalTitle").textContent=`${day} ${MONTHS[curMonth]} ${curYear}`;
+  document.getElementById("modalTitle").textContent=`${day} ${S("MONTHS")[curMonth]} ${curYear}`;
   document.getElementById("dayTradeList").innerHTML="";
   document.getElementById("dayNoteArea").value="";
   document.getElementById("addTradeFormWrap").style.display="none";
@@ -784,7 +830,7 @@ function renderDayTrades(trades) {
     if(t.setup) metaParts.push(SETUP_LABELS[t.setup]||t.setup);
     if(metaParts.length){const meta=document.createElement("span");meta.className="trade-card-meta";meta.textContent=metaParts.join("  ·  ");left.appendChild(meta);}
     const right=document.createElement("div"); right.className="trade-card-right";
-    if(t.dollar&&t.result!=="be"){const isWin=t.result==="tp";const dEl=document.createElement("span");dEl.className="trade-dollar "+(isWin?"pos":"neg");dEl.textContent=(isWin?"+":"-")+t.dollar+"$";right.appendChild(dEl);}
+    if(t.dollar&&t.result!=="be"){const isWin=t.result==="tp";const dEl=document.createElement("span");dEl.className="trade-dollar "+(isWin?"pos":"neg");dEl.textContent=(isWin?"+":"-")+t.dollar+currency;right.appendChild(dEl);}
     if(t.dir){const b=document.createElement("span");b.className="badge "+t.dir;b.textContent=t.dir==="long"?"LONG":"SHORT";right.appendChild(b);}
     if(t.result){const b=document.createElement("span");b.className="badge "+t.result;b.textContent=t.result==="tp"?"TP":t.result==="sl"?"SL":"BE";right.appendChild(b);}
     const arrow=document.createElement("span"); arrow.className="trade-arrow"; arrow.textContent="›"; right.appendChild(arrow);
@@ -887,7 +933,7 @@ async function openTradePage(y,m,d,idx) {
   document.getElementById("tradePage").classList.add("open");
 }
 function fillTradePageInfo(t) {
-  document.getElementById("tradePageTitle").textContent=`${t.pair} — ${openTradeDay.d} ${MONTHS[openTradeDay.m]}`;
+  document.getElementById("tradePageTitle").textContent=`${t.pair} — ${openTradeDay.d} ${S("MONTHS")[openTradeDay.m]}`;
   const dirEl=document.getElementById("tpDir"); dirEl.textContent=t.dir==="long"?"LONG":t.dir==="short"?"SHORT":"—"; dirEl.className="info-value "+(t.dir==="long"?"pos":t.dir==="short"?"neg":"mid");
   const resEl=document.getElementById("tpResult");
   if(t.result==="tp"){resEl.textContent="TP ✓";resEl.className="info-value pos";}
@@ -899,7 +945,7 @@ function fillTradePageInfo(t) {
   if(t.rr&&t.result!=="be"){const isWin=t.result==="tp";rrEl.textContent=(isWin?"+":"-")+t.rr+"R";rrEl.className="info-value "+(isWin?"pos":"neg");}
   else{rrEl.textContent="—";rrEl.className="info-value mid";}
   const dolEl=document.getElementById("tpDollar");
-  if(t.dollar&&t.result!=="be"){const isWin=t.result==="tp";dolEl.textContent=(isWin?"+":"-")+t.dollar+"$";dolEl.className="info-value "+(isWin?"pos":"neg");}
+  if(t.dollar&&t.result!=="be"){const isWin=t.result==="tp";dolEl.textContent=(isWin?"+":"-")+t.dollar+currency;dolEl.className="info-value "+(isWin?"pos":"neg");}
   else{dolEl.textContent="—";dolEl.className="info-value mid";}
   document.getElementById("tpKZ").textContent=t.kz?(KZ_LABELS[t.kz]||t.kz):"—";
   document.getElementById("tpSetup").textContent=t.setup?(SETUP_LABELS[t.setup]||t.setup):"—";
@@ -1027,6 +1073,128 @@ document.getElementById("settingsClose").addEventListener("click", closeSettings
 document.getElementById("settingsOverlay").addEventListener("click", e => { if (e.target === document.getElementById("settingsOverlay")) closeSettings(); });
 document.getElementById("signOutBtn2").addEventListener("click", () => signOut(auth));
 
+// ── CURRENCY ──
+let currency = localStorage.getItem("currency") || "$";
+function applyCurrency(c) {
+  currency = c;
+  localStorage.setItem("currency", c);
+  document.querySelectorAll(".curr-btn").forEach(b => b.classList.toggle("active", b.dataset.curr === c));
+}
+document.querySelectorAll(".curr-btn").forEach(b => b.addEventListener("click", () => { applyCurrency(b.dataset.curr); render(); }));
+applyCurrency(currency);
+
+// ── LANGUAGE ──
+const STRINGS = {
+  tr: {
+    appSub: "kişisel not & fotoğraf takvimi",
+    signIn: "Google ile giriş yap",
+    signOut: "çıkış yap",
+    settings: "Ayarlar",
+    labelName: "İsim",
+    labelCurrency: "Para Birimi",
+    labelLang: "Dil",
+    labelTheme: "Tema",
+    labelDark: "Koyu",
+    labelLight: "Açık",
+    summaryShow: "ay özeti göster",
+    summaryHide: "ay özetini gizle",
+    loading: "yükleniyor...",
+    addTrade: "+ Trade ekle",
+    cancel: "İptal",
+    dayNote: "Günlük not...",
+    tradeNote: "Bu trade hakkında notların...",
+    save: "Kaydet",
+    saveEdit: "Değişiklikleri Kaydet",
+    edit: "Düzenle",
+    del: "Sil",
+    addPhoto: "+ Fotoğraf ekle",
+    photos: "Fotoğraflar",
+    note: "Not",
+    detailStats: "▾ Detaylı İstatistik",
+    detailStatsOpen: "▴ Detaylı İstatistik",
+    welcome: "Hoşgeldin",
+    MONTHS: ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"],
+    DAYS: ["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"],
+  },
+  en: {
+    appSub: "personal note & photo calendar",
+    signIn: "Sign in with Google",
+    signOut: "sign out",
+    settings: "Settings",
+    labelName: "Name",
+    labelCurrency: "Currency",
+    labelLang: "Language",
+    labelTheme: "Theme",
+    labelDark: "Dark",
+    labelLight: "Light",
+    summaryShow: "show monthly summary",
+    summaryHide: "hide monthly summary",
+    loading: "loading...",
+    addTrade: "+ Add trade",
+    cancel: "Cancel",
+    dayNote: "How was today?",
+    tradeNote: "Notes about this trade...",
+    save: "Save",
+    saveEdit: "Save Changes",
+    edit: "Edit",
+    del: "Delete",
+    addPhoto: "+ Add photo",
+    photos: "Photos",
+    note: "Note",
+    detailStats: "▾ Detailed Statistics",
+    detailStatsOpen: "▴ Detailed Statistics",
+    welcome: "Welcome",
+    MONTHS: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+    DAYS: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+  }
+};
+let lang = localStorage.getItem("lang") || "tr";
+function S(key) { return (STRINGS[lang]||STRINGS.tr)[key] || key; }
+
+function applyLang(l) {
+  lang = l;
+  localStorage.setItem("lang", l);
+  document.querySelectorAll(".lang-btn").forEach(b => b.classList.toggle("active", b.dataset.lang === l));
+  // update static UI strings
+  document.getElementById("settingsPanelTitle").textContent = S("settings");
+  document.getElementById("labelName").textContent = S("labelName");
+  document.getElementById("labelCurrency").textContent = S("labelCurrency");
+  document.getElementById("labelLang").textContent = S("labelLang");
+  document.getElementById("labelTheme").textContent = S("labelTheme");
+  document.getElementById("labelDark").textContent = S("labelDark");
+  document.getElementById("labelLight").textContent = S("labelLight");
+  document.getElementById("summaryToggleBtn").textContent = S("summaryShow");
+  document.getElementById("showAddTradeBtn").textContent = S("addTrade");
+  document.getElementById("saveNewTradeBtn").textContent = S("save");
+  document.getElementById("saveEditTradeBtn").textContent = S("saveEdit");
+  document.getElementById("editTradeBtn").textContent = isEditMode ? S("cancel") : S("edit");
+  document.getElementById("deleteTradeBtn").textContent = S("del");
+  document.getElementById("dayNoteArea").placeholder = S("dayNote");
+  document.getElementById("tpNoteArea").placeholder = S("tradeNote");
+  document.querySelector(".login-sub").textContent = S("appSub");
+  document.getElementById("signOutBtn").textContent = S("signOut");
+  document.getElementById("signOutBtn2").textContent = S("signOut");
+  render();
+}
+document.querySelectorAll(".lang-btn").forEach(b => b.addEventListener("click", () => applyLang(b.dataset.lang)));
+
+// ── USER NAME ──
+let userName = localStorage.getItem("userName") || "";
+const nameInput = document.getElementById("userNameInput");
+nameInput.value = userName;
+nameInput.addEventListener("input", () => {
+  userName = nameInput.value.trim();
+  localStorage.setItem("userName", userName);
+  updateWelcome();
+});
+
+function updateWelcome() {
+  const el = document.getElementById("welcomeMsg");
+  if (!el) return;
+  el.textContent = userName ? `${S("welcome")}, ${userName}` : "";
+  el.style.display = userName ? "block" : "none";
+}
+
 // ── THEME ──
 function applyTheme(theme) {
   if (theme === "light") {
@@ -1042,8 +1210,10 @@ function applyTheme(theme) {
 }
 document.getElementById("themeDark").addEventListener("click", () => applyTheme("dark"));
 document.getElementById("themeLight").addEventListener("click", () => applyTheme("light"));
-// load saved theme
+
+// init all settings
 applyTheme(localStorage.getItem("theme") || "dark");
+applyLang(lang);
 </script>
 </body>
 </html>
