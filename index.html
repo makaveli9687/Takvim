@@ -86,31 +86,31 @@
     background: linear-gradient(
       105deg,
       #3d9e6a 0%,
-      #4caf7d 35%,
-      #a8f0c8 50%,
-      #4caf7d 65%,
+      #4caf7d 40%,
+      #7dd4a8 50%,
+      #4caf7d 60%,
       #3d9e6a 100%
     );
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: shimmer 5s linear infinite;
+    animation: shimmer 10s linear infinite;
   }
   body.light .welcome-text {
     background: linear-gradient(
       105deg,
       #1e6e42 0%,
-      #2d8a57 35%,
-      #6dc49a 50%,
-      #2d8a57 65%,
+      #2d8a57 40%,
+      #5aab7a 50%,
+      #2d8a57 60%,
       #1e6e42 100%
     );
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: shimmer 5s linear infinite;
+    animation: shimmer 10s linear infinite;
   }
   body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 24px 12px 48px; }
   .app { width: 100%; max-width: 460px; }
@@ -424,12 +424,12 @@
           <input class="trade-input" id="tRR" placeholder="RR" type="number" inputmode="decimal" step="any" min="0">
           <input class="trade-input" id="tDollar" placeholder="$ Tutar" type="number" inputmode="decimal" step="any" min="0">
         </div>
-        <div class="form-section-label">İşlem Tipi</div>
+        <div class="form-section-label form-rev-label">İşlem Tipi</div>
         <div class="trade-form-row">
           <button class="toggle-btn rev" id="tRev_r">Reversal</button>
           <button class="toggle-btn rev" id="tRev_c">Continuation</button>
         </div>
-        <div class="form-section-label">Killzone</div>
+        <div class="form-section-label form-kz-label">Killzone</div>
         <div class="trade-form-row">
           <button class="toggle-btn kz" id="tKZ_asia">Asia</button>
           <button class="toggle-btn kz" id="tKZ_ldn">London</button>
@@ -437,13 +437,13 @@
           <button class="toggle-btn kz" id="tKZ_lunch">NY Lunch</button>
           <button class="toggle-btn kz" id="tKZ_nypm">NY PM</button>
         </div>
-        <div class="form-section-label">Setup Kalitesi</div>
+        <div class="form-section-label form-setup-label">Setup Kalitesi</div>
         <div class="trade-form-row">
           <button class="toggle-btn setup-a" id="tSetup_a">A+</button>
           <button class="toggle-btn setup-b" id="tSetup_b">B</button>
           <button class="toggle-btn setup-c" id="tSetup_c">C</button>
         </div>
-        <div class="form-section-label">Trend</div>
+        <div class="form-section-label form-trend-label">Trend</div>
         <div class="trade-form-row">
           <button class="toggle-btn trend-w" id="tTrend_w">Trend Yönü</button>
           <button class="toggle-btn trend-a" id="tTrend_a">Trend Tersi</button>
@@ -507,12 +507,12 @@
         <input class="trade-input" id="eRR" placeholder="RR" type="number" inputmode="decimal" step="any" min="0">
         <input class="trade-input" id="eDollar" placeholder="$ Tutar" type="number" inputmode="decimal" step="any" min="0">
       </div>
-      <div class="form-section-label">İşlem Tipi</div>
+      <div class="form-section-label form-rev-label">İşlem Tipi</div>
       <div class="trade-form-row">
         <button class="toggle-btn rev" id="eRev_r">Reversal</button>
         <button class="toggle-btn rev" id="eRev_c">Continuation</button>
       </div>
-      <div class="form-section-label">Killzone</div>
+      <div class="form-section-label form-kz-label">Killzone</div>
       <div class="trade-form-row">
         <button class="toggle-btn kz" id="eKZ_asia">Asia</button>
         <button class="toggle-btn kz" id="eKZ_ldn">London</button>
@@ -520,13 +520,13 @@
         <button class="toggle-btn kz" id="eKZ_lunch">NY Lunch</button>
         <button class="toggle-btn kz" id="eKZ_nypm">NY PM</button>
       </div>
-      <div class="form-section-label">Setup Kalitesi</div>
+      <div class="form-section-label form-setup-label">Setup Kalitesi</div>
       <div class="trade-form-row">
         <button class="toggle-btn setup-a" id="eSetup_a">A+</button>
         <button class="toggle-btn setup-b" id="eSetup_b">B</button>
         <button class="toggle-btn setup-c" id="eSetup_c">C</button>
       </div>
-      <div class="form-section-label">Trend</div>
+      <div class="form-section-label form-trend-label">Trend</div>
       <div class="trade-form-row">
         <button class="toggle-btn trend-w" id="eTrend_w">Trend Yönü</button>
         <button class="toggle-btn trend-a" id="eTrend_a">Trend Tersi</button>
@@ -1168,6 +1168,42 @@ const STRINGS = {
     detailStats: "▾ Detaylı İstatistik",
     detailStatsOpen: "▴ Detaylı İstatistik",
     welcome: "Hoşgeldin",
+    kzLabel: "Killzone",
+    setupLabel: "Setup Kalitesi",
+    trendLabel: "Trend",
+    revLabel: "İşlem Tipi",
+    trendWith: "Trend Yönü",
+    trendAgainst: "Trend Tersi",
+    revReversal: "Reversal",
+    revCont: "Continuation",
+    resultTP: "TP ✓",
+    resultSL: "SL ✗",
+    resultBE: "BE",
+    dirLong: "Long",
+    dirShort: "Short",
+    pairPlaceholder: "Pair",
+    tfPlaceholder: "TF",
+    rrPlaceholder: "RR",
+    dollarPlaceholder: "$ Tutar",
+    sumProfit: "Kâr",
+    sumLoss: "Zarar",
+    sumNet: "Net",
+    statTrades: "İşlem",
+    statWin: "Win%",
+    statRR: "Ort RR",
+    statLong: "Long",
+    statShort: "Short",
+    statAvgWin: "Kârlı Ort.",
+    statAvgLoss: "Zararlı Ort.",
+    pairDist: "Pair Dağılımı",
+    detailRev: "İşlem Tipi",
+    detailKZ: "Killzone",
+    detailSetup: "Setup Kalitesi",
+    detailTrend: "Trend",
+    photosSec: "Fotoğraflar",
+    noteSec: "Not",
+    editBtn: "Düzenle",
+    deleteBtn: "Sil",
     MONTHS: ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"],
     DAYS: ["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"],
   },
@@ -1187,7 +1223,7 @@ const STRINGS = {
     loading: "loading...",
     addTrade: "+ Add trade",
     cancel: "Cancel",
-    dayNote: "How was today?",
+    dayNote: "Daily note...",
     tradeNote: "Notes about this trade...",
     save: "Save",
     saveEdit: "Save Changes",
@@ -1199,6 +1235,42 @@ const STRINGS = {
     detailStats: "▾ Detailed Statistics",
     detailStatsOpen: "▴ Detailed Statistics",
     welcome: "Welcome",
+    kzLabel: "Killzone",
+    setupLabel: "Setup Quality",
+    trendLabel: "Trend",
+    revLabel: "Trade Type",
+    trendWith: "With Trend",
+    trendAgainst: "Counter Trend",
+    revReversal: "Reversal",
+    revCont: "Continuation",
+    resultTP: "TP ✓",
+    resultSL: "SL ✗",
+    resultBE: "BE",
+    dirLong: "Long",
+    dirShort: "Short",
+    pairPlaceholder: "Pair",
+    tfPlaceholder: "TF",
+    rrPlaceholder: "RR",
+    dollarPlaceholder: "Amount",
+    sumProfit: "Profit",
+    sumLoss: "Loss",
+    sumNet: "Net",
+    statTrades: "Trades",
+    statWin: "Win%",
+    statRR: "Avg RR",
+    statLong: "Long",
+    statShort: "Short",
+    statAvgWin: "Avg Win",
+    statAvgLoss: "Avg Loss",
+    pairDist: "Pair Distribution",
+    detailRev: "Trade Type",
+    detailKZ: "Killzone",
+    detailSetup: "Setup Quality",
+    detailTrend: "Trend",
+    photosSec: "Photos",
+    noteSec: "Note",
+    editBtn: "Edit",
+    deleteBtn: "Delete",
     MONTHS: ["January","February","March","April","May","June","July","August","September","October","November","December"],
     DAYS: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
   }
@@ -1210,6 +1282,7 @@ function applyLang(l, skipRender = false) {
   lang = l;
   localStorage.setItem("lang", l);
   document.querySelectorAll(".lang-btn").forEach(b => b.classList.toggle("active", b.dataset.lang === l));
+  // settings panel
   document.getElementById("settingsPanelTitle").textContent = S("settings");
   document.getElementById("labelName").textContent = S("labelName");
   document.getElementById("labelCurrency").textContent = S("labelCurrency");
@@ -1217,17 +1290,60 @@ function applyLang(l, skipRender = false) {
   document.getElementById("labelTheme").textContent = S("labelTheme");
   document.getElementById("labelDark").textContent = S("labelDark");
   document.getElementById("labelLight").textContent = S("labelLight");
+  // calendar
   document.getElementById("summaryToggleBtn").textContent = S("summaryShow");
+  // day modal
   document.getElementById("showAddTradeBtn").textContent = S("addTrade");
-  document.getElementById("saveNewTradeBtn").textContent = S("save");
-  document.getElementById("saveEditTradeBtn").textContent = S("saveEdit");
-  document.getElementById("editTradeBtn").textContent = isEditMode ? S("cancel") : S("edit");
-  document.getElementById("deleteTradeBtn").textContent = S("del");
   document.getElementById("dayNoteArea").placeholder = S("dayNote");
+  // add trade form
+  document.getElementById("saveNewTradeBtn").textContent = S("save");
+  document.getElementById("tPair").placeholder = S("pairPlaceholder");
+  document.getElementById("tTF").placeholder = S("tfPlaceholder");
+  document.getElementById("tRR").placeholder = S("rrPlaceholder");
+  document.getElementById("tDollar").placeholder = S("dollarPlaceholder");
+  document.getElementById("tLongBtn").textContent = S("dirLong");
+  document.getElementById("tShortBtn").textContent = S("dirShort");
+  document.getElementById("tTPBtn").textContent = S("resultTP");
+  document.getElementById("tSLBtn").textContent = S("resultSL");
+  document.getElementById("tBEBtn").textContent = S("resultBE");
+  document.getElementById("tTrend_w").textContent = S("trendWith");
+  document.getElementById("tTrend_a").textContent = S("trendAgainst");
+  document.getElementById("tRev_r").textContent = S("revReversal");
+  document.getElementById("tRev_c").textContent = S("revCont");
+  // form section labels
+  document.querySelectorAll(".form-kz-label").forEach(el => el.textContent = S("kzLabel"));
+  document.querySelectorAll(".form-setup-label").forEach(el => el.textContent = S("setupLabel"));
+  document.querySelectorAll(".form-trend-label").forEach(el => el.textContent = S("trendLabel"));
+  document.querySelectorAll(".form-rev-label").forEach(el => el.textContent = S("revLabel"));
+  // edit form
+  document.getElementById("saveEditTradeBtn").textContent = S("saveEdit");
+  document.getElementById("ePair").placeholder = S("pairPlaceholder");
+  document.getElementById("eTF").placeholder = S("tfPlaceholder");
+  document.getElementById("eRR").placeholder = S("rrPlaceholder");
+  document.getElementById("eDollar").placeholder = S("dollarPlaceholder");
+  document.getElementById("eLongBtn").textContent = S("dirLong");
+  document.getElementById("eShortBtn").textContent = S("dirShort");
+  document.getElementById("eTPBtn").textContent = S("resultTP");
+  document.getElementById("eSLBtn").textContent = S("resultSL");
+  document.getElementById("eBEBtn").textContent = S("resultBE");
+  document.getElementById("eTrend_w").textContent = S("trendWith");
+  document.getElementById("eTrend_a").textContent = S("trendAgainst");
+  document.getElementById("eRev_r").textContent = S("revReversal");
+  document.getElementById("eRev_c").textContent = S("revCont");
+  // trade page
+  document.getElementById("editTradeBtn").textContent = isEditMode ? S("cancel") : S("editBtn");
+  document.getElementById("deleteTradeBtn").textContent = S("deleteBtn");
   document.getElementById("tpNoteArea").placeholder = S("tradeNote");
+  // summary labels
+  document.getElementById("sumProfit").closest(".sum-col")?.querySelector(".sum-label") && (() => {
+    const cols = document.querySelectorAll("#monthSummary .sum-label");
+    // update via class-based approach below
+  })();
+  // login
   document.querySelector(".login-sub").textContent = S("appSub");
   document.getElementById("signOutBtn").textContent = S("signOut");
   document.getElementById("signOutBtn2").textContent = S("signOut");
+  updateWelcome();
   if (!skipRender) render();
 }
 document.querySelectorAll(".lang-btn").forEach(b => b.addEventListener("click", () => applyLang(b.dataset.lang)));
@@ -1246,12 +1362,8 @@ function updateWelcome() {
   const el = document.getElementById("welcomeMsg");
   if (!el) return;
   const span = el.querySelector(".welcome-text");
-  if (userName) {
-    span.textContent = `${S("welcome")}, ${userName}`;
-    el.style.display = "block";
-  } else {
-    el.style.display = "none";
-  }
+  span.textContent = userName ? `${S("welcome")}, ${userName}` : S("welcome");
+  el.style.display = "block";
 }
 
 // ── WELCOME COLOR ──
