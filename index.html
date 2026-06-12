@@ -347,51 +347,51 @@
     <button class="summary-toggle-btn" id="summaryToggleBtn">ay özeti göster</button>
     <div class="month-summary" id="monthSummary" style="display:none">
       <div class="sum-row cols3">
-        <div class="sum-col"><span class="sum-label">Kâr</span><span class="sum-value pos lg" id="sumProfit">—</span></div>
+        <div class="sum-col"><span class="sum-label" id="lblProfit">Kâr</span><span class="sum-value pos lg" id="sumProfit">—</span></div>
         <div class="sum-divider"></div>
-        <div class="sum-col"><span class="sum-label">Net</span><span class="sum-value lg" id="sumNet">—</span></div>
+        <div class="sum-col"><span class="sum-label" id="lblNet">Net</span><span class="sum-value lg" id="sumNet">—</span></div>
         <div class="sum-divider"></div>
-        <div class="sum-col"><span class="sum-label">Zarar</span><span class="sum-value neg lg" id="sumLoss">—</span></div>
+        <div class="sum-col"><span class="sum-label" id="lblLoss">Zarar</span><span class="sum-value neg lg" id="sumLoss">—</span></div>
       </div>
       <div class="summary-bar-wrap"><div class="summary-bar" id="summaryBar" style="width:0%"></div></div>
       <div class="sum-row cols3">
-        <div class="sum-col"><span class="sum-label">İşlem</span><span class="sum-value" id="statTotal">—</span></div>
+        <div class="sum-col"><span class="sum-label" id="lblTrades">İşlem</span><span class="sum-value" id="statTotal">—</span></div>
         <div class="sum-divider"></div>
-        <div class="sum-col"><span class="sum-label">Win%</span><span class="sum-value" id="statWinRate">—</span></div>
+        <div class="sum-col"><span class="sum-label" id="lblWin">Win%</span><span class="sum-value" id="statWinRate">—</span></div>
         <div class="sum-divider"></div>
-        <div class="sum-col"><span class="sum-label">Ort RR</span><span class="sum-value" id="statAvgRR">—</span></div>
+        <div class="sum-col"><span class="sum-label" id="lblRR">Ort RR</span><span class="sum-value" id="statAvgRR">—</span></div>
       </div>
       <div class="sum-row cols2">
-        <div class="sum-col"><span class="sum-label">Long</span><span class="sum-value pos" id="statLong">—</span><span class="sum-label" id="statLongDetail"></span></div>
+        <div class="sum-col"><span class="sum-label" id="lblLong">Long</span><span class="sum-value pos" id="statLong">—</span><span class="sum-label" id="statLongDetail"></span></div>
         <div class="sum-divider"></div>
-        <div class="sum-col"><span class="sum-label">Short</span><span class="sum-value neg" id="statShort">—</span><span class="sum-label" id="statShortDetail"></span></div>
+        <div class="sum-col"><span class="sum-label" id="lblShort">Short</span><span class="sum-value neg" id="statShort">—</span><span class="sum-label" id="statShortDetail"></span></div>
       </div>
       <div class="sum-row cols2 no-border">
-        <div class="sum-col"><span class="sum-label">Kârlı Ort.</span><span class="sum-value pos" id="statAvgWin">—</span></div>
+        <div class="sum-col"><span class="sum-label" id="lblAvgWin">Kârlı Ort.</span><span class="sum-value pos" id="statAvgWin">—</span></div>
         <div class="sum-divider"></div>
-        <div class="sum-col"><span class="sum-label">Zararlı Ort.</span><span class="sum-value neg" id="statAvgLoss">—</span></div>
+        <div class="sum-col"><span class="sum-label" id="lblAvgLoss">Zararlı Ort.</span><span class="sum-value neg" id="statAvgLoss">—</span></div>
       </div>
       <div class="pair-list-wrap" id="pairListWrap" style="display:none">
-        <div class="pair-list-title">Pair Dağılımı</div>
+        <div class="pair-list-title" id="lblPairDist">Pair Dağılımı</div>
         <div id="pairList"></div>
       </div>
       <button class="detail-toggle-btn" id="detailToggleBtn">▾ Detaylı İstatistik</button>
       <div class="detail-stats" id="detailStats">
         <div class="detail-section">
-          <div class="detail-section-title">İşlem Tipi</div>
-          <table class="detail-table"><thead><tr><th>Tip</th><th>İşlem</th><th>TP / SL</th><th>Win%</th></tr></thead><tbody id="revTableBody"></tbody></table>
+          <div class="detail-section-title" id="dtRevTitle">İşlem Tipi</div>
+          <table class="detail-table"><thead><tr><th id="dtRevType">Tip</th><th id="dtRevCount">İşlem</th><th>TP / SL</th><th id="dtRevWin">Win%</th></tr></thead><tbody id="revTableBody"></tbody></table>
         </div>
         <div class="detail-section">
-          <div class="detail-section-title">Killzone</div>
-          <table class="detail-table"><thead><tr><th>Seans</th><th>İşlem</th><th>TP / SL</th><th>Win%</th></tr></thead><tbody id="kzTableBody"></tbody></table>
+          <div class="detail-section-title" id="dtKZTitle">Killzone</div>
+          <table class="detail-table"><thead><tr><th id="dtKZSession">Seans</th><th id="dtKZCount">İşlem</th><th>TP / SL</th><th id="dtKZWin">Win%</th></tr></thead><tbody id="kzTableBody"></tbody></table>
         </div>
         <div class="detail-section">
-          <div class="detail-section-title">Setup Kalitesi</div>
-          <table class="detail-table"><thead><tr><th>Setup</th><th>İşlem</th><th>TP / SL</th><th>Ort. RR</th></tr></thead><tbody id="setupTableBody"></tbody></table>
+          <div class="detail-section-title" id="dtSetupTitle">Setup Kalitesi</div>
+          <table class="detail-table"><thead><tr><th id="dtSetupSetup">Setup</th><th id="dtSetupCount">İşlem</th><th>TP / SL</th><th id="dtSetupRR">Ort. RR</th></tr></thead><tbody id="setupTableBody"></tbody></table>
         </div>
         <div class="detail-section">
-          <div class="detail-section-title">Trend</div>
-          <table class="detail-table"><thead><tr><th>Yön</th><th>İşlem</th><th>TP / SL</th><th>Net Kâr</th></tr></thead><tbody id="trendTableBody"></tbody></table>
+          <div class="detail-section-title" id="dtTrendTitle">Trend</div>
+          <table class="detail-table"><thead><tr><th id="dtTrendDir">Yön</th><th id="dtTrendCount">İşlem</th><th>TP / SL</th><th id="dtTrendNet">Net Kâr</th></tr></thead><tbody id="trendTableBody"></tbody></table>
         </div>
       </div>
     </div>
@@ -477,14 +477,14 @@
         <div class="info-col"><span class="info-label">Tutar</span><span class="info-value" id="tpDollar">—</span></div>
       </div>
       <div class="info-row cols3">
-        <div class="info-col"><span class="info-label">Killzone</span><span class="info-value mid" id="tpKZ">—</span></div>
+        <div class="info-col"><span class="info-label" id="lblKZ">Killzone</span><span class="info-value mid" id="tpKZ">—</span></div>
         <div class="info-divider"></div>
-        <div class="info-col"><span class="info-label">Setup</span><span class="info-value mid" id="tpSetup">—</span></div>
+        <div class="info-col"><span class="info-label" id="lblSetup">Setup</span><span class="info-value mid" id="tpSetup">—</span></div>
         <div class="info-divider"></div>
-        <div class="info-col"><span class="info-label">Trend</span><span class="info-value mid" id="tpTrend">—</span></div>
+        <div class="info-col"><span class="info-label" id="lblTrend">Trend</span><span class="info-value mid" id="tpTrend">—</span></div>
       </div>
       <div class="info-row cols2 no-border">
-        <div class="info-col"><span class="info-label">İşlem Tipi</span><span class="info-value mid" id="tpRev">—</span></div>
+        <div class="info-col"><span class="info-label" id="lblRevType">İşlem Tipi</span><span class="info-value mid" id="tpRev">—</span></div>
         <div class="info-divider"></div>
         <div class="info-col"></div>
       </div>
@@ -534,12 +534,20 @@
       <button class="save-trade-btn" id="saveEditTradeBtn">Değişiklikleri Kaydet</button>
     </div>
     <div>
-      <div class="tp-section-title" style="margin-bottom:10px">Fotoğraflar</div>
+      <div class="tp-section-title" id="lblPhotos" style="margin-bottom:10px">Fotoğraflar</div>
       <div class="tp-photo-grid" id="tpPhotoGrid"></div>
-      <label class="add-photo-label" style="margin-top:10px">+ Fotoğraf ekle<input type="file" id="tpFileInput" accept="image/*" multiple></label>
+      <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; align-items:center;">
+        <label class="add-photo-label" id="lblAddPhoto">+ Fotoğraf ekle<input type="file" id="tpFileInput" accept="image/*" multiple></label>
+        <input type="text" id="tpUrlInput" placeholder="URL yapıştır..."
+          style="flex:1; min-width:120px; background:var(--surface2); border:1px solid var(--border2); border-radius:9px;
+                 color:var(--text); font-family:'DM Mono',monospace; font-size:11px; padding:8px 10px; outline:none;">
+        <button id="tpUrlAddBtn"
+          style="background:none; border:1px solid var(--border2); color:var(--text-mid); border-radius:9px;
+                 padding:8px 12px; font-size:11px; font-family:'DM Mono',monospace; cursor:pointer;">ekle</button>
+      </div>
     </div>
     <div>
-      <div class="tp-section-title" style="margin-bottom:8px">Not</div>
+      <div class="tp-section-title" id="lblNote" style="margin-bottom:8px">Not</div>
       <textarea class="tp-note" id="tpNoteArea" placeholder="Bu trade hakkında notların..."></textarea>
     </div>
     <div class="status-trade" id="statusTrade"></div>
@@ -779,8 +787,8 @@ async function render() {
 
 document.getElementById("summaryToggleBtn").addEventListener("click", async () => {
   const el=document.getElementById("monthSummary"), btn=document.getElementById("summaryToggleBtn");
-  if (el.style.display!=="none") { el.style.display="none"; btn.textContent="ay özeti göster"; }
-  else { btn.textContent="yükleniyor..."; await updateMonthlySummary(curYear,curMonth); btn.textContent="ay özetini gizle"; }
+  if (el.style.display!=="none") { el.style.display="none"; btn.textContent=S("summaryShow"); }
+  else { btn.textContent=S("statusLoading"); await updateMonthlySummary(curYear,curMonth); btn.textContent=S("summaryHide"); }
 });
 document.getElementById("detailToggleBtn").addEventListener("click", () => {
   const ds=document.getElementById("detailStats"), btn=document.getElementById("detailToggleBtn");
@@ -816,7 +824,7 @@ async function updateMonthlySummary(y,m) {
   const net=totalProfit+totalLoss;
   const hasData=totalProfit!==0||totalLoss!==0||allTrades.length>0;
   const summaryEl=document.getElementById("monthSummary");
-  if (!hasData){summaryEl.style.display="none";document.getElementById("summaryToggleBtn").textContent="ay özeti göster";return;}
+  if (!hasData){summaryEl.style.display="none";document.getElementById("summaryToggleBtn").textContent=S("summaryShow");return;}
   summaryEl.style.display="block"; summaryEl.style.animation="none"; summaryEl.offsetHeight; summaryEl.style.animation="fadeIn 0.3s ease";
   document.getElementById("sumProfit").textContent=totalProfit>0?`+${totalProfit.toFixed(0)}${currency}`:"—";
   document.getElementById("sumLoss").textContent=totalLoss<0?`${totalLoss.toFixed(0)}${currency}`:"—";
@@ -862,7 +870,7 @@ async function openDayModal(day) {
   document.getElementById("dayNoteArea").value="";
   document.getElementById("addTradeFormWrap").style.display="none";
   document.getElementById("showAddTradeBtn").textContent="+ Trade ekle";
-  resetNewTradeForm(); setStatusDay("yükleniyor...");
+  resetNewTradeForm(); setStatusDay(S("statusLoading"));
   document.getElementById("overlay").classList.add("open");
   const entry=await loadEntry(curYear,curMonth,day);
   document.getElementById("dayNoteArea").value=entry.note||"";
@@ -951,7 +959,7 @@ document.getElementById("saveNewTradeBtn").addEventListener("click", async ()=>{
   else{document.getElementById("tLongBtn").classList.remove("error");document.getElementById("tShortBtn").classList.remove("error");}
   if(!tradeResult){["tTPBtn","tSLBtn","tBEBtn"].forEach(id=>document.getElementById(id).classList.add("error"));hasError=true;}
   else{["tTPBtn","tSLBtn","tBEBtn"].forEach(id=>document.getElementById(id).classList.remove("error"));}
-  if(hasError){showToast("Pair, Yön ve Sonuç zorunludur");return;}
+  if(hasError){showToast(S("statusPairReq"));return;}
   const missing=[];
   if(!tradeRev){["tRev_r","tRev_c"].forEach(id=>document.getElementById(id).classList.add("error"));missing.push("İşlem Tipi");}
   else{["tRev_r","tRev_c"].forEach(id=>document.getElementById(id).classList.remove("error"));}
@@ -961,7 +969,7 @@ document.getElementById("saveNewTradeBtn").addEventListener("click", async ()=>{
   else{["tSetup_a","tSetup_b","tSetup_c"].forEach(id=>document.getElementById(id).classList.remove("error"));}
   if(!tradeTrend){["tTrend_w","tTrend_a"].forEach(id=>document.getElementById(id).classList.add("error"));missing.push("Trend");}
   else{["tTrend_w","tTrend_a"].forEach(id=>document.getElementById(id).classList.remove("error"));}
-  if(missing.length>0){showToast("Bazı alanlar boş: "+missing.join(", "));}
+  if(missing.length>0){showToast(S("statusMissing")+missing.join(", "));}
   const trade={id:Date.now(),pair,dir:tradeDir,result:tradeResult,tf:document.getElementById("tTF").value.trim(),rr:document.getElementById("tRR").value,dollar:document.getElementById("tDollar").value,kz:tradeKZ,setup:tradeSetup,trend:tradeTrend,rev:tradeRev,note:"",photos:[]};
   const entry=await loadEntry(curYear,curMonth,selectedDay);
   entry.trades.push(trade);
@@ -969,12 +977,12 @@ document.getElementById("saveNewTradeBtn").addEventListener("click", async ()=>{
   renderDayTrades(entry.trades);
   document.getElementById("addTradeFormWrap").style.display="none";
   document.getElementById("showAddTradeBtn").textContent="+ Trade ekle";
-  resetNewTradeForm(); setStatusDay("trade eklendi ✓"); setTimeout(()=>setStatusDay(""),1500);
+  resetNewTradeForm(); setStatusDay(S("statusAdded")); setTimeout(()=>setStatusDay(""),1500);
 });
 
 document.getElementById("dayNoteArea").addEventListener("input",e=>{
-  if(!selectedDay) return; clearTimeout(dayNoteTimer); setStatusDay("kaydediliyor...");
-  dayNoteTimer=setTimeout(async()=>{const entry=await loadEntry(curYear,curMonth,selectedDay);entry.note=e.target.value;await saveEntry(curYear,curMonth,selectedDay,entry);setStatusDay("kaydedildi ✓");setTimeout(()=>setStatusDay(""),2000);},800);
+  if(!selectedDay) return; clearTimeout(dayNoteTimer); setStatusDay(S("statusSaving"));
+  dayNoteTimer=setTimeout(async()=>{const entry=await loadEntry(curYear,curMonth,selectedDay);entry.note=e.target.value;await saveEntry(curYear,curMonth,selectedDay,entry);setStatusDay(S("statusSaved"));setTimeout(()=>setStatusDay(""),2000);},800);
 });
 
 async function openTradePage(y,m,d,idx) {
@@ -1055,7 +1063,7 @@ document.getElementById("saveEditTradeBtn").addEventListener("click", async ()=>
   const missing=[];
   if(!editRev) missing.push("İşlem Tipi"); if(!editKZ) missing.push("Killzone");
   if(!editSetup) missing.push("Setup"); if(!editTrend) missing.push("Trend");
-  if(missing.length>0) showToast("Bazı alanlar boş: "+missing.join(", "));
+  if(missing.length>0) showToast(S("statusMissing")+missing.join(", "));
   const {y,m,d}=openTradeDay; const entry=await loadEntry(y,m,d); const t=entry.trades[openTradeIdx];
   t.pair=pair; t.dir=editDir; t.result=editResult;
   t.tf=document.getElementById("eTF").value.trim();
@@ -1065,12 +1073,12 @@ document.getElementById("saveEditTradeBtn").addEventListener("click", async ()=>
   document.getElementById("tradeEditForm").classList.remove("open");
   document.getElementById("tradeInfoCard").style.display="block";
   document.getElementById("editTradeBtn").textContent="Düzenle";
-  setStatusTrade("kaydedildi ✓"); setTimeout(()=>setStatusTrade(""),2000);
+  setStatusTrade(S("statusSaved")); setTimeout(()=>setStatusTrade(""),2000);
 });
 
 document.getElementById("tpNoteArea").addEventListener("input",e=>{
-  if(!openTradeDay||openTradeIdx===null) return; clearTimeout(tradeNoteTimer); setStatusTrade("kaydediliyor...");
-  tradeNoteTimer=setTimeout(async()=>{const {y,m,d}=openTradeDay;const entry=await loadEntry(y,m,d);if(entry.trades[openTradeIdx]){entry.trades[openTradeIdx].note=e.target.value;await saveEntry(y,m,d,entry);}setStatusTrade("kaydedildi ✓");setTimeout(()=>setStatusTrade(""),2000);},800);
+  if(!openTradeDay||openTradeIdx===null) return; clearTimeout(tradeNoteTimer); setStatusTrade(S("statusSaving"));
+  tradeNoteTimer=setTimeout(async()=>{const {y,m,d}=openTradeDay;const entry=await loadEntry(y,m,d);if(entry.trades[openTradeIdx]){entry.trades[openTradeIdx].note=e.target.value;await saveEntry(y,m,d,entry);}setStatusTrade(S("statusSaved"));setTimeout(()=>setStatusTrade(""),2000);},800);
 });
 
 function renderTradePhotos(photos) {
@@ -1088,7 +1096,7 @@ async function removeTradePhoto(pIdx) {
   const {y,m,d}=openTradeDay; const entry=await loadEntry(y,m,d);
   entry.trades[openTradeIdx].photos.splice(pIdx,1);
   await saveEntry(y,m,d,entry); renderTradePhotos(entry.trades[openTradeIdx].photos);
-  setStatusTrade("silindi ✓"); setTimeout(()=>setStatusTrade(""),1500);
+  setStatusTrade(S("statusDeleted")); setTimeout(()=>setStatusTrade(""),1500);
 }
 function resizeImage(file,maxSize=1200) {
   return new Promise(resolve=>{
@@ -1097,18 +1105,30 @@ function resizeImage(file,maxSize=1200) {
     reader.readAsDataURL(file);
   });
 }
-document.getElementById("tpFileInput").addEventListener("change", async e=>{
+document.getElementById("tpUrlAddBtn").addEventListener("click", async () => {
+  if (!openTradeDay || openTradeIdx === null) return;
+  const url = document.getElementById("tpUrlInput").value.trim();
+  if (!url) return;
+  setStatusTrade(S("statusSaving"));
+  const {y,m,d} = openTradeDay;
+  const entry = await loadEntry(y,m,d);
+  entry.trades[openTradeIdx].photos.push(url);
+  await saveEntry(y,m,d,entry);
+  renderTradePhotos(entry.trades[openTradeIdx].photos);
+  document.getElementById("tpUrlInput").value = "";
+  setStatusTrade(S("statusSaved")); setTimeout(()=>setStatusTrade(""),2000);
+});
   if(!openTradeDay||openTradeIdx===null) return;
   const files=Array.from(e.target.files); if(!files.length) return;
-  setStatusTrade("fotoğraflar yükleniyor...");
+  setStatusTrade(S("statusPhotos"));
   const {y,m,d}=openTradeDay; const entry=await loadEntry(y,m,d);
   for(const file of files) entry.trades[openTradeIdx].photos.push(await resizeImage(file));
   await saveEntry(y,m,d,entry); renderTradePhotos(entry.trades[openTradeIdx].photos);
-  setStatusTrade("kaydedildi ✓"); setTimeout(()=>setStatusTrade(""),2000); e.target.value="";
+  setStatusTrade(S("statusSaved")); setTimeout(()=>setStatusTrade(""),2000); e.target.value="";
 });
 document.getElementById("deleteTradeBtn").addEventListener("click", async ()=>{
   if(!openTradeDay||openTradeIdx===null) return;
-  if(!confirm("Bu trade silinsin mi?")) return;
+  if(!confirm(S("confirmDelete"))) return;
   const {y,m,d}=openTradeDay; const entry=await loadEntry(y,m,d);
   entry.trades.splice(openTradeIdx,1); await saveEntry(y,m,d,entry); closeTradePageFn();
 });
@@ -1204,6 +1224,22 @@ const STRINGS = {
     noteSec: "Not",
     editBtn: "Düzenle",
     deleteBtn: "Sil",
+    thProfit: "Kâr", thLoss: "Zarar", thNet: "Net",
+    thTrades: "İşlem", thWin: "Win%", thRR: "Ort RR",
+    thLong: "Long", thShort: "Short",
+    thAvgWin: "Kârlı Ort.", thAvgLoss: "Zararlı Ort.",
+    thPairDist: "Pair Dağılımı",
+    thType: "Tip", thCount: "İşlem", thTPSL: "TP / SL",
+    thSession: "Seans", thSetup: "Setup", thAvgRR: "Ort. RR",
+    thDirection: "Yön", thNetProfit: "Net Kâr",
+    statusLoading: "yükleniyor...", statusSaving: "kaydediliyor...",
+    statusSaved: "kaydedildi ✓", statusDeleted: "silindi ✓",
+    statusAdded: "trade eklendi ✓", statusPhotos: "fotoğraflar yükleniyor...",
+    statusPairReq: S("statusPairReq"),
+    statusMissing: S("statusMissing"),
+    confirmDelete: S("confirmDelete"),
+    pastePhoto: "URL ile ekle",
+    pastePhotoPlaceholder: "Fotoğraf URL'si yapıştır...",
     MONTHS: ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"],
     DAYS: ["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"],
   },
@@ -1271,6 +1307,22 @@ const STRINGS = {
     noteSec: "Note",
     editBtn: "Edit",
     deleteBtn: "Delete",
+    thProfit: "Profit", thLoss: "Loss", thNet: "Net",
+    thTrades: "Trades", thWin: "Win%", thRR: "Avg RR",
+    thLong: "Long", thShort: "Short",
+    thAvgWin: "Avg Win", thAvgLoss: "Avg Loss",
+    thPairDist: "Pair Distribution",
+    thType: "Type", thCount: "Trades", thTPSL: "TP / SL",
+    thSession: "Session", thSetup: "Setup", thAvgRR: "Avg RR",
+    thDirection: "Direction", thNetProfit: "Net Profit",
+    statusLoading: "loading...", statusSaving: "saving...",
+    statusSaved: "saved ✓", statusDeleted: "deleted ✓",
+    statusAdded: "trade added ✓", statusPhotos: "uploading photos...",
+    statusPairReq: "Pair, Direction and Result are required",
+    statusMissing: "Some fields empty: ",
+    confirmDelete: "Delete this trade?",
+    pastePhoto: "Add via URL",
+    pastePhotoPlaceholder: "Paste photo URL...",
     MONTHS: ["January","February","March","April","May","June","July","August","September","October","November","December"],
     DAYS: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
   }
@@ -1330,15 +1382,45 @@ function applyLang(l, skipRender = false) {
   document.getElementById("eTrend_a").textContent = S("trendAgainst");
   document.getElementById("eRev_r").textContent = S("revReversal");
   document.getElementById("eRev_c").textContent = S("revCont");
-  // trade page
+  // trade page labels
   document.getElementById("editTradeBtn").textContent = isEditMode ? S("cancel") : S("editBtn");
   document.getElementById("deleteTradeBtn").textContent = S("deleteBtn");
   document.getElementById("tpNoteArea").placeholder = S("tradeNote");
+  if(document.getElementById("lblPhotos")) document.getElementById("lblPhotos").textContent = S("photosSec");
+  if(document.getElementById("lblNote")) document.getElementById("lblNote").textContent = S("noteSec");
+  if(document.getElementById("lblRevType")) document.getElementById("lblRevType").textContent = S("revLabel");
+  if(document.getElementById("lblKZ")) document.getElementById("lblKZ").textContent = S("kzLabel");
+  if(document.getElementById("lblSetup")) document.getElementById("lblSetup").textContent = S("setupLabel");
+  if(document.getElementById("lblTrend")) document.getElementById("lblTrend").textContent = S("trendLabel");
   // summary labels
-  document.getElementById("sumProfit").closest(".sum-col")?.querySelector(".sum-label") && (() => {
-    const cols = document.querySelectorAll("#monthSummary .sum-label");
-    // update via class-based approach below
-  })();
+  if(document.getElementById("lblProfit")) document.getElementById("lblProfit").textContent = S("thProfit");
+  if(document.getElementById("lblNet")) document.getElementById("lblNet").textContent = S("thNet");
+  if(document.getElementById("lblLoss")) document.getElementById("lblLoss").textContent = S("thLoss");
+  if(document.getElementById("lblTrades")) document.getElementById("lblTrades").textContent = S("thTrades");
+  if(document.getElementById("lblWin")) document.getElementById("lblWin").textContent = S("thWin");
+  if(document.getElementById("lblRR")) document.getElementById("lblRR").textContent = S("thRR");
+  if(document.getElementById("lblLong")) document.getElementById("lblLong").textContent = S("thLong");
+  if(document.getElementById("lblShort")) document.getElementById("lblShort").textContent = S("thShort");
+  if(document.getElementById("lblAvgWin")) document.getElementById("lblAvgWin").textContent = S("thAvgWin");
+  if(document.getElementById("lblAvgLoss")) document.getElementById("lblAvgLoss").textContent = S("thAvgLoss");
+  if(document.getElementById("lblPairDist")) document.getElementById("lblPairDist").textContent = S("thPairDist");
+  // detail stats titles & headers
+  if(document.getElementById("dtRevTitle")) document.getElementById("dtRevTitle").textContent = S("detailRev");
+  if(document.getElementById("dtRevType")) document.getElementById("dtRevType").textContent = S("thType");
+  if(document.getElementById("dtRevCount")) document.getElementById("dtRevCount").textContent = S("thCount");
+  if(document.getElementById("dtRevWin")) document.getElementById("dtRevWin").textContent = S("thWin");
+  if(document.getElementById("dtKZTitle")) document.getElementById("dtKZTitle").textContent = S("detailKZ");
+  if(document.getElementById("dtKZSession")) document.getElementById("dtKZSession").textContent = S("thSession");
+  if(document.getElementById("dtKZCount")) document.getElementById("dtKZCount").textContent = S("thCount");
+  if(document.getElementById("dtKZWin")) document.getElementById("dtKZWin").textContent = S("thWin");
+  if(document.getElementById("dtSetupTitle")) document.getElementById("dtSetupTitle").textContent = S("detailSetup");
+  if(document.getElementById("dtSetupSetup")) document.getElementById("dtSetupSetup").textContent = S("thSetup");
+  if(document.getElementById("dtSetupCount")) document.getElementById("dtSetupCount").textContent = S("thCount");
+  if(document.getElementById("dtSetupRR")) document.getElementById("dtSetupRR").textContent = S("thAvgRR");
+  if(document.getElementById("dtTrendTitle")) document.getElementById("dtTrendTitle").textContent = S("detailTrend");
+  if(document.getElementById("dtTrendDir")) document.getElementById("dtTrendDir").textContent = S("thDirection");
+  if(document.getElementById("dtTrendCount")) document.getElementById("dtTrendCount").textContent = S("thCount");
+  if(document.getElementById("dtTrendNet")) document.getElementById("dtTrendNet").textContent = S("thNetProfit");
   // login
   document.querySelector(".login-sub").textContent = S("appSub");
   document.getElementById("signOutBtn").textContent = S("signOut");
