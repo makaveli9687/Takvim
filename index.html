@@ -1118,8 +1118,8 @@ document.getElementById("tpUrlAddBtn").addEventListener("click", async () => {
   document.getElementById("tpUrlInput").value = "";
   setStatusTrade(S("statusSaved")); setTimeout(()=>setStatusTrade(""),2000);
 });
+document.getElementById("tpFileInput").addEventListener("change", async e=>{
   if(!openTradeDay||openTradeIdx===null) return;
-  const files=Array.from(e.target.files); if(!files.length) return;
   setStatusTrade(S("statusPhotos"));
   const {y,m,d}=openTradeDay; const entry=await loadEntry(y,m,d);
   for(const file of files) entry.trades[openTradeIdx].photos.push(await resizeImage(file));
