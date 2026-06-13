@@ -236,7 +236,7 @@ textarea::placeholder { color:#333; font-style:italic; }
 <body>
 <div class="app">
   <!-- LOGIN -->
-  <div id="loginScreen" style="display:none">
+  <div id="loginScreen" style="display:block">
     <div class="login-screen">
       <div><div class="login-title">Takvim</div><div class="login-sub" id="loginSub" style="margin-top:8px">kişisel not &amp; fotoğraf takvimi</div></div>
       <button class="google-btn" id="googleSignInBtn">
@@ -545,9 +545,21 @@ function setStatusDay(m){document.getElementById("statusDay").textContent=m;}
 function setStatusTrade(m){document.getElementById("statusTrade").textContent=m;}
 
 // ── AUTH ──
-onAuthStateChanged(auth, user=>{
-  if(user){currentUser=user;dotCache={};showScreen("calendar");render();}
-  else{currentUser=null;showScreen("login");}
+onAuthStateChanged(auth, async user=>{
+  if(user){
+    currentUser=user;
+    dotCache={};
+    showScreen("calendar");
+    try {
+      await render();
+    } catch(e) {
+      console.error("RENDER ERROR:", e);
+      // Still show calendar even if render fails
+    }
+  } else {
+    currentUser=null;
+    showScreen("login");
+  }
 });
 document.getElementById("googleSignInBtn").addEventListener("click",async()=>{
   try{await signInWithPopup(auth,new GoogleAuthProvider());}
@@ -580,6 +592,7 @@ function firstDay(y,m){let d=new Date(y,m,1).getDay();return d===0?6:d-1;}
 
 // ── RENDER ──
 async function render(){
+  if(!currentUser) return;
   const M=S("months"), D=S("days");
   document.getElementById("monthName").textContent=M[curMonth];
   document.getElementById("yearLabel").textContent=curYear;
@@ -1389,11 +1402,6 @@ function updateWelcome(){
 // ── INIT ──
 applyTheme(localStorage.getItem("theme")||"dark");
 applyCurrency(currency);
-// applyLang sets lang buttons, translates UI, calls render
-// but render needs currentUser - so we call applyLang for UI only, render happens after auth
 lang=localStorage.getItem("lang")||"tr";
-document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
-// translate static labels without calling render
-applyLang(lang);
-applyWelcomeColor(welcomeColor);
-<
+// Only update UI labels, do NOT call render yet (no currentUser yet)
+document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.dataset
