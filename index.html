@@ -430,12 +430,24 @@ textarea::placeholder { color:#333; font-style:italic; }
 
   <!-- Preview step -->
   <div id="summaryPreviewStep" style="display:none;width:100%;max-width:460px;flex-direction:column;gap:12px;">
+    <!-- top bar: indir + tema + kapat -->
     <div style="display:flex;gap:8px;align-items:center;">
       <a id="summaryDownloadBtn" style="flex:1;background:#fff;color:#000;border:none;border-radius:10px;padding:11px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;display:block;">⬇ İndir</a>
       <button id="summaryThemeBtn" style="background:none;border:1px solid #444;color:#ccc;border-radius:10px;padding:11px 14px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;">◑ Tema</button>
       <button id="summaryCloseBtn" style="background:none;border:1px solid #444;color:#ccc;border-radius:10px;padding:11px 14px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;">✕</button>
     </div>
-    <canvas id="summaryCanvas" style="width:100%;border-radius:14px;"></canvas>
+    <!-- carousel -->
+    <div id="summaryCarousel" style="overflow:hidden;border-radius:14px;position:relative;">
+      <div id="summaryCarouselTrack" style="display:flex;transition:transform 0.35s cubic-bezier(.22,1,.36,1);">
+        <!-- slide 0: özet canvas -->
+        <div class="carousel-slide" style="flex:0 0 100%;">
+          <canvas id="summaryCanvas" style="width:100%;display:block;border-radius:14px;"></canvas>
+        </div>
+        <!-- photo slides injected by JS -->
+      </div>
+    </div>
+    <!-- dots -->
+    <div id="summaryDots" style="display:flex;justify-content:center;gap:6px;"></div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -1088,23 +1100,119 @@ function wrapText(ctx,text,x,y,maxW,lineH){
   if(line)ctx.fillText(line,x,y);
 }
 
+let carouselIndex = 0;
+let carouselTotal = 0;
+
 async function generateSummaryPreview(){
   const entry=document.getElementById("summaryEntry").value.trim();
   const stop=document.getElementById("summaryStop").value.trim();
   const exit=document.getElementById("summaryExit").value.trim();
+
+  // build canvas slide
   await buildSummaryCanvas(entry,stop,exit,summaryCardTheme);
+
+  // build photo slides
+  const track=document.getElementById("summaryCarouselTrack");
+  // remove old photo slides (keep slide 0 = canvas)
+  while(track.children.length>1) track.removeChild(track.lastChild);
+
+  // get current trade photos
+  const {y,m,d}=openTradeDay;
+  const tradeEntry=await loadEntry(y,m,d);
+  const t=tradeEntry.trades[openTradeIdx];
+  const photos=(t&&t.photos)||[];
+
+  photos.forEach(src=>{
+    const slide=document.createElement("div");
+    slide.className="carousel-slide";
+    slide.style.cssText="flex:0 0 100%;";
+    // 1:1 square image
+    const wrapper=document.createElement("div");
+    wrapper.style.cssText="width:100%;padding-top:100%;position:relative;border-radius:14px;overflow:hidden;background:#000;";
+    const img=document.createElement("img");
+    img.src=src;
+    img.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;";
+    wrapper.appendChild(img);
+    slide.appendChild(wrapper);
+    track.appendChild(slide);
+  });
+
+  carouselTotal=1+photos.length;
+  carouselIndex=0;
+  updateCarousel();
+
   document.getElementById("summaryFormStep").style.display="none";
   const ps=document.getElementById("summaryPreviewStep");
   ps.style.display="flex"; ps.style.flexDirection="column";
+}
+
+function updateCarousel(){
+  const track=document.getElementById("summaryCarouselTrack");
+  track.style.transform=`translateX(-${carouselIndex*100}%)`;
+
+  // dots
+  const dots=document.getElementById("summaryDots");
+  dots.innerHTML="";
+  if(carouselTotal>1){
+    for(let i=0;i<carouselTotal;i++){
+      const dot=document.createElement("div");
+      dot.style.cssText=`width:${i===carouselIndex?18:6}px;height:6px;border-radius:3px;background:${i===carouselIndex?"#fff":"#555"};transition:all 0.3s;`;
+      dots.appendChild(dot);
+    }
+  }
+
+  // update download button
   updateSummaryDownload();
 }
 
 function updateSummaryDownload(){
-  const canvas=document.getElementById("summaryCanvas");
-  const dataUrl=canvas.toDataURL("image/png",1.0);
   const a=document.getElementById("summaryDownloadBtn");
-  a.href=dataUrl; a.download=`trade-ozet-${Date.now()}.png`;
+  if(carouselIndex===0){
+    // canvas download
+    const canvas=document.getElementById("summaryCanvas");
+    a.href=canvas.toDataURL("image/png",1.0);
+    a.download=`trade-ozet-${Date.now()}.png`;
+    a.style.display="block";
+  } else {
+    // photo download
+    const track=document.getElementById("summaryCarouselTrack");
+    const slide=track.children[carouselIndex];
+    const img=slide&&slide.querySelector("img");
+    if(img){
+      // draw to canvas for high quality square crop
+      const sz=1080;
+      const offscreen=document.createElement("canvas");
+      offscreen.width=sz;offscreen.height=sz;
+      const oc=offscreen.getContext("2d");
+      const tempImg=new Image();
+      tempImg.crossOrigin="anonymous";
+      tempImg.onload=()=>{
+        const s=Math.min(tempImg.width,tempImg.height);
+        const sx=(tempImg.width-s)/2;
+        const sy=(tempImg.height-s)/2;
+        oc.drawImage(tempImg,sx,sy,s,s,0,0,sz,sz);
+        a.href=offscreen.toDataURL("image/png",1.0);
+        a.download=`trade-foto-${carouselIndex}-${Date.now()}.png`;
+      };
+      tempImg.src=img.src;
+    }
+    a.style.display="block";
+  }
 }
+
+// swipe support
+(()=>{
+  let startX=0;
+  const car=document.getElementById("summaryCarousel");
+  car.addEventListener("touchstart",e=>{startX=e.touches[0].clientX;},{passive:true});
+  car.addEventListener("touchend",e=>{
+    const dx=startX-e.changedTouches[0].clientX;
+    if(Math.abs(dx)>40){
+      if(dx>0&&carouselIndex<carouselTotal-1){carouselIndex++;updateCarousel();}
+      else if(dx<0&&carouselIndex>0){carouselIndex--;updateCarousel();}
+    }
+  });
+})();
 
 document.getElementById("summaryGenerateBtn").addEventListener("click",generateSummaryPreview);
 document.getElementById("summarySkipBtn").addEventListener("click",()=>{
@@ -1288,6 +1396,4 @@ document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.
 // translate static labels without calling render
 applyLang(lang);
 applyWelcomeColor(welcomeColor);
-</script>
-</body>
-</html>
+<
