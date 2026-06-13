@@ -236,7 +236,7 @@ textarea::placeholder { color:#333; font-style:italic; }
 <body>
 <div class="app">
   <!-- LOGIN -->
-  <div id="loginScreen" style="display:block">
+  <div id="loginScreen" style="display:none">
     <div class="login-screen">
       <div><div class="login-title">Takvim</div><div class="login-sub" id="loginSub" style="margin-top:8px">kişisel not &amp; fotoğraf takvimi</div></div>
       <button class="google-btn" id="googleSignInBtn">
@@ -545,32 +545,13 @@ function setStatusDay(m){document.getElementById("statusDay").textContent=m;}
 function setStatusTrade(m){document.getElementById("statusTrade").textContent=m;}
 
 // ── AUTH ──
-onAuthStateChanged(auth, async user=>{
-  if(user){
-    currentUser=user;
-    dotCache={};
-    showScreen("calendar");
-    try {
-      await render();
-    } catch(e) {
-      console.error("RENDER ERROR:", e);
-      // Still show calendar even if render fails
-    }
-  } else {
-    currentUser=null;
-    showScreen("login");
-  }
+onAuthStateChanged(auth, user=>{
+  if(user){currentUser=user;dotCache={};showScreen("calendar");render();}
+  else{currentUser=null;showScreen("login");}
 });
 document.getElementById("googleSignInBtn").addEventListener("click",async()=>{
-  const errEl = document.getElementById("loginError");
-  errEl.style.display="block";
-  errEl.textContent="Giriş deneniyor...";
-  try{
-    await signInWithPopup(auth,new GoogleAuthProvider());
-  } catch(e){
-    errEl.textContent="HATA: "+e.code+" — "+e.message;
-    console.error(e);
-  }
+  try{await signInWithPopup(auth,new GoogleAuthProvider());}
+  catch(e){document.getElementById("loginError").textContent=e.message;document.getElementById("loginError").style.display="block";}
 });
 document.getElementById("signOutBtn").addEventListener("click",()=>signOut(auth));
 document.getElementById("signOutBtn2").addEventListener("click",()=>signOut(auth));
@@ -1411,4 +1392,10 @@ applyTheme(localStorage.getItem("theme")||"dark");
 applyCurrency(currency);
 lang=localStorage.getItem("lang")||"tr";
 // Only update UI labels, do NOT call render yet (no currentUser yet)
-document.querySel
+document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
+// Call applyLang but it won't render because currentUser is null
+applyLang(lang);
+applyWelcomeColor(welcomeColor);
+</script>
+</body>
+</html>
