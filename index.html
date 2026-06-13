@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Takvim</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -1019,18 +1019,19 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
   // P&L value
   const pnlVal=t.dollar?((t.result==="tp"?"+":t.result==="sl"?"-":"")+currency+t.dollar):"—";
   ctx.fillStyle=ACCENT;
-  ctx.font="800 160px Inter, sans-serif";
+  ctx.font="800 150px Inter, sans-serif";
   ctx.textAlign="center";
-  ctx.fillText(pnlVal,SIZE/2,660);
+  ctx.fillText(pnlVal,SIZE/2,640);
 
   // trade summary text
   const summaryText=t.summary||"";
   if(summaryText){
-    ctx.fillStyle=ACCENT;
-    ctx.font="italic 600 46px Georgia, serif";
+    const summaryColor=isDark?"#a0c4ff":"#4a6fa5";
+    ctx.fillStyle=summaryColor;
+    ctx.font="italic 500 42px 'Playfair Display', Georgia, serif";
     ctx.textAlign="center";
-    const maxW=SIZE-108;
-    wrapText(ctx,summaryText,SIZE/2,760,maxW,60);
+    const maxW=SIZE-140;
+    wrapText(ctx,summaryText,SIZE/2,720,maxW,58);
   }
 
   // divider before entry/stop/exit
