@@ -407,6 +407,13 @@ textarea::placeholder { color:#333; font-style:italic; }
         <button class="theme-btn" id="themeLight"><div class="theme-preview theme-preview-light"><div class="theme-preview-hdr"><span style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#1a1814;">Haziran</span></div><div class="theme-preview-bar"><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div></div></div><span class="theme-lbl" id="lblThemeLight">Açık</span></button>
       </div>
     </div>
+    <div>
+      <div class="settings-sec-lbl">Özet Fotoğraf Çerçevesi</div>
+      <div style="display:flex;gap:8px;">
+        <button class="curr-btn active" id="frameColorDark" style="display:flex;align-items:center;justify-content:center;gap:6px;"><span style="width:12px;height:12px;border-radius:2px;background:#0c0c0c;border:1px solid #555;display:inline-block;flex-shrink:0;"></span>Siyah</button>
+        <button class="curr-btn" id="frameColorLight" style="display:flex;align-items:center;justify-content:center;gap:6px;"><span style="width:12px;height:12px;border-radius:2px;background:#f5f4f0;border:1px solid #ccc;display:inline-block;flex-shrink:0;"></span>Beyaz</button>
+      </div>
+    </div>
     <div style="text-align:right;"><button class="signout-btn" id="signOutBtn2">çıkış yap</button></div>
   </div>
 </div>
@@ -516,7 +523,6 @@ let userName = localStorage.getItem("userName") || "";
 let welcomeColor = localStorage.getItem("welcomeColor") || "green";
 let socialName = localStorage.getItem("socialName") || "";
 let summaryCardTheme = document.body.classList.contains("light") ? "light" : "dark";
-let frameColor = localStorage.getItem("frameColor") || "dark";
 function S(k) { return (lang==="en"?EN:TR)[k] || k; }
 
 const KZ_LABELS = {asia:"Asia",ldn:"London",nyam:"NY AM",lunch:"NY Lunch",nypm:"NY PM"};
@@ -1088,64 +1094,7 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
   }
 }
 
-function setFrameColor(color){
-  frameColor=color;
-  localStorage.setItem("frameColor",color);
-  document.getElementById("frameColorDark").classList.toggle("active",color==="dark");
-  document.getElementById("frameColorLight").classList.toggle("active",color==="light");
-}
-document.getElementById("frameColorDark").addEventListener("click",()=>setFrameColor("dark"));
-document.getElementById("frameColorLight").addEventListener("click",()=>setFrameColor("light"));
 
-function drawFramedPhoto(canvas,img,src,idx){
-  const SIZE=1080;
-  const ctx=canvas.getContext("2d");
-  const isDark=frameColor==="dark";
-  const BG=isDark?"#0c0c0c":"#f5f4f0";
-  const FG=isDark?"#e0e0e0":"#1a1814";
-  const FG2=isDark?"#999":"#7a736a";
-
-  // Frame sizes
-  const topFrame=90;   // thicker top
-  const sideFrame=48;
-  const bottomFrame=58;
-
-  // Background (frame color)
-  ctx.fillStyle=BG;
-  ctx.fillRect(0,0,SIZE,SIZE);
-
-  // Draw photo cropped 1:1 inside frame
-  const imgW=SIZE-sideFrame*2;
-  const imgH=SIZE-topFrame-bottomFrame;
-  const s=Math.min(img.width,img.height);
-  const sx=(img.width-s)/2;
-  const sy=(img.height-s)/2;
-  ctx.drawImage(img,sx,sy,s,s,sideFrame,topFrame,imgW,imgH);
-
-  // Top bar text
-  // Left: name + @social
-  ctx.fillStyle=FG;
-  ctx.font="600 28px Inter, sans-serif";
-  ctx.textAlign="left";
-  let leftText=userName||"";
-  if(socialName) leftText+=(leftText?" · ":"")+"@"+socialName;
-  if(leftText) ctx.fillText(leftText,sideFrame,58);
-
-  // Right: date
-  const months2=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-  const dateStr=`${months2[openTradeDay.m]} ${openTradeDay.d} ${openTradeDay.y}`;
-  ctx.fillStyle=FG2;
-  ctx.font="500 26px Inter, sans-serif";
-  ctx.textAlign="right";
-  ctx.fillText(dateStr,SIZE-sideFrame,58);
-
-  // Update that slide's download
-  if(idx===carouselIndex-1){
-    const a=document.getElementById("summaryDownloadBtn");
-    a.href=canvas.toDataURL("image/png",1.0);
-    a.download=`trade-foto-${idx+1}-${Date.now()}.png`;
-  }
-}
 
 function roundRect(ctx,x,y,w,h,r){
   ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
@@ -1187,25 +1136,14 @@ async function generateSummaryPreview(){
     const slide=document.createElement("div");
     slide.className="carousel-slide";
     slide.style.cssText="flex:0 0 100%;";
-    // Draw photo on canvas with frame
-    const c=document.createElement("canvas");
-    c.width=1080; c.height=1080;
-    c.style.cssText="width:100%;display:block;border-radius:14px;";
-    slide.appendChild(c);
+    const wrapper=document.createElement("div");
+    wrapper.style.cssText="width:100%;padding-top:100%;position:relative;border-radius:14px;overflow:hidden;background:#000;";
+    const img=document.createElement("img");
+    img.src=src;
+    img.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;";
+    wrapper.appendChild(img);
+    slide.appendChild(wrapper);
     track.appendChild(slide);
-    // Load image and draw with frame
-    const tempImg=new Image();
-    tempImg.crossOrigin="anonymous";
-    tempImg.onload=()=>{
-      drawFramedPhoto(c,tempImg,src,pi);
-    };
-    tempImg.onerror=()=>{
-      // if crossOrigin fails, try without
-      const img2=new Image();
-      img2.onload=()=>drawFramedPhoto(c,img2,src,pi);
-      img2.src=src;
-    };
-    tempImg.src=src;
   });
 
   carouselTotal=1+photos.length;
@@ -1247,10 +1185,21 @@ function updateSummaryDownload(){
   } else {
     const track=document.getElementById("summaryCarouselTrack");
     const slide=track.children[carouselIndex];
-    const c=slide&&slide.querySelector("canvas");
-    if(c){
-      a.href=c.toDataURL("image/png",1.0);
-      a.download=`trade-foto-${carouselIndex}-${Date.now()}.png`;
+    const img=slide&&slide.querySelector("img");
+    if(img){
+      const sz=1080;
+      const off=document.createElement("canvas");
+      off.width=sz;off.height=sz;
+      const oc=off.getContext("2d");
+      const tmp=new Image();
+      tmp.crossOrigin="anonymous";
+      tmp.onload=()=>{
+        const s=Math.min(tmp.width,tmp.height);
+        oc.drawImage(tmp,(tmp.width-s)/2,(tmp.height-s)/2,s,s,0,0,sz,sz);
+        a.href=off.toDataURL("image/png",1.0);
+        a.download=`trade-foto-${carouselIndex}-${Date.now()}.png`;
+      };
+      tmp.src=img.src;
     }
     a.style.display="block";
   }
@@ -1323,10 +1272,6 @@ function applyTheme(theme){
   document.getElementById("themeLight").classList.toggle("active",theme==="light");
   localStorage.setItem("theme",theme);
   applyWelcomeColor(welcomeColor);
-  // sync frame color with theme if not manually set
-  if(!localStorage.getItem("frameColor")){
-    setFrameColor(theme==="light"?"light":"dark");
-  }
 }
 document.getElementById("themeDark").addEventListener("click",()=>applyTheme("dark"));
 document.getElementById("themeLight").addEventListener("click",()=>applyTheme("light"));
@@ -1417,4 +1362,30 @@ function applyLang(l){
   document.getElementById("eTrendLbl").textContent=S("trendLbl");
   document.getElementById("eLongBtn").textContent=S("long");
   document.getElementById("eShortBtn").textContent=S("short");
-  document.g
+  document.getElementById("eTrend_w").textContent=S("trendWith");
+  document.getElementById("eTrend_a").textContent=S("trendAgainst");
+  document.getElementById("eRev_r").textContent=S("reversal");
+  document.getElementById("eRev_c").textContent=S("continuation");
+  // login
+  document.getElementById("loginSub").textContent=S("appSub");
+  document.getElementById("signInText").textContent=S("signIn");
+  document.getElementById("signOutBtn").textContent=S("signOut");
+  document.getElementById("signOutBtn2").textContent=S("signOut");
+  updateWelcome();
+  if(currentUser) render();
+}
+document.querySelectorAll(".lang-btn").forEach(b=>b.addEventListener("click",()=>applyLang(b.dataset.lang)));
+
+// ── USERNAME ──
+const nameInput=document.getElementById("userNameInput");
+nameInput.value=userName;
+nameInput.addEventListener("input",()=>{userName=nameInput.value.trim();localStorage.setItem("userName",userName);updateWelcome();});
+
+const socialInput=document.getElementById("socialInput");
+socialInput.value=socialName;
+socialInput.addEventListener("input",()=>{socialName=socialInput.value.trim();localStorage.setItem("socialName",socialName);});
+
+function updateWelcome(){
+  const el=document.getElementById("welcomeText");if(!el)return;
+  el.textContent=userName?`${S("welcome")}, ${userName}`:S("welcome");
+  applyWelcomeCo
