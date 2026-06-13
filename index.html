@@ -410,8 +410,8 @@ textarea::placeholder { color:#333; font-style:italic; }
     <div>
       <div class="settings-sec-lbl">Özet Fotoğraf Çerçevesi</div>
       <div style="display:flex;gap:8px;">
-        <button class="curr-btn active" id="frameColorDark" onclick="setFrameColor('dark')" style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#0c0c0c;border:1px solid #555;display:inline-block;"></span>Siyah</button>
-        <button class="curr-btn" id="frameColorLight" onclick="setFrameColor('light')" style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#f5f4f0;border:1px solid #ccc;display:inline-block;"></span>Beyaz</button>
+        <button class="curr-btn active" id="frameColorDark" style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#0c0c0c;border:1px solid #555;display:inline-block;"></span>Siyah</button>
+        <button class="curr-btn" id="frameColorLight" style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#f5f4f0;border:1px solid #ccc;display:inline-block;"></span>Beyaz</button>
       </div>
     </div>
     <div style="text-align:right;"><button class="signout-btn" id="signOutBtn2">çıkış yap</button></div>
@@ -1101,6 +1101,8 @@ function setFrameColor(color){
   document.getElementById("frameColorDark").classList.toggle("active",color==="dark");
   document.getElementById("frameColorLight").classList.toggle("active",color==="light");
 }
+document.getElementById("frameColorDark").addEventListener("click",()=>setFrameColor("dark"));
+document.getElementById("frameColorLight").addEventListener("click",()=>setFrameColor("light"));
 
 function drawFramedPhoto(canvas,img,src,idx){
   const SIZE=1080;
@@ -1411,6 +1413,4 @@ function applyLang(l){
   document.getElementById("iResLbl").textContent=S("resultLbl");
   document.getElementById("iTutarLbl").textContent=S("amountLbl");
   document.getElementById("iKZLbl").textContent=S("kzLbl");
-  document.getElementById("iSetupLbl").textContent=S("setupLbl");
-  document.getElementById("iTrendLbl").textContent=S("trendLbl");
-  document.getElementById("iRevLb
+  document.getElementById("iSetupLbl")
