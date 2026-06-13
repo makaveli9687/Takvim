@@ -236,7 +236,7 @@ textarea::placeholder { color:#333; font-style:italic; }
 <body>
 <div class="app">
   <!-- LOGIN -->
-  <div id="loginScreen" style="display:none">
+  <div id="loginScreen" style="display:block">
     <div class="login-screen">
       <div><div class="login-title">Takvim</div><div class="login-sub" id="loginSub" style="margin-top:8px">kişisel not &amp; fotoğraf takvimi</div></div>
       <button class="google-btn" id="googleSignInBtn">
@@ -407,13 +407,6 @@ textarea::placeholder { color:#333; font-style:italic; }
         <button class="theme-btn" id="themeLight"><div class="theme-preview theme-preview-light"><div class="theme-preview-hdr"><span style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#1a1814;">Haziran</span></div><div class="theme-preview-bar"><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div></div></div><span class="theme-lbl" id="lblThemeLight">Açık</span></button>
       </div>
     </div>
-    <div>
-      <div class="settings-sec-lbl">Özet Fotoğraf Çerçevesi</div>
-      <div style="display:flex;gap:8px;">
-        <button class="curr-btn active" id="frameColorDark" style="display:flex;align-items:center;justify-content:center;gap:6px;"><span style="width:12px;height:12px;border-radius:2px;background:#0c0c0c;border:1px solid #555;display:inline-block;flex-shrink:0;"></span>Siyah</button>
-        <button class="curr-btn" id="frameColorLight" style="display:flex;align-items:center;justify-content:center;gap:6px;"><span style="width:12px;height:12px;border-radius:2px;background:#f5f4f0;border:1px solid #ccc;display:inline-block;flex-shrink:0;"></span>Beyaz</button>
-      </div>
-    </div>
     <div style="text-align:right;"><button class="signout-btn" id="signOutBtn2">çıkış yap</button></div>
   </div>
 </div>
@@ -552,13 +545,25 @@ function setStatusDay(m){document.getElementById("statusDay").textContent=m;}
 function setStatusTrade(m){document.getElementById("statusTrade").textContent=m;}
 
 // ── AUTH ──
-onAuthStateChanged(auth, user=>{
-  if(user){currentUser=user;dotCache={};showScreen("calendar");render();}
-  else{currentUser=null;showScreen("login");}
+onAuthStateChanged(auth, async user=>{
+  if(user){
+    currentUser=user;
+    dotCache={};
+    showScreen("calendar");
+    try {
+      await render();
+    } catch(e) {
+      console.error("RENDER ERROR:", e);
+      // Still show calendar even if render fails
+    }
+  } else {
+    currentUser=null;
+    showScreen("login");
+  }
 });
 document.getElementById("googleSignInBtn").addEventListener("click",async()=>{
   try{await signInWithPopup(auth,new GoogleAuthProvider());}
-  catch(e){document.getElementById("loginError").textContent=e.message;document.getElementById("loginError").style.display="block";}
+  catch(e){document.getElementById("loginError").textContent=S("signIn")+" failed: "+e.message;document.getElementById("loginError").style.display="block";}
 });
 document.getElementById("signOutBtn").addEventListener("click",()=>signOut(auth));
 document.getElementById("signOutBtn2").addEventListener("click",()=>signOut(auth));
@@ -1094,8 +1099,6 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
   }
 }
 
-
-
 function roundRect(ctx,x,y,w,h,r){
   ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
 }
@@ -1132,10 +1135,11 @@ async function generateSummaryPreview(){
   const t=tradeEntry.trades[openTradeIdx];
   const photos=(t&&t.photos)||[];
 
-  photos.forEach((src,pi)=>{
+  photos.forEach(src=>{
     const slide=document.createElement("div");
     slide.className="carousel-slide";
     slide.style.cssText="flex:0 0 100%;";
+    // 1:1 square image
     const wrapper=document.createElement("div");
     wrapper.style.cssText="width:100%;padding-top:100%;position:relative;border-radius:14px;overflow:hidden;background:#000;";
     const img=document.createElement("img");
@@ -1183,23 +1187,27 @@ function updateSummaryDownload(){
     a.download=`trade-ozet-${Date.now()}.png`;
     a.style.display="block";
   } else {
+    // photo download
     const track=document.getElementById("summaryCarouselTrack");
     const slide=track.children[carouselIndex];
     const img=slide&&slide.querySelector("img");
     if(img){
+      // draw to canvas for high quality square crop
       const sz=1080;
-      const off=document.createElement("canvas");
-      off.width=sz;off.height=sz;
-      const oc=off.getContext("2d");
-      const tmp=new Image();
-      tmp.crossOrigin="anonymous";
-      tmp.onload=()=>{
-        const s=Math.min(tmp.width,tmp.height);
-        oc.drawImage(tmp,(tmp.width-s)/2,(tmp.height-s)/2,s,s,0,0,sz,sz);
-        a.href=off.toDataURL("image/png",1.0);
+      const offscreen=document.createElement("canvas");
+      offscreen.width=sz;offscreen.height=sz;
+      const oc=offscreen.getContext("2d");
+      const tempImg=new Image();
+      tempImg.crossOrigin="anonymous";
+      tempImg.onload=()=>{
+        const s=Math.min(tempImg.width,tempImg.height);
+        const sx=(tempImg.width-s)/2;
+        const sy=(tempImg.height-s)/2;
+        oc.drawImage(tempImg,sx,sy,s,s,0,0,sz,sz);
+        a.href=offscreen.toDataURL("image/png",1.0);
         a.download=`trade-foto-${carouselIndex}-${Date.now()}.png`;
       };
-      tmp.src=img.src;
+      tempImg.src=img.src;
     }
     a.style.display="block";
   }
@@ -1388,4 +1396,12 @@ socialInput.addEventListener("input",()=>{socialName=socialInput.value.trim();lo
 function updateWelcome(){
   const el=document.getElementById("welcomeText");if(!el)return;
   el.textContent=userName?`${S("welcome")}, ${userName}`:S("welcome");
-  applyWelcomeCo
+  applyWelcomeColor(welcomeColor);
+}
+
+// ── INIT ──
+applyTheme(localStorage.getItem("theme")||"dark");
+applyCurrency(currency);
+lang=localStorage.getItem("lang")||"tr";
+// Only update UI labels, do NOT call render yet (no currentUser yet)
+document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.dataset
