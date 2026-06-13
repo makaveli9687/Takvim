@@ -631,14 +631,15 @@ async function openDayModal(day){
   document.getElementById("addTradeFormWrap").style.display="none";
   document.getElementById("showAddTradeBtn").textContent=S("addTrade");
   resetNewTradeForm();setStatusDay(S("loading"));
+  history.pushState({page:"day"},"");
   document.getElementById("overlay").classList.add("open");
   const entry=await loadEntry(curYear,curMonth,day);
   document.getElementById("dayNoteArea").value=entry.note||"";
   renderDayTrades(entry.trades||[]);setStatusDay("");
 }
 function closeDayModal(){document.getElementById("overlay").classList.remove("open");selectedDay=null;render();}
-document.getElementById("closeDayBtn").addEventListener("click",closeDayModal);
-document.getElementById("overlay").addEventListener("click",e=>{if(e.target===document.getElementById("overlay"))closeDayModal();});
+document.getElementById("closeDayBtn").addEventListener("click",()=>history.back());
+document.getElementById("overlay").addEventListener("click",e=>{if(e.target===document.getElementById("overlay"))history.back();});
 
 function renderDayTrades(trades){
   const list=document.getElementById("dayTradeList");list.innerHTML="";
@@ -731,7 +732,9 @@ async function openTradePage(y,m,d,idx){
   document.getElementById("editTradeBtn").textContent=S("edit");
   const entry=await loadEntry(y,m,d);const t=entry.trades[idx];if(!t)return;
   fillTradeInfo(t);document.getElementById("tpNoteArea").value=t.note||"";
-  renderTradePhotos(t.photos||[]);document.getElementById("tradePage").classList.add("open");
+  renderTradePhotos(t.photos||[]);
+  history.pushState({page:"trade"}, "");
+  document.getElementById("tradePage").classList.add("open");
 }
 function fillTradeInfo(t){
   document.getElementById("tradePageTitle").textContent=`${t.pair} — ${openTradeDay.d} ${S("months")[openTradeDay.m]}`;
@@ -756,7 +759,16 @@ function closeTradePageFn(){
   if(selectedDay)loadEntry(curYear,curMonth,selectedDay).then(entry=>renderDayTrades(entry.trades||[]));
   openTradeDay=null;openTradeIdx=null;isEditMode=false;
 }
-document.getElementById("closeTradePageBtn").addEventListener("click",closeTradePageFn);
+document.getElementById("closeTradePageBtn").addEventListener("click",()=>{
+  history.back();
+});
+window.addEventListener("popstate",()=>{
+  if(document.getElementById("tradePage").classList.contains("open")){
+    closeTradePageFn();
+  } else if(document.getElementById("overlay").classList.contains("open")){
+    closeDayModal();
+  }
+});
 
 document.getElementById("editTradeBtn").addEventListener("click",async()=>{
   if(!openTradeDay||openTradeIdx===null)return;
