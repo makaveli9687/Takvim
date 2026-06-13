@@ -1023,7 +1023,7 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
   ctx.textAlign="center";
   ctx.fillText(pnlVal,SIZE/2,640);
 
-  // trade summary text
+  // trade summary text - always right below PnL
   const summaryText=t.summary||"";
   if(summaryText){
     const summaryColor=isDark?"#a0c4ff":"#4a6fa5";
@@ -1031,7 +1031,7 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
     ctx.font="italic 500 42px 'Playfair Display', Georgia, serif";
     ctx.textAlign="center";
     const maxW=SIZE-140;
-    wrapText(ctx,summaryText,SIZE/2,720,maxW,58);
+    wrapText(ctx,summaryText,SIZE/2,780,maxW,58);
   }
 
   // divider before entry/stop/exit
