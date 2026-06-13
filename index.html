@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Takvim</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -333,13 +333,7 @@ textarea::placeholder { color:#333; font-style:italic; }
 <!-- TRADE PAGE -->
 <div class="trade-page" id="tradePage">
   <div class="trade-page-inner">
-    <div class="trade-page-header">
-      <div class="trade-page-title" id="tradePageTitle"></div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <button id="ozetiAlBtn" style="background:none;border:1px solid var(--border2);color:var(--text-mid);border-radius:9px;padding:7px 12px;font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;white-space:nowrap;">özeti al</button>
-        <button class="trade-page-close" id="closeTradePageBtn">×</button>
-      </div>
-    </div>
+    <div class="trade-page-header"><div class="trade-page-title" id="tradePageTitle"></div><button class="trade-page-close" id="closeTradePageBtn">×</button></div>
     <div class="info-card" id="tradeInfoCard">
       <div class="info-row c3"><div class="info-col"><span class="info-label" id="iDirLbl">Yön</span><span class="info-value" id="tpDir">—</span></div><div class="info-div"></div><div class="info-col"><span class="info-label" id="iResLbl">Sonuç</span><span class="info-value" id="tpResult">—</span></div><div class="info-div"></div><div class="info-col"><span class="info-label">TF</span><span class="info-value mid" id="tpTF">—</span></div></div>
       <div class="info-row c2"><div class="info-col"><span class="info-label">RR</span><span class="info-value" id="tpRR">—</span></div><div class="info-div"></div><div class="info-col"><span class="info-label" id="iTutarLbl">Tutar</span><span class="info-value" id="tpDollar">—</span></div></div>
@@ -370,9 +364,7 @@ textarea::placeholder { color:#333; font-style:italic; }
         <button id="tpUrlAddBtn" style="background:none;border:1px solid var(--border2);color:var(--text-mid);border-radius:9px;padding:8px 12px;font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;" id="urlAddBtn">ekle</button>
       </div>
     </div>
-    <div><div class="sec-title" id="lblNote" style="margin-bottom:8px">Not</div><textarea class="tp-note" id="tpNoteArea" placeholder="Bu trade hakkında notların..."></textarea>
-      <input type="text" id="tpSummaryInput" placeholder="Trade özeti (tek cümle)..." style="margin-top:8px;width:100%;background:none;border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:10px 14px;outline:none;">
-    </div>
+    <div><div class="sec-title" id="lblNote" style="margin-bottom:8px">Not</div><textarea class="tp-note" id="tpNoteArea" placeholder="Bu trade hakkında notların..."></textarea></div>
     <div class="status-trade" id="statusTrade"></div>
     <div class="trade-action-btns"><button class="edit-trade-btn" id="editTradeBtn">Düzenle</button><button class="delete-trade-btn" id="deleteTradeBtn">Sil</button></div>
   </div>
@@ -384,18 +376,11 @@ textarea::placeholder { color:#333; font-style:italic; }
     <div class="settings-hdr"><div class="settings-title" id="settingsTitle">Ayarlar</div><button class="settings-close" id="settingsClose">×</button></div>
     <div>
       <div class="settings-sec-lbl" id="sLblName">İsim</div>
-      <input type="text" id="userNameInput" placeholder="Adını gir..." style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:10px 14px;outline:none;">
+      <input type="text" id="userNameInput" placeholder="Adını gir..." style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:10px 14px;outline:none;">
       <div class="color-dot-row">
         <button class="welcome-color-btn" data-color="green" style="background:linear-gradient(105deg,#2d6e4a,#4caf7d,#7dd4a8,#4caf7d,#2d6e4a);"></button>
         <button class="welcome-color-btn" data-color="teal" style="background:linear-gradient(105deg,#0d7a7a,#1ac8c8,#8ff5f5,#1ac8c8,#0d7a7a);"></button>
         <button class="welcome-color-btn" data-color="red" style="background:linear-gradient(105deg,#8b1a1a,#e05c5c,#ffaaaa,#e05c5c,#8b1a1a);"></button>
-      </div>
-    </div>
-    <div>
-      <div class="settings-sec-lbl" id="sLblSocial">Sosyal Medya</div>
-      <div style="display:flex;align-items:center;">
-        <span style="background:var(--surface2);border:1px solid var(--border2);border-right:none;border-radius:10px 0 0 10px;padding:10px 12px;color:var(--text-mid);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;">@</span>
-        <input type="text" id="socialInput" placeholder="sosyalmedyaadin" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-left:none;border-radius:0 10px 10px 0;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:10px 14px;outline:none;">
       </div>
     </div>
     <div><div class="settings-sec-lbl" id="sLblCurr">Para Birimi</div><div style="display:flex;gap:8px;"><button class="curr-btn" data-curr="$">$ Dolar</button><button class="curr-btn" data-curr="€">€ Euro</button><button class="curr-btn" data-curr="£">£ Sterlin</button><button class="curr-btn" data-curr="₺">₺ Lira</button></div></div>
@@ -407,56 +392,11 @@ textarea::placeholder { color:#333; font-style:italic; }
         <button class="theme-btn" id="themeLight"><div class="theme-preview theme-preview-light"><div class="theme-preview-hdr"><span style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#1a1814;">Haziran</span></div><div class="theme-preview-bar"><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div></div></div><span class="theme-lbl" id="lblThemeLight">Açık</span></button>
       </div>
     </div>
-    <div>
-      <div class="settings-sec-lbl">Özet Fotoğraf Çerçevesi</div>
-      <div style="display:flex;gap:8px;">
-        <button class="curr-btn active" id="frameColorDark" style="display:flex;align-items:center;justify-content:center;gap:6px;"><span style="width:12px;height:12px;border-radius:2px;background:#0c0c0c;border:1px solid #555;display:inline-block;flex-shrink:0;"></span>Siyah</button>
-        <button class="curr-btn" id="frameColorLight" style="display:flex;align-items:center;justify-content:center;gap:6px;"><span style="width:12px;height:12px;border-radius:2px;background:#f5f4f0;border:1px solid #ccc;display:inline-block;flex-shrink:0;"></span>Beyaz</button>
-      </div>
-    </div>
     <div style="text-align:right;"><button class="signout-btn" id="signOutBtn2">çıkış yap</button></div>
   </div>
 </div>
 
 <div class="viewer-overlay" id="viewerOverlay"><button class="viewer-close" id="viewerClose">×</button><a class="viewer-download" id="viewerDownload" download="foto.jpg">⬇</a><img class="viewer-img" id="viewerImg" src="" alt=""></div>
-
-<!-- SUMMARY PREVIEW MODAL -->
-<div id="summaryModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:400;flex-direction:column;align-items:center;justify-content:flex-start;padding:16px;overflow-y:auto;">
-  <!-- Entry/Stop/Exit form step -->
-  <div id="summaryFormStep" style="width:100%;max-width:460px;display:flex;flex-direction:column;gap:14px;padding-bottom:20px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;">
-      <span style="font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:#fff;">Fiyat Seviyeleri</span>
-      <button id="summarySkipBtn" style="background:none;border:1px solid #444;color:#aaa;border-radius:8px;padding:7px 14px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;">Atla →</button>
-    </div>
-    <p style="font-size:11px;color:#888;font-family:'DM Mono',monospace;">Entry, Stop ve Exit girebilirsin. Boş bıraktıklarını göstermeyeceğim.</p>
-    <input type="text" id="summaryEntry" placeholder="Entry fiyatı (ör: 19,450.00)" style="background:#1a1a1a;border:1px solid #333;border-radius:10px;color:#eee;font-family:'DM Mono',monospace;font-size:13px;padding:11px 14px;outline:none;width:100%;">
-    <input type="text" id="summaryStop" placeholder="Stop fiyatı (ör: 19,320.00)" style="background:#1a1a1a;border:1px solid #333;border-radius:10px;color:#eee;font-family:'DM Mono',monospace;font-size:13px;padding:11px 14px;outline:none;width:100%;">
-    <input type="text" id="summaryExit" placeholder="Exit fiyatı (ör: 19,660.00)" style="background:#1a1a1a;border:1px solid #333;border-radius:10px;color:#eee;font-family:'DM Mono',monospace;font-size:13px;padding:11px 14px;outline:none;width:100%;">
-    <button id="summaryGenerateBtn" style="background:#fff;border:none;border-radius:10px;color:#000;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:13px;cursor:pointer;width:100%;">Önizlemeyi Oluştur</button>
-  </div>
-
-  <!-- Preview step -->
-  <div id="summaryPreviewStep" style="display:none;width:100%;max-width:460px;flex-direction:column;gap:12px;">
-    <!-- top bar: indir + tema + kapat -->
-    <div style="display:flex;gap:8px;align-items:center;">
-      <a id="summaryDownloadBtn" style="flex:1;background:#fff;color:#000;border:none;border-radius:10px;padding:11px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;display:block;">⬇ İndir</a>
-      <button id="summaryThemeBtn" style="background:none;border:1px solid #444;color:#ccc;border-radius:10px;padding:11px 14px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;">◑ Tema</button>
-      <button id="summaryCloseBtn" style="background:none;border:1px solid #444;color:#ccc;border-radius:10px;padding:11px 14px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;">✕</button>
-    </div>
-    <!-- carousel -->
-    <div id="summaryCarousel" style="overflow:hidden;border-radius:14px;position:relative;">
-      <div id="summaryCarouselTrack" style="display:flex;transition:transform 0.35s cubic-bezier(.22,1,.36,1);">
-        <!-- slide 0: özet canvas -->
-        <div class="carousel-slide" style="flex:0 0 100%;">
-          <canvas id="summaryCanvas" style="width:100%;display:block;border-radius:14px;"></canvas>
-        </div>
-        <!-- photo slides injected by JS -->
-      </div>
-    </div>
-    <!-- dots -->
-    <div id="summaryDots" style="display:flex;justify-content:center;gap:6px;"></div>
-  </div>
-</div>
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -521,8 +461,6 @@ let lang = localStorage.getItem("lang") || "tr";
 let currency = localStorage.getItem("currency") || "$";
 let userName = localStorage.getItem("userName") || "";
 let welcomeColor = localStorage.getItem("welcomeColor") || "green";
-let socialName = localStorage.getItem("socialName") || "";
-let summaryCardTheme = document.body.classList.contains("light") ? "light" : "dark";
 function S(k) { return (lang==="en"?EN:TR)[k] || k; }
 
 const KZ_LABELS = {asia:"Asia",ldn:"London",nyam:"NY AM",lunch:"NY Lunch",nypm:"NY PM"};
@@ -558,7 +496,7 @@ onAuthStateChanged(auth, user=>{
 });
 document.getElementById("googleSignInBtn").addEventListener("click",async()=>{
   try{await signInWithPopup(auth,new GoogleAuthProvider());}
-  catch(e){document.getElementById("loginError").textContent=e.message;document.getElementById("loginError").style.display="block";}
+  catch(e){document.getElementById("loginError").textContent=S("signIn")+" failed: "+e.message;document.getElementById("loginError").style.display="block";}
 });
 document.getElementById("signOutBtn").addEventListener("click",()=>signOut(auth));
 document.getElementById("signOutBtn2").addEventListener("click",()=>signOut(auth));
@@ -568,7 +506,7 @@ function entryRef(y,m,d){return doc(db,"users",currentUser.uid,"entries",`${y}_$
 async function loadEntry(y,m,d){
   try{
     const snap=await getDoc(entryRef(y,m,d)); const data=snap.exists()?snap.data():{};
-    return{note:data.note||"",pnl:data.pnl||"",trades:(data.trades||[]).map(t=>({id:t.id||Date.now(),pair:(t.pair||"").toUpperCase(),dir:t.dir||null,result:t.result||null,tf:t.tf||"",rr:t.rr||"",dollar:t.dollar||"",kz:t.kz||null,setup:t.setup||null,trend:t.trend||null,rev:t.rev||null,note:t.note||"",summary:t.summary||"",photos:t.photos||[]}))};
+    return{note:data.note||"",pnl:data.pnl||"",trades:(data.trades||[]).map(t=>({id:t.id||Date.now(),pair:(t.pair||"").toUpperCase(),dir:t.dir||null,result:t.result||null,tf:t.tf||"",rr:t.rr||"",dollar:t.dollar||"",kz:t.kz||null,setup:t.setup||null,trend:t.trend||null,rev:t.rev||null,note:t.note||"",photos:t.photos||[]}))};
   }catch(e){console.error(e);return{note:"",pnl:"",trades:[]};}
 }
 async function saveEntry(y,m,d,data){
@@ -587,7 +525,6 @@ function firstDay(y,m){let d=new Date(y,m,1).getDay();return d===0?6:d-1;}
 
 // ── RENDER ──
 async function render(){
-  if(!currentUser) return;
   const M=S("months"), D=S("days");
   document.getElementById("monthName").textContent=M[curMonth];
   document.getElementById("yearLabel").textContent=curYear;
@@ -795,7 +732,6 @@ async function openTradePage(y,m,d,idx){
   document.getElementById("editTradeBtn").textContent=S("edit");
   const entry=await loadEntry(y,m,d);const t=entry.trades[idx];if(!t)return;
   fillTradeInfo(t);document.getElementById("tpNoteArea").value=t.note||"";
-  document.getElementById("tpSummaryInput").value=t.summary||"";
   renderTradePhotos(t.photos||[]);
   history.pushState({page:"trade"}, "");
   document.getElementById("tradePage").classList.add("open");
@@ -878,12 +814,6 @@ document.getElementById("tpNoteArea").addEventListener("input",e=>{
   tradeNoteTimer=setTimeout(async()=>{const {y,m,d}=openTradeDay;const entry=await loadEntry(y,m,d);if(entry.trades[openTradeIdx]){entry.trades[openTradeIdx].note=e.target.value;await saveEntry(y,m,d,entry);}setStatusTrade(S("saved"));setTimeout(()=>setStatusTrade(""),2000);},800);
 });
 
-document.getElementById("tpSummaryInput").addEventListener("input",e=>{
-  if(!openTradeDay||openTradeIdx===null)return;
-  clearTimeout(tradeNoteTimer);
-  tradeNoteTimer=setTimeout(async()=>{const {y,m,d}=openTradeDay;const entry=await loadEntry(y,m,d);if(entry.trades[openTradeIdx]){entry.trades[openTradeIdx].summary=e.target.value;await saveEntry(y,m,d,entry);}},800);
-});
-
 // ── PHOTOS ──
 function renderTradePhotos(photos){
   const grid=document.getElementById("tpPhotoGrid");grid.innerHTML="";
@@ -935,308 +865,6 @@ function openViewer(src){document.getElementById("viewerImg").src=src;document.g
 function closeViewer(){document.getElementById("viewerOverlay").classList.remove("open");}
 document.getElementById("viewerClose").addEventListener("click",closeViewer);
 document.getElementById("viewerOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("viewerOverlay"))closeViewer();});
-
-// ── ÖZET AL ──
-let currentSummaryTrade = null;
-let currentSummaryDay = null;
-
-document.getElementById("ozetiAlBtn").addEventListener("click",()=>{
-  if(!openTradeDay||openTradeIdx===null)return;
-  const modal=document.getElementById("summaryModal");
-  modal.style.display="flex";
-  document.getElementById("summaryFormStep").style.display="flex";
-  document.getElementById("summaryFormStep").style.flexDirection="column";
-  document.getElementById("summaryPreviewStep").style.display="none";
-  document.getElementById("summaryEntry").value="";
-  document.getElementById("summaryStop").value="";
-  document.getElementById("summaryExit").value="";
-  summaryCardTheme=document.body.classList.contains("light")?"light":"dark";
-});
-
-async function buildSummaryCanvas(entry,stop,exit,theme){
-  const {y,m,d}=openTradeDay;
-  const tradeEntry=await loadEntry(y,m,d);
-  const t=tradeEntry.trades[openTradeIdx];
-  if(!t)return;
-
-  const SIZE=1080;
-  const canvas=document.getElementById("summaryCanvas");
-  canvas.width=SIZE; canvas.height=SIZE;
-  const ctx=canvas.getContext("2d");
-
-  const isDark=theme==="dark";
-  const BG=isDark?"#0c0c0c":"#f5f4f0";
-  const FG=isDark?"#e0e0e0":"#1a1814";
-  const FG2=isDark?"#888":"#7a736a";
-  const FG3=isDark?"#444":"#d4d0ca";
-  const ACCENT_GREEN="#4caf7d";
-  const ACCENT_RED="#e05c5c";
-  const ACCENT=t.result==="tp"?ACCENT_GREEN:t.result==="sl"?ACCENT_RED:"#5b8dee";
-
-  // background
-  ctx.fillStyle=BG;
-  ctx.fillRect(0,0,SIZE,SIZE);
-
-  // top divider line
-  ctx.strokeStyle=FG3; ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(54,148);ctx.lineTo(SIZE-54,148);ctx.stroke();
-
-  // name (top left)
-  if(userName){
-    ctx.fillStyle=FG2;
-    ctx.font="500 38px Inter, sans-serif";
-    ctx.textAlign="left";
-    ctx.fillText(userName,54,100);
-  }
-
-  // rev type (top right)
-  const revText=t.rev==="r"?"REVERSAL":t.rev==="c"?"CONTINUATION":"";
-  if(revText){
-    ctx.fillStyle=FG2;
-    ctx.font="500 34px Inter, sans-serif";
-    ctx.textAlign="right";
-    ctx.fillText(revText,SIZE-54,100);
-  }
-
-  // INSTRUMENT label
-  ctx.fillStyle=FG2;
-  ctx.font="500 32px Inter, sans-serif";
-  ctx.textAlign="left";
-  ctx.fillText("INSTRUMENT",54,210);
-
-  // pair name (big)
-  ctx.fillStyle=FG;
-  ctx.font="800 160px Inter, sans-serif";
-  ctx.textAlign="left";
-  ctx.fillText("$"+t.pair,54,390);
-
-  // Long/Short badge
-  const dirText=t.dir==="long"?"▲ LONG":"▼ SHORT";
-  const badgeBG=t.dir==="long"?"rgba(76,175,125,0.18)":"rgba(224,92,92,0.18)";
-  const badgeColor=t.dir==="long"?ACCENT_GREEN:ACCENT_RED;
-  const badgeW=240, badgeH=68, badgeX=SIZE-54-badgeW, badgeY=310;
-  ctx.fillStyle=badgeBG;
-  roundRect(ctx,badgeX,badgeY,badgeW,badgeH,14);
-  ctx.fill();
-  ctx.strokeStyle=badgeColor; ctx.lineWidth=2;
-  roundRect(ctx,badgeX,badgeY,badgeW,badgeH,14);
-  ctx.stroke();
-  ctx.fillStyle=badgeColor;
-  ctx.font="600 36px Inter, sans-serif";
-  ctx.textAlign="center";
-  ctx.fillText(dirText,badgeX+badgeW/2,badgeY+44);
-
-  // divider
-  ctx.strokeStyle=FG3; ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(54,420);ctx.lineTo(SIZE-54,420);ctx.stroke();
-
-  // NET P&L label
-  ctx.fillStyle=FG2;
-  ctx.font="500 36px Inter, sans-serif";
-  ctx.textAlign="center";
-  ctx.fillText("NET P&L",SIZE/2,490);
-
-  // P&L value
-  const pnlVal=t.dollar?((t.result==="tp"?"+":t.result==="sl"?"-":"")+currency+t.dollar):"—";
-  ctx.fillStyle=ACCENT;
-  ctx.font="800 150px Inter, sans-serif";
-  ctx.textAlign="center";
-  ctx.fillText(pnlVal,SIZE/2,640);
-
-  // trade summary text - always right below PnL
-  const summaryText=t.summary||"";
-  if(summaryText){
-    const summaryColor=isDark?"#a0c4ff":"#4a6fa5";
-    ctx.fillStyle=summaryColor;
-    ctx.font="italic 500 42px 'Playfair Display', Georgia, serif";
-    ctx.textAlign="center";
-    const maxW=SIZE-140;
-    wrapText(ctx,summaryText,SIZE/2,780,maxW,58);
-  }
-
-  // divider before entry/stop/exit
-  const hasESE=entry||stop||exit;
-  if(hasESE){
-    ctx.strokeStyle=FG3; ctx.lineWidth=2;
-    const divY=summaryText?840:730;
-    ctx.beginPath();ctx.moveTo(54,divY);ctx.lineTo(SIZE-54,divY);ctx.stroke();
-    const colY=divY+30;
-    const cols=[{lbl:"ENTRY",val:entry},{lbl:"STOP",val:stop},{lbl:"EXIT",val:exit}].filter(c=>c.val);
-    const colW=(SIZE-108)/cols.length;
-    cols.forEach((col,i)=>{
-      const cx=54+colW*i+colW/2;
-      ctx.fillStyle=FG2; ctx.font="500 30px Inter, sans-serif"; ctx.textAlign="center";
-      ctx.fillText(col.lbl,cx,colY+40);
-      ctx.fillStyle=ACCENT; ctx.font="700 44px Inter, sans-serif";
-      ctx.fillText(col.val,cx,colY+100);
-    });
-    // divider between columns
-    for(let i=1;i<cols.length;i++){
-      ctx.strokeStyle=FG3; ctx.lineWidth=1;
-      ctx.beginPath();ctx.moveTo(54+colW*i,divY+10);ctx.lineTo(54+colW*i,divY+130);ctx.stroke();
-    }
-  }
-
-  // bottom divider
-  ctx.strokeStyle=FG3; ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(54,SIZE-120);ctx.lineTo(SIZE-54,SIZE-120);ctx.stroke();
-
-  // date (bottom left)
-  const months=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-  const dateStr=`${months[openTradeDay.m]} ${openTradeDay.d} ${openTradeDay.y}`;
-  ctx.fillStyle=FG2; ctx.font="500 34px Inter, sans-serif"; ctx.textAlign="left";
-  ctx.fillText(dateStr,54,SIZE-60);
-
-  // social (bottom right)
-  if(socialName){
-    ctx.fillStyle=FG2; ctx.font="500 34px Inter, sans-serif"; ctx.textAlign="right";
-    ctx.fillText("@"+socialName,SIZE-54,SIZE-60);
-  }
-}
-
-
-
-function roundRect(ctx,x,y,w,h,r){
-  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
-}
-
-function wrapText(ctx,text,x,y,maxW,lineH){
-  const words=text.split(" ");let line="";
-  for(let i=0;i<words.length;i++){
-    const test=line+(line?" ":"")+words[i];
-    if(ctx.measureText(test).width>maxW&&line){ctx.fillText(line,x,y);line=words[i];y+=lineH;}
-    else line=test;
-  }
-  if(line)ctx.fillText(line,x,y);
-}
-
-let carouselIndex = 0;
-let carouselTotal = 0;
-
-async function generateSummaryPreview(){
-  const entry=document.getElementById("summaryEntry").value.trim();
-  const stop=document.getElementById("summaryStop").value.trim();
-  const exit=document.getElementById("summaryExit").value.trim();
-
-  // build canvas slide
-  await buildSummaryCanvas(entry,stop,exit,summaryCardTheme);
-
-  // build photo slides
-  const track=document.getElementById("summaryCarouselTrack");
-  // remove old photo slides (keep slide 0 = canvas)
-  while(track.children.length>1) track.removeChild(track.lastChild);
-
-  // get current trade photos
-  const {y,m,d}=openTradeDay;
-  const tradeEntry=await loadEntry(y,m,d);
-  const t=tradeEntry.trades[openTradeIdx];
-  const photos=(t&&t.photos)||[];
-
-  photos.forEach((src,pi)=>{
-    const slide=document.createElement("div");
-    slide.className="carousel-slide";
-    slide.style.cssText="flex:0 0 100%;";
-    const wrapper=document.createElement("div");
-    wrapper.style.cssText="width:100%;padding-top:100%;position:relative;border-radius:14px;overflow:hidden;background:#000;";
-    const img=document.createElement("img");
-    img.src=src;
-    img.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;";
-    wrapper.appendChild(img);
-    slide.appendChild(wrapper);
-    track.appendChild(slide);
-  });
-
-  carouselTotal=1+photos.length;
-  carouselIndex=0;
-  updateCarousel();
-
-  document.getElementById("summaryFormStep").style.display="none";
-  const ps=document.getElementById("summaryPreviewStep");
-  ps.style.display="flex"; ps.style.flexDirection="column";
-}
-
-function updateCarousel(){
-  const track=document.getElementById("summaryCarouselTrack");
-  track.style.transform=`translateX(-${carouselIndex*100}%)`;
-
-  // dots
-  const dots=document.getElementById("summaryDots");
-  dots.innerHTML="";
-  if(carouselTotal>1){
-    for(let i=0;i<carouselTotal;i++){
-      const dot=document.createElement("div");
-      dot.style.cssText=`width:${i===carouselIndex?18:6}px;height:6px;border-radius:3px;background:${i===carouselIndex?"#fff":"#555"};transition:all 0.3s;`;
-      dots.appendChild(dot);
-    }
-  }
-
-  // update download button
-  updateSummaryDownload();
-}
-
-function updateSummaryDownload(){
-  const a=document.getElementById("summaryDownloadBtn");
-  if(carouselIndex===0){
-    // canvas download
-    const canvas=document.getElementById("summaryCanvas");
-    a.href=canvas.toDataURL("image/png",1.0);
-    a.download=`trade-ozet-${Date.now()}.png`;
-    a.style.display="block";
-  } else {
-    const track=document.getElementById("summaryCarouselTrack");
-    const slide=track.children[carouselIndex];
-    const img=slide&&slide.querySelector("img");
-    if(img){
-      const sz=1080;
-      const off=document.createElement("canvas");
-      off.width=sz;off.height=sz;
-      const oc=off.getContext("2d");
-      const tmp=new Image();
-      tmp.crossOrigin="anonymous";
-      tmp.onload=()=>{
-        const s=Math.min(tmp.width,tmp.height);
-        oc.drawImage(tmp,(tmp.width-s)/2,(tmp.height-s)/2,s,s,0,0,sz,sz);
-        a.href=off.toDataURL("image/png",1.0);
-        a.download=`trade-foto-${carouselIndex}-${Date.now()}.png`;
-      };
-      tmp.src=img.src;
-    }
-    a.style.display="block";
-  }
-}
-
-// swipe support
-(()=>{
-  let startX=0;
-  const car=document.getElementById("summaryCarousel");
-  car.addEventListener("touchstart",e=>{startX=e.touches[0].clientX;},{passive:true});
-  car.addEventListener("touchend",e=>{
-    const dx=startX-e.changedTouches[0].clientX;
-    if(Math.abs(dx)>40){
-      if(dx>0&&carouselIndex<carouselTotal-1){carouselIndex++;updateCarousel();}
-      else if(dx<0&&carouselIndex>0){carouselIndex--;updateCarousel();}
-    }
-  });
-})();
-
-document.getElementById("summaryGenerateBtn").addEventListener("click",generateSummaryPreview);
-document.getElementById("summarySkipBtn").addEventListener("click",()=>{
-  document.getElementById("summaryEntry").value="";
-  document.getElementById("summaryStop").value="";
-  document.getElementById("summaryExit").value="";
-  generateSummaryPreview();
-});
-document.getElementById("summaryThemeBtn").addEventListener("click",async()=>{
-  summaryCardTheme=summaryCardTheme==="dark"?"light":"dark";
-  const entry=document.getElementById("summaryEntry").value.trim();
-  const stop=document.getElementById("summaryStop").value.trim();
-  const exit=document.getElementById("summaryExit").value.trim();
-  await buildSummaryCanvas(entry,stop,exit,summaryCardTheme);
-  updateSummaryDownload();
-});
-document.getElementById("summaryCloseBtn").addEventListener("click",()=>{
-  document.getElementById("summaryModal").style.display="none";
-});
 
 // ── NAV ──
 document.getElementById("prevBtn").addEventListener("click",()=>{if(curMonth===0){curMonth=11;curYear--;}else curMonth--;render();});
@@ -1372,7 +1000,7 @@ function applyLang(l){
   document.getElementById("signOutBtn").textContent=S("signOut");
   document.getElementById("signOutBtn2").textContent=S("signOut");
   updateWelcome();
-  if(currentUser) render();
+  render();
 }
 document.querySelectorAll(".lang-btn").forEach(b=>b.addEventListener("click",()=>applyLang(b.dataset.lang)));
 
@@ -1381,11 +1009,22 @@ const nameInput=document.getElementById("userNameInput");
 nameInput.value=userName;
 nameInput.addEventListener("input",()=>{userName=nameInput.value.trim();localStorage.setItem("userName",userName);updateWelcome();});
 
-const socialInput=document.getElementById("socialInput");
-socialInput.value=socialName;
-socialInput.addEventListener("input",()=>{socialName=socialInput.value.trim();localStorage.setItem("socialName",socialName);});
-
 function updateWelcome(){
   const el=document.getElementById("welcomeText");if(!el)return;
   el.textContent=userName?`${S("welcome")}, ${userName}`:S("welcome");
-  applyWelcomeCo
+  applyWelcomeColor(welcomeColor);
+}
+
+// ── INIT ──
+applyTheme(localStorage.getItem("theme")||"dark");
+applyCurrency(currency);
+// applyLang sets lang buttons, translates UI, calls render
+// but render needs currentUser - so we call applyLang for UI only, render happens after auth
+lang=localStorage.getItem("lang")||"tr";
+document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
+// translate static labels without calling render
+applyLang(lang);
+applyWelcomeColor(welcomeColor);
+</script>
+</body>
+</html>
