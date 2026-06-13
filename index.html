@@ -562,8 +562,15 @@ onAuthStateChanged(auth, async user=>{
   }
 });
 document.getElementById("googleSignInBtn").addEventListener("click",async()=>{
-  try{await signInWithPopup(auth,new GoogleAuthProvider());}
-  catch(e){document.getElementById("loginError").textContent=S("signIn")+" failed: "+e.message;document.getElementById("loginError").style.display="block";}
+  const errEl = document.getElementById("loginError");
+  errEl.style.display="block";
+  errEl.textContent="Giriş deneniyor...";
+  try{
+    await signInWithPopup(auth,new GoogleAuthProvider());
+  } catch(e){
+    errEl.textContent="HATA: "+e.code+" — "+e.message;
+    console.error(e);
+  }
 });
 document.getElementById("signOutBtn").addEventListener("click",()=>signOut(auth));
 document.getElementById("signOutBtn2").addEventListener("click",()=>signOut(auth));
@@ -1404,4 +1411,4 @@ applyTheme(localStorage.getItem("theme")||"dark");
 applyCurrency(currency);
 lang=localStorage.getItem("lang")||"tr";
 // Only update UI labels, do NOT call render yet (no currentUser yet)
-document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.dataset
+document.querySel
