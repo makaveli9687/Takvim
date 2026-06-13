@@ -407,13 +407,6 @@ textarea::placeholder { color:#333; font-style:italic; }
         <button class="theme-btn" id="themeLight"><div class="theme-preview theme-preview-light"><div class="theme-preview-hdr"><span style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#1a1814;">Haziran</span></div><div class="theme-preview-bar"><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div></div></div><span class="theme-lbl" id="lblThemeLight">Açık</span></button>
       </div>
     </div>
-    <div>
-      <div class="settings-sec-lbl">Özet Fotoğraf Çerçevesi</div>
-      <div style="display:flex;gap:8px;">
-        <button class="curr-btn active" id="frameColorDark" style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#0c0c0c;border:1px solid #555;display:inline-block;"></span>Siyah</button>
-        <button class="curr-btn" id="frameColorLight" style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:3px;background:#f5f4f0;border:1px solid #ccc;display:inline-block;"></span>Beyaz</button>
-      </div>
-    </div>
     <div style="text-align:right;"><button class="signout-btn" id="signOutBtn2">çıkış yap</button></div>
   </div>
 </div>
@@ -1413,4 +1406,15 @@ function applyLang(l){
   document.getElementById("iResLbl").textContent=S("resultLbl");
   document.getElementById("iTutarLbl").textContent=S("amountLbl");
   document.getElementById("iKZLbl").textContent=S("kzLbl");
-  document.getElementById("iSetupLbl")
+  document.getElementById("iSetupLbl").textContent=S("setupLbl");
+  document.getElementById("iTrendLbl").textContent=S("trendLbl");
+  document.getElementById("iRevLbl").textContent=S("revLbl");
+  // edit form
+  document.getElementById("saveEditTradeBtn").textContent=S("saveEdit");
+  document.getElementById("eRevLbl").textContent=S("revLbl");
+  document.getElementById("eKZLbl").textContent=S("kzLbl");
+  document.getElementById("eSetupLbl").textContent=S("setupLbl");
+  document.getElementById("eTrendLbl").textContent=S("trendLbl");
+  document.getElementById("eLongBtn").textContent=S("long");
+  document.getElementById("eShortBtn").textContent=S("short");
+  document.g
