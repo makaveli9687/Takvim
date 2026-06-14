@@ -195,7 +195,8 @@ textarea::placeholder { color:#333; font-style:italic; }
 /* SETTINGS */
 .settings-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(6px); z-index:200; align-items:flex-end; justify-content:center; padding:16px; }
 .settings-overlay.open { display:flex; }
-.settings-panel { background:var(--surface); border:1px solid var(--border2); border-radius:20px; width:100%; max-width:460px; padding:24px; display:flex; flex-direction:column; gap:20px; animation:slideUp 0.22s cubic-bezier(.22,1,.36,1); max-height:88vh; overflow-y:auto; }
+.settings-panel { background:var(--surface); border:1px solid var(--border2); border-radius:20px; width:100%; max-width:460px; padding:24px; display:flex; flex-direction:column; gap:20px; animation:slideUp 0.22s cubic-bezier(.22,1,.36,1); max-height:88vh; overflow-y:auto; scrollbar-width:none; }
+.settings-panel::-webkit-scrollbar { display:none; }
 .settings-title { font-family:'Inter',sans-serif; font-size:18px; font-weight:700; color:var(--text); letter-spacing:-0.02em; }
 .settings-hdr { display:flex; align-items:center; justify-content:space-between; }
 .settings-close { background:none; border:none; color:var(--text-dim); font-size:24px; cursor:pointer; }
@@ -383,12 +384,6 @@ textarea::placeholder { color:#333; font-style:italic; }
   <div class="settings-panel">
     <div class="settings-hdr"><div class="settings-title" id="settingsTitle">Ayarlar</div><button class="settings-close" id="settingsClose">×</button></div>
     <div>
-      <div class="settings-sec-lbl">Hesap</div>
-      <div id="profileList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
-      <input type="text" id="profileNameInput" placeholder="Bu hesabın adı..." style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:9px 14px;outline:none;margin-bottom:6px;">
-      <button id="addProfileBtn" style="width:100%;background:none;border:1px dashed var(--border2);color:var(--text-mid);border-radius:10px;padding:9px;font-family:'DM Mono',monospace;font-size:12px;cursor:pointer;">+ Yeni hesap oluştur</button>
-    </div>
-    <div>
       <div class="settings-sec-lbl" id="sLblName">İsim</div>
       <input type="text" id="userNameInput" placeholder="Adını gir..." style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:10px 14px;outline:none;">
       <div class="color-dot-row">
@@ -406,6 +401,12 @@ textarea::placeholder { color:#333; font-style:italic; }
     </div>
     <div><div class="settings-sec-lbl" id="sLblCurr">Para Birimi</div><div style="display:flex;gap:8px;"><button class="curr-btn" data-curr="$">$ Dolar</button><button class="curr-btn" data-curr="€">€ Euro</button><button class="curr-btn" data-curr="£">£ Sterlin</button><button class="curr-btn" data-curr="₺">₺ Lira</button></div></div>
     <div><div class="settings-sec-lbl" id="sLblLang">Dil</div><div style="display:flex;gap:8px;"><button class="lang-btn" data-lang="tr">🇹🇷 Türkçe</button><button class="lang-btn" data-lang="en">🇬🇧 English</button></div></div>
+    <div>
+      <div class="settings-sec-lbl">Hesap</div>
+      <div id="profileList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+      <input type="text" id="profileNameInput" placeholder="Hesap adı..." style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:9px 14px;outline:none;margin-bottom:6px;display:none;">
+      <button id="addProfileBtn" style="width:100%;background:none;border:1px dashed var(--border2);color:var(--text-mid);border-radius:10px;padding:9px;font-family:'DM Mono',monospace;font-size:12px;cursor:pointer;">+ Yeni hesap oluştur</button>
+    </div>
     <div>
       <div class="settings-sec-lbl" id="sLblTheme">Tema</div>
       <div class="theme-row">
@@ -1078,7 +1079,7 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
       const cx=54+colW*i+colW/2;
       ctx.fillStyle=FG2; ctx.font="500 28px Inter, sans-serif"; ctx.textAlign="center";
       ctx.fillText(col.lbl,cx,colY+36);
-      ctx.fillStyle=ACCENT; ctx.font="700 40px Inter, sans-serif";
+      ctx.fillStyle=FG; ctx.font="700 40px Inter, sans-serif";
       ctx.fillText(col.val,cx,colY+86);
     });
     for(let i=1;i<cols.length;i++){
@@ -1310,6 +1311,21 @@ function renderProfiles(){
     btn.style.cssText=`flex:1;text-align:left;background:${isActive?"rgba(91,141,238,0.08)":"var(--surface2)"};border:1px solid ${isActive?"var(--blue)":"var(--border2)"};color:${isActive?"var(--blue)":"var(--text-mid)"};border-radius:10px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;`;
     btn.addEventListener("click",()=>switchProfile(p.id));
     row.appendChild(btn);
+    // edit pencil
+    const edit=document.createElement("button");
+    edit.textContent="✏️";
+    edit.style.cssText=`background:var(--surface2);border:1px solid var(--border2);color:var(--text-mid);border-radius:10px;padding:10px 12px;font-size:13px;cursor:pointer;`;
+    edit.addEventListener("click",e=>{
+      e.stopPropagation();
+      // switch to this profile first, then show name input
+      if(p.id!==currentProfile){currentProfile=p.id;saveProfiles();dotCache={};render();}
+      const np=document.getElementById("profileNameInput");
+      np.style.display="block";
+      np.value=p.name||"";
+      np.focus();
+      renderProfiles();
+    });
+    row.appendChild(edit);
     if(p.id!=="main"){
       const del=document.createElement("button");
       del.textContent="🗑";
@@ -1319,10 +1335,6 @@ function renderProfiles(){
     }
     list.appendChild(row);
   });
-  // current profile name input
-  const np=document.getElementById("profileNameInput");
-  np.value=curProfileName();
-  np.placeholder=currentProfile==="main"?"Ana hesap adı (boşsa 'Ana Hesap')":"Bu hesabın adı...";
 }
 
 function switchProfile(id){
@@ -1350,6 +1362,10 @@ document.getElementById("addProfileBtn").addEventListener("click",()=>{
   saveProfiles();
   dotCache={};
   renderProfiles();
+  const np=document.getElementById("profileNameInput");
+  np.style.display="block";
+  np.value="";
+  np.focus();
   render();
 });
 
@@ -1357,7 +1373,10 @@ document.getElementById("profileNameInput").addEventListener("input",e=>{
   const p=profiles.find(x=>x.id===currentProfile);
   if(p){ p.name=e.target.value.trim(); saveProfiles(); }
 });
-document.getElementById("profileNameInput").addEventListener("blur",()=>renderProfiles());
+document.getElementById("profileNameInput").addEventListener("blur",()=>{
+  document.getElementById("profileNameInput").style.display="none";
+  renderProfiles();
+});
 
 // ── WELCOME COLOR ──
 const WC_GRADS={
