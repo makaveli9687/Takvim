@@ -383,6 +383,12 @@ textarea::placeholder { color:#333; font-style:italic; }
   <div class="settings-panel">
     <div class="settings-hdr"><div class="settings-title" id="settingsTitle">Ayarlar</div><button class="settings-close" id="settingsClose">×</button></div>
     <div>
+      <div class="settings-sec-lbl">Hesap</div>
+      <div id="profileList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+      <input type="text" id="profileNameInput" placeholder="Bu hesabın adı..." style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:9px 14px;outline:none;margin-bottom:6px;">
+      <button id="addProfileBtn" style="width:100%;background:none;border:1px dashed var(--border2);color:var(--text-mid);border-radius:10px;padding:9px;font-family:'DM Mono',monospace;font-size:12px;cursor:pointer;">+ Yeni hesap oluştur</button>
+    </div>
+    <div>
       <div class="settings-sec-lbl" id="sLblName">İsim</div>
       <input type="text" id="userNameInput" placeholder="Adını gir..." style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;padding:10px 14px;outline:none;">
       <div class="color-dot-row">
@@ -517,6 +523,14 @@ let userName = localStorage.getItem("userName") || "";
 let welcomeColor = localStorage.getItem("welcomeColor") || "green";
 let socialName = localStorage.getItem("socialName") || "";
 let summaryCardTheme = document.body.classList.contains("light") ? "light" : "dark";
+
+// ── PROFILES ──
+let profiles = JSON.parse(localStorage.getItem("profiles") || '[{"id":"main","name":""}]');
+if(!profiles.find(p=>p.id==="main")) profiles.unshift({id:"main",name:""});
+let currentProfile = localStorage.getItem("currentProfile") || "main";
+if(!profiles.find(p=>p.id===currentProfile)) currentProfile="main";
+function saveProfiles(){ localStorage.setItem("profiles",JSON.stringify(profiles)); localStorage.setItem("currentProfile",currentProfile); }
+function curProfileName(){ const p=profiles.find(x=>x.id===currentProfile); return (p&&p.name)||""; }
 function S(k) { return (lang==="en"?EN:TR)[k] || k; }
 
 const KZ_LABELS = {asia:"Asia",ldn:"London",nyam:"NY AM",lunch:"NY Lunch",nypm:"NY PM"};
@@ -558,7 +572,10 @@ document.getElementById("signOutBtn").addEventListener("click",()=>signOut(auth)
 document.getElementById("signOutBtn2").addEventListener("click",()=>signOut(auth));
 
 // ── FIRESTORE ──
-function entryRef(y,m,d){return doc(db,"users",currentUser.uid,"entries",`${y}_${m}_${d}`);}
+function entryRef(y,m,d){
+  if(currentProfile==="main") return doc(db,"users",currentUser.uid,"entries",`${y}_${m}_${d}`);
+  return doc(db,"users",currentUser.uid,"profiles",currentProfile,"entries",`${y}_${m}_${d}`);
+}
 async function loadEntry(y,m,d){
   try{
     const snap=await getDoc(entryRef(y,m,d)); const data=snap.exists()?snap.data():{};
@@ -1052,39 +1069,38 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
   const hasESE=entry||stop||exit;
   if(hasESE){
     ctx.strokeStyle=FG3; ctx.lineWidth=2;
-    const divY=summaryText?840:730;
+    const divY=summaryText?870:780;
     ctx.beginPath();ctx.moveTo(54,divY);ctx.lineTo(SIZE-54,divY);ctx.stroke();
-    const colY=divY+30;
+    const colY=divY+20;
     const cols=[{lbl:"ENTRY",val:entry},{lbl:"STOP",val:stop},{lbl:"EXIT",val:exit}].filter(c=>c.val);
     const colW=(SIZE-108)/cols.length;
     cols.forEach((col,i)=>{
       const cx=54+colW*i+colW/2;
-      ctx.fillStyle=FG2; ctx.font="500 30px Inter, sans-serif"; ctx.textAlign="center";
-      ctx.fillText(col.lbl,cx,colY+40);
-      ctx.fillStyle=ACCENT; ctx.font="700 44px Inter, sans-serif";
-      ctx.fillText(col.val,cx,colY+100);
+      ctx.fillStyle=FG2; ctx.font="500 28px Inter, sans-serif"; ctx.textAlign="center";
+      ctx.fillText(col.lbl,cx,colY+36);
+      ctx.fillStyle=ACCENT; ctx.font="700 40px Inter, sans-serif";
+      ctx.fillText(col.val,cx,colY+86);
     });
-    // divider between columns
     for(let i=1;i<cols.length;i++){
       ctx.strokeStyle=FG3; ctx.lineWidth=1;
-      ctx.beginPath();ctx.moveTo(54+colW*i,divY+10);ctx.lineTo(54+colW*i,divY+130);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(54+colW*i,divY+8);ctx.lineTo(54+colW*i,divY+110);ctx.stroke();
     }
   }
 
   // bottom divider
   ctx.strokeStyle=FG3; ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(54,SIZE-120);ctx.lineTo(SIZE-54,SIZE-120);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(54,SIZE-130);ctx.lineTo(SIZE-54,SIZE-130);ctx.stroke();
 
   // date (bottom left)
   const months=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
   const dateStr=`${months[openTradeDay.m]} ${openTradeDay.d} ${openTradeDay.y}`;
   ctx.fillStyle=FG2; ctx.font="500 34px Inter, sans-serif"; ctx.textAlign="left";
-  ctx.fillText(dateStr,54,SIZE-60);
+  ctx.fillText(dateStr,54,SIZE-78);
 
   // social (bottom right)
   if(socialName){
     ctx.fillStyle=FG2; ctx.font="500 34px Inter, sans-serif"; ctx.textAlign="right";
-    ctx.fillText("@"+socialName,SIZE-54,SIZE-60);
+    ctx.fillText("@"+socialName,SIZE-54,SIZE-78);
   }
 }
 
@@ -1276,9 +1292,72 @@ document.getElementById("prevBtn").addEventListener("click",()=>{if(curMonth===0
 document.getElementById("nextBtn").addEventListener("click",()=>{if(curMonth===11){curMonth=0;curYear++;}else curMonth++;render();});
 
 // ── SETTINGS ──
-document.getElementById("settingsBtn").addEventListener("click",()=>document.getElementById("settingsOverlay").classList.add("open"));
+document.getElementById("settingsBtn").addEventListener("click",()=>{document.getElementById("settingsOverlay").classList.add("open");renderProfiles();});
 document.getElementById("settingsClose").addEventListener("click",()=>document.getElementById("settingsOverlay").classList.remove("open"));
 document.getElementById("settingsOverlay").addEventListener("click",e=>{if(e.target===document.getElementById("settingsOverlay"))document.getElementById("settingsOverlay").classList.remove("open");});
+
+// ── PROFILES UI ──
+function renderProfiles(){
+  const list=document.getElementById("profileList");
+  list.innerHTML="";
+  profiles.forEach(p=>{
+    const isActive=p.id===currentProfile;
+    const row=document.createElement("div");
+    row.style.cssText=`display:flex;align-items:center;gap:8px;`;
+    const btn=document.createElement("button");
+    const label=p.id==="main"?(p.name||"Ana Hesap"):(p.name||"İsimsiz hesap");
+    btn.textContent=(isActive?"● ":"○ ")+label;
+    btn.style.cssText=`flex:1;text-align:left;background:${isActive?"rgba(91,141,238,0.08)":"var(--surface2)"};border:1px solid ${isActive?"var(--blue)":"var(--border2)"};color:${isActive?"var(--blue)":"var(--text-mid)"};border-radius:10px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;`;
+    btn.addEventListener("click",()=>switchProfile(p.id));
+    row.appendChild(btn);
+    if(p.id!=="main"){
+      const del=document.createElement("button");
+      del.textContent="🗑";
+      del.style.cssText=`background:none;border:1px solid #3a1a1a;color:#7a3535;border-radius:10px;padding:10px 12px;font-size:13px;cursor:pointer;`;
+      del.addEventListener("click",e=>{e.stopPropagation();deleteProfile(p.id);});
+      row.appendChild(del);
+    }
+    list.appendChild(row);
+  });
+  // current profile name input
+  const np=document.getElementById("profileNameInput");
+  np.value=curProfileName();
+  np.placeholder=currentProfile==="main"?"Ana hesap adı (boşsa 'Ana Hesap')":"Bu hesabın adı...";
+}
+
+function switchProfile(id){
+  currentProfile=id;
+  saveProfiles();
+  dotCache={};
+  document.getElementById("settingsOverlay").classList.remove("open");
+  render();
+}
+
+function deleteProfile(id){
+  if(!confirm("Bu hesabı silmek istediğine emin misin? Bu hesabın trade verileri uygulamadan kaldırılır (Firebase'de kalır).")) return;
+  profiles=profiles.filter(p=>p.id!==id);
+  if(currentProfile===id) currentProfile="main";
+  saveProfiles();
+  dotCache={};
+  renderProfiles();
+  render();
+}
+
+document.getElementById("addProfileBtn").addEventListener("click",()=>{
+  const newId="p"+Date.now();
+  profiles.push({id:newId,name:""});
+  currentProfile=newId;
+  saveProfiles();
+  dotCache={};
+  renderProfiles();
+  render();
+});
+
+document.getElementById("profileNameInput").addEventListener("input",e=>{
+  const p=profiles.find(x=>x.id===currentProfile);
+  if(p){ p.name=e.target.value.trim(); saveProfiles(); }
+});
+document.getElementById("profileNameInput").addEventListener("blur",()=>renderProfiles());
 
 // ── WELCOME COLOR ──
 const WC_GRADS={
