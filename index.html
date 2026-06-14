@@ -407,13 +407,6 @@ textarea::placeholder { color:#333; font-style:italic; }
         <button class="theme-btn" id="themeLight"><div class="theme-preview theme-preview-light"><div class="theme-preview-hdr"><span style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#1a1814;">Haziran</span></div><div class="theme-preview-bar"><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div><div class="theme-preview-dot"></div></div></div><span class="theme-lbl" id="lblThemeLight">Açık</span></button>
       </div>
     </div>
-    <div>
-      <div class="settings-sec-lbl">Özet Fotoğraf Çerçevesi</div>
-      <div style="display:flex;gap:8px;">
-        <button class="curr-btn active" id="frameColorDark" style="display:flex;align-items:center;justify-content:center;gap:6px;"><span style="width:12px;height:12px;border-radius:2px;background:#0c0c0c;border:1px solid #555;display:inline-block;flex-shrink:0;"></span>Siyah</button>
-        <button class="curr-btn" id="frameColorLight" style="display:flex;align-items:center;justify-content:center;gap:6px;"><span style="width:12px;height:12px;border-radius:2px;background:#f5f4f0;border:1px solid #ccc;display:inline-block;flex-shrink:0;"></span>Beyaz</button>
-      </div>
-    </div>
     <div style="text-align:right;"><button class="signout-btn" id="signOutBtn2">çıkış yap</button></div>
   </div>
 </div>
@@ -1096,6 +1089,37 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
 
 
 
+function drawFramedPhoto(canvas,img){
+  const SIZE=1080;
+  const ctx=canvas.getContext("2d");
+  const isDark=summaryCardTheme==="dark";
+  const BG=isDark?"#0c0c0c":"#f5f4f0";
+  const FG=isDark?"#e0e0e0":"#1a1814";
+  const FG2=isDark?"#999":"#7a736a";
+  const topFrame=90, sideFrame=48, bottomFrame=58;
+  ctx.fillStyle=BG;
+  ctx.fillRect(0,0,SIZE,SIZE);
+  const imgW=SIZE-sideFrame*2;
+  const imgH=SIZE-topFrame-bottomFrame;
+  const s=Math.min(img.width,img.height);
+  const sx=(img.width-s)/2, sy=(img.height-s)/2;
+  ctx.drawImage(img,sx,sy,s,s,sideFrame,topFrame,imgW,imgH);
+  // left: name + @social
+  ctx.fillStyle=FG;
+  ctx.font="600 28px Inter, sans-serif";
+  ctx.textAlign="left";
+  let leftText=userName||"";
+  if(socialName) leftText+=(leftText?" · ":"")+"@"+socialName;
+  if(leftText) ctx.fillText(leftText,sideFrame,58);
+  // right: date
+  const mm=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+  const dateStr=`${mm[openTradeDay.m]} ${openTradeDay.d} ${openTradeDay.y}`;
+  ctx.fillStyle=FG2;
+  ctx.font="500 26px Inter, sans-serif";
+  ctx.textAlign="right";
+  ctx.fillText(dateStr,SIZE-sideFrame,58);
+}
+
 function roundRect(ctx,x,y,w,h,r){
   ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
 }
@@ -1136,14 +1160,16 @@ async function generateSummaryPreview(){
     const slide=document.createElement("div");
     slide.className="carousel-slide";
     slide.style.cssText="flex:0 0 100%;";
-    const wrapper=document.createElement("div");
-    wrapper.style.cssText="width:100%;padding-top:100%;position:relative;border-radius:14px;overflow:hidden;background:#000;";
-    const img=document.createElement("img");
-    img.src=src;
-    img.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;";
-    wrapper.appendChild(img);
-    slide.appendChild(wrapper);
+    const c=document.createElement("canvas");
+    c.width=1080; c.height=1080;
+    c.style.cssText="width:100%;display:block;border-radius:14px;";
+    slide.appendChild(c);
     track.appendChild(slide);
+    const im=new Image();
+    im.crossOrigin="anonymous";
+    im.onload=()=>drawFramedPhoto(c,im);
+    im.onerror=()=>{const im2=new Image();im2.onload=()=>drawFramedPhoto(c,im2);im2.src=src;};
+    im.src=src;
   });
 
   carouselTotal=1+photos.length;
@@ -1185,21 +1211,10 @@ function updateSummaryDownload(){
   } else {
     const track=document.getElementById("summaryCarouselTrack");
     const slide=track.children[carouselIndex];
-    const img=slide&&slide.querySelector("img");
-    if(img){
-      const sz=1080;
-      const off=document.createElement("canvas");
-      off.width=sz;off.height=sz;
-      const oc=off.getContext("2d");
-      const tmp=new Image();
-      tmp.crossOrigin="anonymous";
-      tmp.onload=()=>{
-        const s=Math.min(tmp.width,tmp.height);
-        oc.drawImage(tmp,(tmp.width-s)/2,(tmp.height-s)/2,s,s,0,0,sz,sz);
-        a.href=off.toDataURL("image/png",1.0);
-        a.download=`trade-foto-${carouselIndex}-${Date.now()}.png`;
-      };
-      tmp.src=img.src;
+    const c=slide&&slide.querySelector("canvas");
+    if(c){
+      a.href=c.toDataURL("image/png",1.0);
+      a.download=`trade-foto-${carouselIndex}-${Date.now()}.png`;
     }
     a.style.display="block";
   }
@@ -1232,6 +1247,17 @@ document.getElementById("summaryThemeBtn").addEventListener("click",async()=>{
   const stop=document.getElementById("summaryStop").value.trim();
   const exit=document.getElementById("summaryExit").value.trim();
   await buildSummaryCanvas(entry,stop,exit,summaryCardTheme);
+  // redraw photo slides with new theme
+  const track=document.getElementById("summaryCarouselTrack");
+  const {y,m,d}=openTradeDay;
+  const te=await loadEntry(y,m,d);
+  const tt=te.trades[openTradeIdx];
+  const phs=(tt&&tt.photos)||[];
+  for(let i=0;i<phs.length;i++){
+    const slide=track.children[i+1];
+    const c=slide&&slide.querySelector("canvas");
+    if(c){const im=new Image();im.crossOrigin="anonymous";im.onload=()=>drawFramedPhoto(c,im);im.onerror=()=>{const i2=new Image();i2.onload=()=>drawFramedPhoto(c,i2);i2.src=phs[i];};im.src=phs[i];}
+  }
   updateSummaryDownload();
 });
 document.getElementById("summaryCloseBtn").addEventListener("click",()=>{
