@@ -1020,7 +1020,7 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
   ctx.fillStyle=FG;
   ctx.font="800 160px Inter, sans-serif";
   ctx.textAlign="left";
-  ctx.fillText("$"+t.pair,54,390);
+  ctx.fillText(t.pair,54,390);
 
   // Long/Short badge
   const dirText=t.dir==="long"?"▲ LONG":"▼ SHORT";
@@ -1079,7 +1079,7 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
       const cx=54+colW*i+colW/2;
       ctx.fillStyle=FG2; ctx.font="500 28px Inter, sans-serif"; ctx.textAlign="center";
       ctx.fillText(col.lbl,cx,colY+34);
-      ctx.fillStyle=FG; ctx.font="700 40px Inter, sans-serif";
+      ctx.fillStyle=isDark?"rgba(224,224,224,0.7)":"rgba(26,24,20,0.65)"; ctx.font="500 38px Inter, sans-serif";
       ctx.fillText(col.val,cx,colY+82);
     });
     for(let i=1;i<cols.length;i++){
