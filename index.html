@@ -1070,7 +1070,7 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
   const hasESE=entry||stop||exit;
   if(hasESE){
     ctx.strokeStyle=FG3; ctx.lineWidth=2;
-    const divY=summaryText?870:780;
+    const divY=summaryText?850:760;
     ctx.beginPath();ctx.moveTo(54,divY);ctx.lineTo(SIZE-54,divY);ctx.stroke();
     const colY=divY+20;
     const cols=[{lbl:"ENTRY",val:entry},{lbl:"STOP",val:stop},{lbl:"EXIT",val:exit}].filter(c=>c.val);
@@ -1078,30 +1078,31 @@ async function buildSummaryCanvas(entry,stop,exit,theme){
     cols.forEach((col,i)=>{
       const cx=54+colW*i+colW/2;
       ctx.fillStyle=FG2; ctx.font="500 28px Inter, sans-serif"; ctx.textAlign="center";
-      ctx.fillText(col.lbl,cx,colY+36);
+      ctx.fillText(col.lbl,cx,colY+34);
       ctx.fillStyle=FG; ctx.font="700 40px Inter, sans-serif";
-      ctx.fillText(col.val,cx,colY+86);
+      ctx.fillText(col.val,cx,colY+82);
     });
     for(let i=1;i<cols.length;i++){
       ctx.strokeStyle=FG3; ctx.lineWidth=1;
-      ctx.beginPath();ctx.moveTo(54+colW*i,divY+8);ctx.lineTo(54+colW*i,divY+110);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(54+colW*i,divY+8);ctx.lineTo(54+colW*i,divY+100);ctx.stroke();
     }
   }
 
-  // bottom divider
+  // bottom divider (below entry/stop/exit, no overlap)
+  const bottomDivY=hasESE?(summaryText?850:760)+120:SIZE-130;
   ctx.strokeStyle=FG3; ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(54,SIZE-130);ctx.lineTo(SIZE-54,SIZE-130);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(54,bottomDivY);ctx.lineTo(SIZE-54,bottomDivY);ctx.stroke();
 
-  // date (bottom left)
+  // date + social: centered between bottom divider and card bottom
+  const textY=(bottomDivY+SIZE)/2+12;
   const months=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
   const dateStr=`${months[openTradeDay.m]} ${openTradeDay.d} ${openTradeDay.y}`;
   ctx.fillStyle=FG2; ctx.font="500 34px Inter, sans-serif"; ctx.textAlign="left";
-  ctx.fillText(dateStr,54,SIZE-78);
+  ctx.fillText(dateStr,54,textY);
 
-  // social (bottom right)
   if(socialName){
     ctx.fillStyle=FG2; ctx.font="500 34px Inter, sans-serif"; ctx.textAlign="right";
-    ctx.fillText("@"+socialName,SIZE-54,SIZE-78);
+    ctx.fillText("@"+socialName,SIZE-54,textY);
   }
 }
 
