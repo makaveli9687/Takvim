@@ -511,7 +511,8 @@ const EN = {
 };
 
 let lang = localStorage.getItem("lang") || "tr";
-let currency = localStorage.getItem("currency") || "$";
+let currency = localStorage.getItem("currency");
+if(!currency || !["$","€","£","₺"].includes(currency)) currency = "$";
 let userName = localStorage.getItem("userName") || "";
 let welcomeColor = localStorage.getItem("welcomeColor") || "green";
 let socialName = localStorage.getItem("socialName") || "";
@@ -1096,14 +1097,20 @@ function drawFramedPhoto(canvas,img){
   const BG=isDark?"#0c0c0c":"#f5f4f0";
   const FG=isDark?"#e0e0e0":"#1a1814";
   const FG2=isDark?"#999":"#7a736a";
-  const topFrame=90, sideFrame=48, bottomFrame=58;
+  const topFrame=90, sideFrame=48, bottomFrame=48;
   ctx.fillStyle=BG;
   ctx.fillRect(0,0,SIZE,SIZE);
   const imgW=SIZE-sideFrame*2;
   const imgH=SIZE-topFrame-bottomFrame;
   const s=Math.min(img.width,img.height);
   const sx=(img.width-s)/2, sy=(img.height-s)/2;
+  // rounded inner corners
+  const r=28;
+  ctx.save();
+  roundRect(ctx,sideFrame,topFrame,imgW,imgH,r);
+  ctx.clip();
   ctx.drawImage(img,sx,sy,s,s,sideFrame,topFrame,imgW,imgH);
+  ctx.restore();
   // left: name + @social
   ctx.fillStyle=FG;
   ctx.font="600 28px Inter, sans-serif";
@@ -1304,6 +1311,7 @@ document.getElementById("themeLight").addEventListener("click",()=>applyTheme("l
 
 // ── CURRENCY ──
 function applyCurrency(c){
+  if(!c||!["$","€","£","₺"].includes(c)) c="$";
   currency=c;localStorage.setItem("currency",c);
   document.querySelectorAll(".curr-btn").forEach(b=>b.classList.toggle("active",b.dataset.curr===c));
 }
