@@ -839,7 +839,10 @@ document.getElementById("closeTradePageBtn").addEventListener("click",()=>{
   history.back();
 });
 window.addEventListener("popstate",()=>{
-  if(document.getElementById("tradePage").classList.contains("open")){
+  const sm=document.getElementById("summaryModal");
+  if(sm.style.display==="flex"){
+    sm.style.display="none";
+  } else if(document.getElementById("tradePage").classList.contains("open")){
     closeTradePageFn();
   } else if(document.getElementById("overlay").classList.contains("open")){
     closeDayModal();
@@ -963,6 +966,7 @@ document.getElementById("ozetiAlBtn").addEventListener("click",()=>{
   document.getElementById("summaryStop").value="";
   document.getElementById("summaryExit").value="";
   summaryCardTheme=document.body.classList.contains("light")?"light":"dark";
+  history.pushState({page:"summary"},"");
 });
 
 async function buildSummaryCanvas(entry,stop,exit,theme){
@@ -1286,7 +1290,7 @@ document.getElementById("summaryThemeBtn").addEventListener("click",async()=>{
   updateSummaryDownload();
 });
 document.getElementById("summaryCloseBtn").addEventListener("click",()=>{
-  document.getElementById("summaryModal").style.display="none";
+  history.back();
 });
 
 // ── NAV ──
